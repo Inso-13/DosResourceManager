@@ -42,7 +42,7 @@ int main()
             IEventStackActive(top,MouseX,MouseY);
         }
     }
-    IDelStack(top);
+    delStack(top);
     return 0;
 }
 void bgice(void)

@@ -1,6 +1,5 @@
-#include<graphics.h>
 #include<stdlib.h>
-#include<dos.h>
+#include<graphics.h>
 #include<conio.h>
 #include"Imouse.h"
 

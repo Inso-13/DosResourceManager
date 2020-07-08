@@ -2,12 +2,11 @@
 
 typedef struct IFile
 {
-    char* name;
+    char name[36];
     IDate date;
-    char* type;
+    char type[6];
     long size;
-    char disk;
-    char* path;
+    char path[80];
 }IFile;
 
 

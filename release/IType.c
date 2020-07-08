@@ -4,14 +4,23 @@
 #include<conio.h>
 #include"IType.h"
 
-IBool IAddChild(IFileNode* parent,IFile* fchild)
+IBool IFileNodeSetNull(IFileNode* node)
 {
-    IFileNode *child=(IFileNode*)malloc(sizeof(IFileNode));
+    node->isHead=0;
+    node->isSelect=0;
+    node->child=NULL;
+    node->next=NULL;
+    node->pre=NULL;
+    return 1;
+}
+IBool IAddChild(IFileNode* parent,IFileNode* child)
+{
     IFileNode *temp=NULL;
-    child->file=*fchild;
-    child->next=NULL;
-    if(!strcmp(parent->file.name,"folder"))
-        return 0;
+    if(!strcmp(child->file.name,""))
+    {
+        free(child);
+        return 1;
+    }
     if(parent->child)
     {
         temp=parent->child;
@@ -21,19 +30,17 @@ IBool IAddChild(IFileNode* parent,IFile* fchild)
         }
         temp->next=child;
         child->pre=temp;
-        child->ishead=0;
+        child->isHead=0;
     }
     else
     {
         parent->child=child;
         child->pre=parent;
-        child->ishead=1;
+        child->isHead=1;
     }
-    child->next=NULL;
-    child->child=NULL;
     printf("%s is added as %s's child\n",child->file.name,parent->file.name);
-    printf("its path is %c:\\%s%s\n",child->file.disk,strcmp(child->file.path,".")?child->file.path:"",child->file.name);
-    return true;
+    printf("its path is %s\n",child->file.path);
+    return 1;
 }
 IBool IDelFilelist(IFileNode* root)
 {
@@ -52,20 +59,21 @@ IBool IDelFilelist(IFileNode* root)
     root=NULL;
     return 1;
 }
-IBool IAddSibling(IFileNode* pre,IFile* next)
+IBool IAddSibling(IFileNode* pre,IFileNode* next)
 {
     IFileNode *temp=pre;
     
-    while(!temp->ishead)
+    while(!temp->isHead)
     {
         temp=temp->pre;
     }
     return IAddChild(temp->pre,next);
 }
-void IInitEventStack(IEventStackNode* top)
+IEventStackNode* IInitEventStack(void)
 {
-    top=(IEventStackNode*)malloc(sizeof(IEventStackNode));
+    IEventStackNode* top=(IEventStackNode*)malloc(sizeof(IEventStackNode));
     top->next=NULL;
+    return top;
 }
 IBool IEventStackPush(IEventStackNode* top,IEvent newEvent)
 {
@@ -121,5 +129,6 @@ IBool IDelStack(IEventStackNode* top)
     {
         IEventStackPop(top);
     }
+    free(top);
     return 1;
 }

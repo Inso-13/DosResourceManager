@@ -6,10 +6,12 @@
 
 typedef enum IBool{false,true} IBool;
 
+
 typedef struct IFileNode
 {
     IFile file;
-    IBool ishead;
+    IBool isSelect;
+    IBool isHead;
     struct IFileNode* pre;
     struct IFileNode* next;
     struct IFileNode* child;
@@ -31,13 +33,14 @@ typedef struct IEventStackNode
 }IEventStackNode;
 
 
-IBool IAddChild(IFileNode* parent,IFile* fchild);
-IBool IAddSibling(IFileNode* pre,IFile* next);
+IBool IAddChild(IFileNode* parent,IFileNode* child);
+IBool IAddSibling(IFileNode* pre,IFileNode* next);
 IBool IDelFilelist(IFileNode* root);
-void IInitEventStack(IEventStackNode* top);
+IEventStackNode* IInitEventStack(void);
 IBool IEventStackPush(IEventStackNode* top,IEvent newEvent);
 IBool IEventStackPop(IEventStackNode* top);
 IBool IEventStackActive(IEventStackNode* top,int x,int y);
 IBool IDelStack(IEventStackNode* top);
+IBool IFileNodeSetNull(IFileNode* node);
 
 #endif
