@@ -5,14 +5,18 @@
 #include<dir.h>
 #include"IType.h"
 #include"IDir.h"
+#define DB
 
-IBool Icd(char* path)
+void Icd(char* path)
 {
     char temp[80]="";
 
     if(path[1]==':')
     {
         setdisk(path[0]-'A');
+#ifdef  DB
+        printf("switch to disk %c\n",getdisk()+'A');
+#endif
     }
     if(strlen(path)<=3)
     {
@@ -22,17 +26,23 @@ IBool Icd(char* path)
         strcpy(path,temp);
     }
     chdir(path);
+#ifdef  DB
     getcwd(temp,80);
     puts(temp);
-    return 1;
+#endif
 }
 IFileNode* IAddFileNode(char* path)
 {
-    IFileNode* childRoot=(IFileNode*)malloc(sizeof(IFileNode));
-    IFileNode* tempNode=childRoot,*lastNode=childRoot;
+    IFileNode* childRoot=(IFileNode*)malloc(sizeof(IFileNode)),*tempNode=childRoot,*lastNode=childRoot;
     int ret,i;
     struct find_t ft;
-
+#ifdef  DB
+    if(childRoot==NULL)
+    {
+        printf("not enough memory\n");
+        exit(-1);
+    }
+#endif
     Icd(path);
     IFileNodeSetNull(childRoot);
     ret=_dos_findfirst("*.*",0xf7,&ft);
@@ -64,6 +74,14 @@ IFileNode* IAddFileNode(char* path)
         if(ret) break;
         lastNode=tempNode;
         tempNode=(IFileNode*)malloc(sizeof(IFileNode));
+#ifdef  DB
+        if(tempNode==NULL)
+        {
+            printf("not enough memory\n");
+            exit(-1);
+        }
+
+#endif
         lastNode->next=tempNode;
         IFileNodeSetNull(tempNode);
         tempNode->pre=lastNode;
@@ -73,14 +91,49 @@ IFileNode* IAddFileNode(char* path)
 IBool IEntree(IFileNode* root)
 {
     IFileNode* childRoot;
+    if(strcmp(root->file.type,"0"))
+        return 0;
+    strcpy(root->file.type,"1");
     childRoot=IAddFileNode(root->file.path);
     IAddChild(root,childRoot);
-    while(!strcmp(childRoot->file.type,"0"))
-    {
-        if(!childRoot) return 1;
-        IEntree(childRoot);
-        Icd(root->file.path);
-        childRoot=childRoot->next;
-    }
+#ifdef  DB
+    printf("%s is entreed\n",root->file.name);
+#endif
     return 1;
+}
+void IDetree(IFileNode* root)
+{
+    strcpy(root->file.type,"0");
+    root=root->child;
+    while(root)
+    {
+#ifdef  DB
+        printf("%s is freed\n",root->file.name);
+#endif
+        free(root);
+        root=NULL;
+        root=root->next;
+    }
+}
+void IUpdateFileNode(IFileNode* curNode)
+{
+    int i,n;
+    char temp[80];
+    IFileNode* tempNode,*childNode;
+    IBool flag;
+
+#ifdef  DB
+    if(curNode==NULL)
+    {
+        printf("curNode is NULL\n");
+        exit(-1);
+    }
+    if(childNode==NULL)
+    {
+        printf("not enough memory\n");
+        exit(-1);
+    }
+#endif
+    IDetree(curNode);
+    IEntree(curNode);
 }

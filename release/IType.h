@@ -1,11 +1,25 @@
 #if !defined(__ITYPE_H)
 #define __ITYPE_H
 
-#include "IDate.h"
-#include "IFile.h"
-
 typedef enum IBool{false,true} IBool;
 
+typedef struct IDate
+{
+    int year;
+    int month;
+    int day;
+    int hour;
+    int minute;
+}IDate;
+
+typedef struct IFile
+{
+    char name[20];
+    IDate date;
+    char type[4];
+    long size;
+    char path[50];
+}IFile;
 
 typedef struct IFileNode
 {
@@ -16,6 +30,7 @@ typedef struct IFileNode
     struct IFileNode* next;
     struct IFileNode* child;
 }IFileNode;
+
 typedef struct IEvent
 {
     int key;
@@ -23,7 +38,8 @@ typedef struct IEvent
     int y1;
     int x2;
     int y2;
-    void (*pfun)(void);
+    void (*pfun)(IFileNode*);
+    IFileNode* target;
 }IEvent;
 
 typedef struct IEventStackNode
@@ -32,15 +48,15 @@ typedef struct IEventStackNode
     struct IEventStackNode* next;
 }IEventStackNode;
 
-
-IBool IAddChild(IFileNode* parent,IFileNode* child);
-IBool IAddSibling(IFileNode* pre,IFileNode* next);
-IBool IDelFilelist(IFileNode* root);
+void IFileNodeSetNull(IFileNode* node);
+IFileNode* IFindParent(IFileNode* child);
+IBool IAddChild(IFileNode* parent,IFileNode* child);// 1 for added
+IBool IAddSibling(IFileNode* pre,IFileNode* next);// 1 for added
+void IDelFilelist(IFileNode* root);
 IEventStackNode* IInitEventStack(void);
-IBool IEventStackPush(IEventStackNode* top,IEvent newEvent);
-IBool IEventStackPop(IEventStackNode* top);
-IBool IEventStackActive(IEventStackNode* top,int x,int y);
-IBool IDelStack(IEventStackNode* top);
-IBool IFileNodeSetNull(IFileNode* node);
+void IEventStackPush(IEventStackNode* top,IEvent newEvent);
+IBool IEventStackPop(IEventStackNode* top);// 1 for poped
+IBool IEventStackActive(IEventStackNode* top,int x,int y);// 1 for active
+void IDelStack(IEventStackNode* top);
 
 #endif

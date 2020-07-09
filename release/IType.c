@@ -3,23 +3,34 @@
 #include<string.h>
 #include<conio.h>
 #include"IType.h"
+#define DB
 
-IBool IFileNodeSetNull(IFileNode* node)
+void IFileNodeSetNull(IFileNode* node)
 {
     node->isHead=0;
     node->isSelect=0;
     node->child=NULL;
     node->next=NULL;
     node->pre=NULL;
-    return 1;
+}
+IFileNode* IFindParent(IFileNode* child)
+{
+    IFileNode *temp=child;
+    
+    while(!temp->isHead)
+    {
+        temp=temp->pre;
+    }
+    return temp->pre;
 }
 IBool IAddChild(IFileNode* parent,IFileNode* child)
 {
     IFileNode *temp=NULL;
+    if(!parent) return 0;
     if(!strcmp(child->file.name,""))
     {
         free(child);
-        return 1;
+        return 0;
     }
     if(parent->child)
     {
@@ -38,11 +49,13 @@ IBool IAddChild(IFileNode* parent,IFileNode* child)
         child->pre=parent;
         child->isHead=1;
     }
+#ifdef  DB
     printf("%s is added as %s's child\n",child->file.name,parent->file.name);
     printf("its path is %s\n",child->file.path);
+#endif
     return 1;
 }
-IBool IDelFilelist(IFileNode* root)
+void IDelFilelist(IFileNode* root)
 {
     if(root->child)
     {
@@ -54,38 +67,46 @@ IBool IDelFilelist(IFileNode* root)
         IDelFilelist(root->next);
         root->next=NULL;
     }
+#ifdef  DB
     printf("%s is freed\n",root->file.name);
+#endif
     free(root);
     root=NULL;
-    return 1;
 }
 IBool IAddSibling(IFileNode* pre,IFileNode* next)
 {
-    IFileNode *temp=pre;
-    
-    while(!temp->isHead)
-    {
-        temp=temp->pre;
-    }
-    return IAddChild(temp->pre,next);
+    return IAddChild(IFindParent(pre),next);
 }
 IEventStackNode* IInitEventStack(void)
 {
     IEventStackNode* top=(IEventStackNode*)malloc(sizeof(IEventStackNode));
+#ifdef  DB
+    if(top==NULL)
+    {
+        printf("not enough memory\n");
+        exit(-1);
+    }
+#endif
     top->next=NULL;
     return top;
 }
-IBool IEventStackPush(IEventStackNode* top,IEvent newEvent)
+void IEventStackPush(IEventStackNode* top,IEvent newEvent)
 {
     IEventStackNode* q=(IEventStackNode*)malloc(sizeof(IEventStackNode));
+#ifdef  DB
+    if(q==NULL)
+        printf("not enough memory\n");
+#endif
     q->event = newEvent;
     q->next = top->next;
     top->next = q;
-    return 1;
 }
 IBool IEventStackPop(IEventStackNode* top)
 {
     IEventStackNode* q;
+
+    if(!q->next)
+        return 0;
     q = top->next;
     top->next = q->next;
     free(q);
@@ -102,11 +123,11 @@ IBool IEventStackActive(IEventStackNode* top,int x,int y)
         {
             if(kbhit()==temp->event.key)
             {
-                temp->event.pfun();
+                temp->event.pfun(temp->event.target);
             }
             if(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2)
             {
-                temp->event.pfun();
+                temp->event.pfun(temp->event.target);
                 return 1;
             }   
         }
@@ -114,7 +135,7 @@ IBool IEventStackActive(IEventStackNode* top,int x,int y)
         {
             if(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2)
             {
-                temp->event.pfun();
+                temp->event.pfun(temp->event.target);
                 return 1;
             }
             else
@@ -123,12 +144,11 @@ IBool IEventStackActive(IEventStackNode* top,int x,int y)
     }
     return 0;
 }
-IBool IDelStack(IEventStackNode* top)
+void IDelStack(IEventStackNode* top)
 {
     while(top->next)
     {
         IEventStackPop(top);
     }
     free(top);
-    return 1;
 }
