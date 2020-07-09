@@ -26,9 +26,9 @@ typedef struct IFileNode
     IFile file;
     IBool isSelect;
     IBool isHead;
-    struct IFileNode* pre;
-    struct IFileNode* next;
-    struct IFileNode* child;
+    struct IFileNode far* pre;
+    struct IFileNode far* next;
+    struct IFileNode far* child;
 }IFileNode;
 
 typedef struct IEvent
@@ -38,25 +38,25 @@ typedef struct IEvent
     int y1;
     int x2;
     int y2;
-    void (*pfun)(IFileNode*);
-    IFileNode* target;
+    void (*pfun)(IFileNode far*);
+    IFileNode far* target;
 }IEvent;
 
 typedef struct IEventStackNode
 {
     IEvent event;
-    struct IEventStackNode* next;
+    struct IEventStackNode far* next;
 }IEventStackNode;
 
-void IFileNodeSetNull(IFileNode* node);
-IFileNode* IFindParent(IFileNode* child);
-IBool IAddChild(IFileNode* parent,IFileNode* child);// 1 for added
-IBool IAddSibling(IFileNode* pre,IFileNode* next);// 1 for added
-void IDelFilelist(IFileNode* root);
-IEventStackNode* IInitEventStack(void);
-void IEventStackPush(IEventStackNode* top,IEvent newEvent);
-IBool IEventStackPop(IEventStackNode* top);// 1 for poped
-IBool IEventStackActive(IEventStackNode* top,int x,int y);// 1 for active
-void IDelStack(IEventStackNode* top);
+void IFileNodeSetNull(IFileNode far* node);
+IFileNode far* IFindParent(IFileNode far* child);
+IBool IAddChild(IFileNode far* parent,IFileNode far* child);// 1 for added
+IBool IAddSibling(IFileNode far* pre,IFileNode far* next);// 1 for added
+void IDelFilelist(IFileNode far* root);
+IEventStackNode far* IInitEventStack(void);
+void IEventStackPush(IEventStackNode far* top,IEvent newEvent);
+IBool IEventStackPop(IEventStackNode far* top);// 1 for poped
+IBool IEventStackActive(IEventStackNode far* top,int x,int y);// 1 for active
+void IDelStack(IEventStackNode far* top);
 
 #endif

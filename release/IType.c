@@ -2,10 +2,11 @@
 #include<stdio.h>
 #include<string.h>
 #include<conio.h>
+#include"IUtility.h"
 #include"IType.h"
 #define DB
 
-void IFileNodeSetNull(IFileNode* node)
+void IFileNodeSetNull(IFileNode far* node)
 {
     node->isHead=0;
     node->isSelect=0;
@@ -13,9 +14,9 @@ void IFileNodeSetNull(IFileNode* node)
     node->next=NULL;
     node->pre=NULL;
 }
-IFileNode* IFindParent(IFileNode* child)
+IFileNode far* IFindParent(IFileNode far* child)
 {
-    IFileNode *temp=child;
+    IFileNode far* temp=child;
     
     while(!temp->isHead)
     {
@@ -23,9 +24,9 @@ IFileNode* IFindParent(IFileNode* child)
     }
     return temp->pre;
 }
-IBool IAddChild(IFileNode* parent,IFileNode* child)
+IBool IAddChild(IFileNode far* parent,IFileNode far* child)
 {
-    IFileNode *temp=NULL;
+    IFileNode far* temp=NULL;
     if(!parent) return 0;
     if(!strcmp(child->file.name,""))
     {
@@ -55,7 +56,7 @@ IBool IAddChild(IFileNode* parent,IFileNode* child)
 #endif
     return 1;
 }
-void IDelFilelist(IFileNode* root)
+void IDelFilelist(IFileNode far* root)
 {
     if(root->child)
     {
@@ -73,13 +74,13 @@ void IDelFilelist(IFileNode* root)
     free(root);
     root=NULL;
 }
-IBool IAddSibling(IFileNode* pre,IFileNode* next)
+IBool IAddSibling(IFileNode far* pre,IFileNode far* next)
 {
     return IAddChild(IFindParent(pre),next);
 }
-IEventStackNode* IInitEventStack(void)
+IEventStackNode far* IInitEventStack(void)
 {
-    IEventStackNode* top=(IEventStackNode*)malloc(sizeof(IEventStackNode));
+    IEventStackNode far* top=(IEventStackNode far*)malloc(sizeof(IEventStackNode));
     if(top==NULL)
     {
 #ifdef  DB
@@ -90,9 +91,9 @@ IEventStackNode* IInitEventStack(void)
     top->next=NULL;
     return top;
 }
-void IEventStackPush(IEventStackNode* top,IEvent newEvent)
+void IEventStackPush(IEventStackNode far* top,IEvent newEvent)
 {
-    IEventStackNode* q=(IEventStackNode*)malloc(sizeof(IEventStackNode));
+    IEventStackNode far* q=(IEventStackNode far*)malloc(sizeof(IEventStackNode));
     if(q==NULL)
     {
 #ifdef  DB
@@ -104,9 +105,9 @@ void IEventStackPush(IEventStackNode* top,IEvent newEvent)
     q->next = top->next;
     top->next = q;
 }
-IBool IEventStackPop(IEventStackNode* top)
+IBool IEventStackPop(IEventStackNode far* top)
 {
-    IEventStackNode* q;
+    IEventStackNode far* q;
 
     if(!q->next)
         return 0;
@@ -116,9 +117,9 @@ IBool IEventStackPop(IEventStackNode* top)
     q = NULL;
     return 1;
 }
-IBool IEventStackActive(IEventStackNode* top,int x,int y)
+IBool IEventStackActive(IEventStackNode far* top,int x,int y)
 {
-    IEventStackNode* temp=top->next;
+    IEventStackNode far* temp=top->next;
     
     while(temp)
     {
@@ -147,7 +148,7 @@ IBool IEventStackActive(IEventStackNode* top,int x,int y)
     }
     return 0;
 }
-void IDelStack(IEventStackNode* top)
+void IDelStack(IEventStackNode far* top)
 {
     while(top->next)
     {

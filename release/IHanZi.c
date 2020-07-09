@@ -6,7 +6,7 @@
 #include "IUtility.h"
 #include "IHanZi.h"
 
-void IPutsHZ16(int x,int y,int Wid,int Color,char *str,FILE *fp)
+void IPutsHZ16(int x,int y,int Wid,int Color,char *str,FILE far* fp)
 {
     unsigned Zcode,Bcode;
     int i,j,k,Rec;

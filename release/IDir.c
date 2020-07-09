@@ -8,7 +8,7 @@
 #include"IDir.h"
 #define DB
 
-void Icd(char* path)
+void Icd(char far* path)
 {
     char temp[80]="";
 
@@ -24,26 +24,27 @@ void Icd(char* path)
         strcpy(temp,path);
         strcpy(temp+1,"");
         strcat(temp,":\\.");
-        strcpy(path,temp);
+        chdir(temp);
     }
-    chdir(path);
+    else
+        chdir(path);
 #ifdef  DB
     getcwd(temp,80);
     puts(temp);
 #endif
 }
-IFileNode* IAddFileNode(char* path)
+IFileNode far* IAddFileNode(char far* path)
 {
-    IFileNode* childRoot=(IFileNode*)malloc(sizeof(IFileNode)),*tempNode=childRoot,*lastNode=childRoot;
+    IFileNode far* childRoot=(IFileNode far*)malloc(sizeof(IFileNode)), far*tempNode=childRoot, far*lastNode=childRoot;
     int ret,i;
     struct find_t ft;
-#ifdef  DB
     if(childRoot==NULL)
     {
+#ifdef  DB
         printf("not enough memory\n");
+#endif
         IQuit();
     }
-#endif
     Icd(path);
     IFileNodeSetNull(childRoot);
     ret=_dos_findfirst("*.*",0xf7,&ft);
@@ -74,23 +75,23 @@ IFileNode* IAddFileNode(char* path)
         ret=_dos_findnext(&ft);
         if(ret) break;
         lastNode=tempNode;
-        tempNode=(IFileNode*)malloc(sizeof(IFileNode));
-#ifdef  DB
+        tempNode=(IFileNode far*)malloc(sizeof(IFileNode));
         if(tempNode==NULL)
         {
+#ifdef  DB
             printf("not enough memory\n");
+#endif
             IQuit();
         }
-#endif
         lastNode->next=tempNode;
         IFileNodeSetNull(tempNode);
         tempNode->pre=lastNode;
     }
     return childRoot;
 }
-IBool IEntree(IFileNode* root)
+IBool IEntree(IFileNode far* root)
 {
-    IFileNode* childRoot;
+    IFileNode far* childRoot;
     if(strcmp(root->file.type,"0"))
         return 0;
     strcpy(root->file.type,"1");
@@ -101,7 +102,7 @@ IBool IEntree(IFileNode* root)
 #endif
     return 1;
 }
-void IDetree(IFileNode* root)
+void IDetree(IFileNode far* root)
 {
     strcpy(root->file.type,"0");
     root=root->child;
@@ -115,11 +116,11 @@ void IDetree(IFileNode* root)
         root=root->next;
     }
 }
-void IUpdateFileNode(IFileNode* curNode)
+void IUpdateFileNode(IFileNode far* curNode)
 {
     int i,n;
     char temp[80];
-    IFileNode* tempNode,*childNode;
+    IFileNode far* tempNode,*childNode;
     IBool flag;
 
 #ifdef  DB
