@@ -80,23 +80,26 @@ IBool IAddSibling(IFileNode* pre,IFileNode* next)
 IEventStackNode* IInitEventStack(void)
 {
     IEventStackNode* top=(IEventStackNode*)malloc(sizeof(IEventStackNode));
-#ifdef  DB
     if(top==NULL)
     {
+#ifdef  DB
         printf("not enough memory\n");
-        exit(-1);
-    }
 #endif
+        IQuit();
+    }
     top->next=NULL;
     return top;
 }
 void IEventStackPush(IEventStackNode* top,IEvent newEvent)
 {
     IEventStackNode* q=(IEventStackNode*)malloc(sizeof(IEventStackNode));
-#ifdef  DB
     if(q==NULL)
+    {
+#ifdef  DB
         printf("not enough memory\n");
 #endif
+        IQuit();
+    }
     q->event = newEvent;
     q->next = top->next;
     top->next = q;

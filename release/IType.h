@@ -16,7 +16,7 @@ typedef struct IFile
 {
     char name[20];
     IDate date;
-    char type[4];
+    char type[5];
     long size;
     char path[50];
 }IFile;

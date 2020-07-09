@@ -3,6 +3,7 @@
 #include<stdlib.h>
 #include<dos.h>
 #include<dir.h>
+#include"IUtility.h"
 #include"IType.h"
 #include"IDir.h"
 #define DB
@@ -40,7 +41,7 @@ IFileNode* IAddFileNode(char* path)
     if(childRoot==NULL)
     {
         printf("not enough memory\n");
-        exit(-1);
+        IQuit();
     }
 #endif
     Icd(path);
@@ -56,7 +57,7 @@ IFileNode* IAddFileNode(char* path)
         }
         if(ret) break;
         strcpy(tempNode->file.name,ft.name);
-        tempNode->file.size=ft.size;
+        tempNode->file.size=(ft.size/512+1)/2;
         if(ft.attrib&0x10) strcpy(tempNode->file.type,"0");
         tempNode->file.date.year=ft.wr_date/512+1980;
         ft.wr_date%=512;
@@ -78,9 +79,8 @@ IFileNode* IAddFileNode(char* path)
         if(tempNode==NULL)
         {
             printf("not enough memory\n");
-            exit(-1);
+            IQuit();
         }
-
 #endif
         lastNode->next=tempNode;
         IFileNodeSetNull(tempNode);
@@ -126,12 +126,12 @@ void IUpdateFileNode(IFileNode* curNode)
     if(curNode==NULL)
     {
         printf("curNode is NULL\n");
-        exit(-1);
+        IQuit();
     }
     if(childNode==NULL)
     {
         printf("not enough memory\n");
-        exit(-1);
+        IQuit();
     }
 #endif
     IDetree(curNode);
