@@ -18,7 +18,7 @@ typedef struct IFile
     IDate date;
     char type[5];
     long size;
-    char path[50];
+    char path[80];
 }IFile;
 
 typedef struct IFileNode
@@ -38,8 +38,10 @@ typedef struct IEvent
     int y1;
     int x2;
     int y2;
-    void (*pfun)(IFileNode far*);
-    IFileNode far* target;
+    int type;
+    void (*pfun)(IFileNode far*,IFileNode far*);
+    IFileNode far* node0;
+    IFileNode far* node1;
 }IEvent;
 
 typedef struct IEventStackNode
@@ -56,7 +58,7 @@ void IDelFilelist(IFileNode far* root);
 IEventStackNode far* IInitEventStack(void);
 void IEventStackPush(IEventStackNode far* top,IEvent newEvent);
 IBool IEventStackPop(IEventStackNode far* top);// 1 for poped
-IBool IEventStackActive(IEventStackNode far* top,int x,int y);// 1 for active
+IBool IEventStackActive(IEventStackNode far* top,int x,int y,int type);// 1 for active
 void IDelStack(IEventStackNode far* top);
 
 #endif

@@ -4,7 +4,6 @@
 #include<conio.h>
 #include"IUtility.h"
 #include"IType.h"
-#define DB
 
 void IFileNodeSetNull(IFileNode far* node)
 {
@@ -71,6 +70,7 @@ void IDelFilelist(IFileNode far* root)
 #ifdef  DB
     printf("%s is freed\n",root->file.name);
 #endif
+    IFileNodeSetNull(root);
     free(root);
     root=NULL;
 }
@@ -117,33 +117,20 @@ IBool IEventStackPop(IEventStackNode far* top)
     q = NULL;
     return 1;
 }
-IBool IEventStackActive(IEventStackNode far* top,int x,int y)
+IBool IEventStackActive(IEventStackNode far* top,int x,int y,int type)
 {
     IEventStackNode far* temp=top->next;
     
     while(temp)
     {
-        if(temp->event.key)
+        if((!(temp->event.key)||kbhit()==temp->event.key)&&x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2&&temp->event.type==type)
         {
-            if(kbhit()==temp->event.key)
-            {
-                temp->event.pfun(temp->event.target);
-            }
-            if(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2)
-            {
-                temp->event.pfun(temp->event.target);
-                return 1;
-            }   
+            temp->event.pfun(temp->event.node0,temp->event.node1);
+            return 1;
         }
         else
         {
-            if(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2)
-            {
-                temp->event.pfun(temp->event.target);
-                return 1;
-            }
-            else
-                temp=temp->next;
+            temp=temp->next;
         }
     }
     return 0;
