@@ -5,10 +5,15 @@
 #include<DIR.H>
 #include<IO.H>
 #include<ALLOC.H>
-#include"IType.h"
 #include"IUtility.h"
+#include"IType.h"
 #include"IDir.h"
+
 #define BUFFSIZE 1024
+
+#ifndef far
+    #define far 
+#endif
 
 IBool IisFolder(IFileNode far* node)
 {
@@ -38,6 +43,22 @@ void Icd(char far* path)
     puts(temp);
 #endif
 }
+IBool IGetPath(IFileNode far* node,char* temp)
+{
+    int i,n;
+
+    n=strlen(node->file.path);
+    i=n-1;
+    while(node->file.path[i]!='\\')
+    {
+        i--;
+        if(i==0)
+            return 0;
+    }
+    strcpy(temp,node->file.path);
+    strcpy(temp+i,"");
+    return 1;
+}
 IFileNode far* IGetFileNodeList(char far* path)
 {
     IFileNode far* childRoot=(IFileNode far*)farmalloc(sizeof(IFileNode)), far*tempNode=childRoot, far*lastNode=childRoot;
@@ -64,7 +85,12 @@ IFileNode far* IGetFileNodeList(char far* path)
         if(ret) break;
         strcpy(tempNode->file.name,ft.name);
         tempNode->file.size=(ft.size/512+1)/2;
-        if(ft.attrib&0x10) strcpy(tempNode->file.type,"0");
+        tempNode->file.readOnly=ft.attrib&0x01;
+        tempNode->file.isHidden=ft.attrib&0x02;
+        if(ft.attrib&0x10)
+        {
+            strcpy(tempNode->file.type,"0");
+        }
         else
         {
             for(i=0;i<strlen(tempNode->file.name);i++)
@@ -263,14 +289,6 @@ IFileNode far* IFindNodeByName(char far* name,IFileNode far* root)
     
     return 0;
 }
-IFileNode far* IFindLastChild(IFileNode far* parent)
-{
-    IFileNode far* temp=parent->child;
-    
-    while(temp->next)
-        temp=temp->next;
-    return temp;
-}
 IBool Icopy(IFileNode far* inFile,IFileNode far* outParent)
 {
     FILE far* fin,*fout;
@@ -379,6 +397,15 @@ void Imvdir(IFileNode far* oldChild,IFileNode far* newParent)
     Imkdir(newParent,oldChild);
     Irmdir(oldChild);
 }
+IBool Irename(IFileNode far* oldName,IFileNode far* newName)
+{
+    char temp[80];
+
+    if(!IGetPath(oldName,temp)) return 0;
+    Icd(temp);
+    rename(oldName->file.name,newName->file.name);
+    return 1;
+}
 void ICopyAll(IFileNode far* oldChildChild,IFileNode far* newChild)
 {
     if(IisFolder(oldChildChild))
@@ -412,9 +439,10 @@ void Icplr(IFileNode far* oldParent,IFileNode far* newParent)
 {
     IFileNode far* tempNode=oldParent->child;
 
-    while(tempNode&&tempNode->isSelect)
+    while(tempNode)
     {
-        Icpr(tempNode,newParent);
+        if(tempNode->isSelect)
+            Icpr(tempNode,newParent);
         tempNode=tempNode->next;
     }
 }
@@ -445,18 +473,20 @@ void Irmr(IFileNode far* oldChild)
         Irmf(oldChild);
     while(Irmdir(oldChild));
 }
-void Irmlr(IFileNode far* oldParent)
+void Irmlr(IFileNode far* oldParent,IFileNode far* rootR)
 {
     IFileNode far* tempNode=oldParent->child;
 
-    while(tempNode&&tempNode->isSelect)
+    if(rootR) Icplr(oldParent,rootR);
+    while(tempNode)
     {
-        Irmr(tempNode);
+        if(tempNode->isSelect)
+            Irmr(tempNode);
         tempNode=tempNode->next;
     }
 }
-void Icutr(IFileNode far* oldChild,IFileNode far* newParent)
+void Icutlr(IFileNode far* oldChild,IFileNode far* newParent)
 {
     Icplr(oldChild,newParent);
-    Irmlr(oldChild);
+    Irmlr(oldChild,NULL);
 }

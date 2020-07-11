@@ -1,6 +1,8 @@
 #if !defined(__ITYPE_H)
 #define __ITYPE_H
-
+#ifndef far
+    #define far 
+#endif
 typedef enum IBool{false,true} IBool;
 
 typedef struct IDate
@@ -19,6 +21,8 @@ typedef struct IFile
     char type[5];
     long size;
     char path[80];
+    IBool readOnly;
+    IBool isHidden;
 }IFile;
 
 typedef struct IFileNode
