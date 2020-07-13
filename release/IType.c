@@ -9,6 +9,8 @@ void IFileNodeSetNull(IFileNode far* node)
 {
     node->isHead=0;
     node->isSelect=0;
+    node->hasFile=0;
+    node->hasFolder=0;
     node->child=NULL;
     node->next=NULL;
     node->pre=NULL;

@@ -30,6 +30,8 @@ typedef struct IFileNode
     IFile file;
     IBool isSelect;
     IBool isHead;
+    int hasFile;
+    int hasFolder;
     struct IFileNode far* pre;
     struct IFileNode far* next;
     struct IFileNode far* child;

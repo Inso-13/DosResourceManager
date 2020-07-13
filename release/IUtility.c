@@ -6,7 +6,7 @@
 void IInitGraph()
 {
     int GraphDrive=VGA,GraphMode=VGAHI;
-    initgraph(&GraphDrive,&GraphMode,"c:\\BORLANDC\\BGI");
+    initgraph(&GraphDrive,&GraphMode,"C:\\BORLANDC\\BGI");
 }
 void IQuit()
 {

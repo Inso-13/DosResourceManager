@@ -14,7 +14,44 @@
 #ifndef far
     #define far 
 #endif
+IFileNode far* IDiskInit()
+{
+    IFileNode far* root=(IFileNode far*)farmalloc(sizeof(IFileNode)),*tempNode=root,*lastNode=root;
+    int i,disk;
+    char temp[3];
 
+    IFileNodeSetNull(root);
+    strcpy(temp,"C:");
+    for(i=0;i<26;i++)
+    {
+        setdisk(i);
+        disk=getdisk();
+        if(disk==i)
+        {
+            if(disk<2||disk>24)
+                continue;
+            tempNode->file.size=0;
+            tempNode->file.date.year=1980;
+            tempNode->file.date.month=1;
+            tempNode->file.date.day=1;
+            tempNode->file.date.hour=0;
+            tempNode->file.date.minute=0;
+            strcpy(tempNode->file.type,"0");
+            temp[0]=disk+'A';
+            strcpy(tempNode->file.name,temp);
+            strcpy(tempNode->file.path,temp);
+            tempNode=(IFileNode far*)farmalloc(sizeof(IFileNode));
+            IFileNodeSetNull(tempNode);
+            lastNode->next=tempNode;
+            tempNode->pre=lastNode;
+            lastNode=lastNode->next;
+        }
+    }
+    lastNode->pre->next=NULL;
+    free(lastNode);
+    Icd("D:");
+    return root;
+}
 IBool IisFolder(IFileNode far* node)
 {
     return !strcmp(node->file.type,"0")||!strcmp(node->file.type,"1");
@@ -42,6 +79,45 @@ void Icd(char far* path)
     getcwd(temp,80);
     puts(temp);
 #endif
+}
+IBool IMatch(char* src,char* pattern)
+{
+    IBool flag;
+
+    while(*src)
+    {
+        if(*pattern=='*')
+        {
+            while((*pattern=='*')||(*pattern)=='?')
+                pattern++;
+            if(!*pattern)
+                return 1;
+            while(*src && !(*src==*pattern))
+                src++;
+            if(!*src) 
+                return 0;
+            flag=IMatch(src,pattern);
+            while((!flag)&&*(src+1)&&(*(src+1)==*pattern))
+                flag=IMatch(++src,pattern);
+            return flag;
+        }
+        else
+        {
+            if((*src==*pattern)||('?'==*pattern))
+                return IMatch(++src,++pattern);
+            else
+                return 0;
+        }
+    }
+    if(*pattern)
+    {
+        if((*pattern=='*')&&(*(pattern+1)==0))
+            return 1;
+        else
+            return 0;
+    }
+    else
+        return 1;
 }
 IBool IGetPath(IFileNode far* node,char* temp)
 {
@@ -362,10 +438,6 @@ IBool Irmf(IFileNode far* fileNode)
     remove(fileNode->file.path);
     return IDelFileNode(IFindParent(fileNode),fileNode->file.name);
 }
-IBool Icut(IFileNode far* inFile,IFileNode far* outParent)
-{
-    return (Icopy(inFile,outParent)&Irmf(inFile));
-}
 IBool Inew(IFileNode far* pathNode,IFileNode far* fileName)
 {
     Icd(pathNode->file.path);
@@ -485,8 +557,88 @@ void Irmlr(IFileNode far* oldParent,IFileNode far* rootR)
         tempNode=tempNode->next;
     }
 }
-void Icutlr(IFileNode far* oldChild,IFileNode far* newParent)
+void IPeek(IFileNode far* node)
 {
-    Icplr(oldChild,newParent);
-    Irmlr(oldChild,NULL);
+    int ret;
+    struct find_t ft;
+    char temp[80];
+    IFileNode far* tempNode=(IFileNode far*)malloc(sizeof(IFileNode));
+    if(tempNode==NULL)
+    {
+#ifdef  DB
+        printf("not enough memory\n");
+#endif
+        IQuit();  
+    }
+    node->hasFile=0;
+    node->hasFolder=0;
+    Icd(node->file.path);
+    ret=_dos_findfirst("*.*",0xf7,&ft);
+
+    while(1)
+    {
+        while(!strcmp(ft.name,".")||!strcmp(ft.name,".."))
+        {
+            ret=_dos_findnext(&ft);
+            if(ret) break;
+        }
+        if(ret) break;
+        if(ft.attrib&0x10)
+        {
+            node->hasFolder++;
+            IFileNodeSetNull(tempNode);
+            strcpy(temp,node->file.path);
+            strcat(temp,"\\");
+            strcat(temp,ft.name);
+            strcpy(tempNode->file.path,temp);
+            IPeek(tempNode);
+            node->hasFile+=tempNode->hasFile;
+            node->hasFolder+=tempNode->hasFolder;
+        }
+        else
+        {
+            node->hasFile++;
+        }
+        ret=_dos_findnext(&ft);
+        if(ret) break;
+    }
+    Icd(node->file.path);
+    free(tempNode);
+}
+IFileNode far* ISearch(IFileNode far* node,IFileNode far* name)
+{
+    IFileNode far* findedNode,*tempNode,*ttempNode;
+    int ret,i;
+    if(findedNode==NULL)
+    {
+#ifdef  DB
+        printf("not enough memory\n");
+#endif
+        IQuit();
+    }
+    IFileNodeSetNull(findedNode);
+    
+    IEntree(node);
+    tempNode=node->child;
+    while(tempNode)
+    {
+        if(IisFolder(tempNode))
+        {
+            ttempNode=ISearch(tempNode,name);
+            if(ttempNode)
+            {
+                IAddChild(findedNode,ttempNode);                
+            }
+            else if(tempNode->child)
+                IDetree(tempNode->child);
+        }
+        else if(IMatch(tempNode->file.name,name->file.name))
+        { 
+            IAddChild(findedNode,ttempNode);                
+        }
+        tempNode=tempNode->next;
+    }
+
+    tempNode=findedNode->child;
+    return tempNode;
 }
