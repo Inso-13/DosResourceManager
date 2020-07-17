@@ -3,57 +3,50 @@
 #include<graphics.h>
 #include<dos.h>
 #include<conio.h>
-#include"Itype.h"
-#include"Imouse.h"
+#include"IEvent.h"
+#include"IType.h"
+#include"IMouse.h"
 
-void bgice(void);
-void outice(void);
-void inice(void);
+void bgice(IFileNode far*,IFileNode far*);
+void outice(IFileNode far*,IFileNode far*);
+void inice(IFileNode far*,IFileNode far*);
 int main()
 {
     IEventStackNode* top = (IEventStackNode*)malloc(sizeof(IEventStackNode));
-    int Keystate,MouseExist,MouseButton,MouseX,MouseY;
-    int up[16][16],down[16][16],mouse_draw[16][16],mouse_save[16][16];
+    int MouseX,MouseY;
+    int mouseDraw[16][16],mouseSave[16][16];
     int gd=DETECT,gm,i;
     
-    IEvent ice[3]={{0,0,0,640,480,bgice},{0,100,100,500,500,outice},{0,200,200,300,300,inice}};
+    IEvent ice[3]={{0,0,0,640,480,2,bgice,0,0},{0,100,100,500,500,4,outice,0,0},{0,200,200,300,300,8,inice,0,0}};
 
     initgraph(&gd,&gm,"c:\\Borlandc\\bgi");
-    MouseMath(up,down,mouse_draw);
-    MouseSetXY(100,100);
-    MouseOn(MouseX,MouseY,mouse_draw,mouse_save);
+    IMouseMath(mouseDraw);
+    IMouseSetXY(100,100);
+    IMouseOn(MouseX,MouseY,mouseDraw,mouseSave);
 
 
     top->next=NULL;
     for(i=0;i<3;i++) IEventStackPush(top,ice[i]);
     rectangle(100,100,500,500);
     setcolor(BLUE);
-    floodfill(250,250,0);
     rectangle(200,200,300,300);
     setcolor(RED);
-    floodfill(250,250,0);
     while(!kbhit())
     {
-        if(MouseStatus(&MouseX,&MouseY,mouse_draw,mouse_save)==1)
-        {
-            MouseOff(&MouseX,&MouseY,mouse_draw,mouse_save);
-            MouseGetXY(&MouseX,&MouseY);
-            MouseOn(MouseX,MouseY,mouse_draw,mouse_save);
-            IEventStackActive(top,MouseX,MouseY);
-        }
+        IEventStackActive(top,MouseX,MouseY,IMouseStatus(&MouseX,&MouseY,mouseDraw,mouseSave));
     }
-    delStack(top);
+    IDelStack(top);
     return 0;
 }
-void bgice(void)
+void bgice(IFileNode far* a,IFileNode far* b)
 {
     outtextxy(100,100,"bg is clicked");
 }
-void outice(void)
+void outice(IFileNode far* a,IFileNode far* b)
 {
     outtextxy(200,200,"outdiv is clicked");
 }
-void inice(void)
+void inice(IFileNode far* a,IFileNode far* b)
 {
     outtextxy(300,300,"indiv is clicked");
 }
