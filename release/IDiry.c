@@ -2,35 +2,44 @@
 #include<STDLIB.H>
 #include<CONIO.H>
 #include<ALLOC.H>
+#include<IO.H>
+#include<STDIO.H>
 #include"INode.h"
 #include"IDirBase.h"
 #include"IUtility.h"
 #include"IDiry.h"
 
-#ifdef DB
-    #include<STDIO.H>
-#endif
-
-
-IBool Irename(IFileNode far* oldName,IFileNode far* newName)
+void Imkdir(IFileNode * pathNode,IFileNode * folderName);    //创建文件夹，并更新节点
+IBool Inew(IFileNode * pathNode,IFileNode * fileName)
+{
+    Icd(pathNode->file.path);
+    if(creatnew(fileName->file.name,0)==-1)
+        return 0;
+    return IAddFileNode(pathNode,fileName->file.name);    
+}
+IBool Irename(IFileNode * oldName,IFileNode * newName) //重命名oldName文件
 {
     char temp[80];
 
     if(!IGetPath(oldName,temp)) return 0;
     Icd(temp);
-    rename(oldName->file.name,newName->file.name);
+    rename(oldName->file.name,newName->file.name);  //重命名
+    strcpy(oldName->file.name,newName->file.name);
+    strcat(temp,"\\");
+    strcat(temp,newName->file.name);
+    strcpy(oldName->file.path,temp);    //更新节点
     return 1;
 }
-void IDetree(IFileNode far* root)
+void IDetree(IFileNode * root) //将root目录下的文件从文件树上减除
 {
     if(!root) return;
     strcpy(root->file.type,"0");
     IDelFilelist(root->child);
     root->child=NULL;
 }
-void IEntree(IFileNode far* root)
+void IEntree(IFileNode * root) //将root目录下的文件加到文件树上
 {
-    IFileNode far* childRoot;
+    IFileNode * childRoot;
 
     if(!root) return;
     if(IisFolder(root))
@@ -39,13 +48,14 @@ void IEntree(IFileNode far* root)
         IAddChild(root,childRoot);
 #ifdef  DB
         printf("%s is entreed\n",root->file.name);
+        printf("%u\n",coreleft());
 #endif    
     }
     strcpy(root->file.type,"1");
 }
-void Icplr(IFileNode far* oldParent,IFileNode far* newParent)
+void Icplr(IFileNode * oldParent,IFileNode * newParent)//复制oldParent目录下所有被选中的文件
 {
-    IFileNode far* tempNode=oldParent->child;
+    IFileNode * tempNode=oldParent->child;
 
     while(tempNode)
     {
@@ -54,9 +64,9 @@ void Icplr(IFileNode far* oldParent,IFileNode far* newParent)
         tempNode=tempNode->next;
     }
 }
-void Irmlr(IFileNode far* oldParent,IFileNode far* rootR)
+void Irmlr(IFileNode * oldParent,IFileNode * rootR) //删除oldParent目录下所有被选中的文件
 {
-    IFileNode far* tempNode=oldParent->child;
+    IFileNode * tempNode=oldParent->child;
 
     if(rootR) Icplr(oldParent,rootR);
     while(tempNode)
@@ -66,15 +76,15 @@ void Irmlr(IFileNode far* oldParent,IFileNode far* rootR)
         tempNode=tempNode->next;
     }
 }
-IFileNode far* ISearch(IFileNode far* node,IFileNode far* name)
+IFileNode * ISearch(IFileNode * node,IFileNode * name) //按文件名查找文件，耗内存，请慎用
 {
-    IFileNode far* findedNode,*headNode,*tempNode,*ttempNode;
+    IFileNode * findedNode,*headNode,*tempNode,*ttempNode;
     if(!node)
     {
         return NULL;
     }
 
-    headNode=(IFileNode far*)malloc(sizeof(IFileNode));
+    headNode=(IFileNode *)malloc(sizeof(IFileNode));
     IFileNodeSetNull(headNode);
 
     if(IMatch(node->file.name,name->file.name))
@@ -113,7 +123,7 @@ IFileNode far* ISearch(IFileNode far* node,IFileNode far* name)
     else if(!headNode->child)
     {
         headNode=headNode->next;
-        farfree(headNode->pre);
+        free(headNode->pre);
         headNode->pre=NULL;
     }
     return headNode;

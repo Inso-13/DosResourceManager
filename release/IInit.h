@@ -3,6 +3,6 @@
 
 #include<GRAPHICS.H>
 
-void IInitGraph(void);
+void IInitGraph(void);  //图形界面的初始化
 
 #endif

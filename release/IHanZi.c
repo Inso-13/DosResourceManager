@@ -1,14 +1,15 @@
 #include <stdio.h>
 #include <conio.h>
 #include <stdlib.h>
+#include <STRING.H>
 #include <graphics.h>
 #include <dos.h>
 #include "IHanZi.h"
 
-void IPutsHZ16(int x,int y,int wid,int color,char *str,FILE far* fp)
+void IPutsHZ16(int x,int y,int wid,int color,int size,char *str,FILE * fp) //中文输出
 {
     unsigned ZCode,BCode;
-    int i,j,k,rec;
+    int i,j,k,s,rec;
     long len;
     char buf[32];
     while(*str)
@@ -29,14 +30,27 @@ void IPutsHZ16(int x,int y,int wid,int color,char *str,FILE far* fp)
                     {
                         if(buf[2*i+j]>>(7-k)&1)
                         {
-                            putpixel(x+8*j+k,y+i,color);
+                            for(s=0;s<size;s++)
+                                putpixel(x+(8*j+k)*size+s,y+i*size+s,color);
                         }
                     }
                 }
             }
-            x=x+16+wid;
+            x=x+16*size+wid;
             str+=2;
         }
     }
     return;    
+}
+void Iouttextxy(int x,int y,int wid,int color,int size,char *str,FILE * fp) //自动判断中英文输出，未测试
+{
+    if(!str) return;
+    if(*str>=0xa0)
+    {
+        IPutsHZ16(x,y,wid,color,size,str,fp);
+    }
+    else
+    {
+        outtextxy(x,y,str);
+    }
 }

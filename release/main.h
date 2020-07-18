@@ -1,0 +1,12 @@
+#include<STDIO.H>
+#include<ALLOC.H>
+#include<STRING.H>
+#include<CONIO.H>
+#include<DOS.H>
+#include"IType.h"
+#include"IMouse.h"
+#include"IInit.h"
+#include"IEvent.h"
+#include"IUtility.h"
+#include"IDiry.h"
+#include"IHanZi.h"

@@ -3,12 +3,13 @@
 
 #include"IType.h"
 
-IBool IAddChild(IFileNode far* parent,IFileNode far* child);// 1 for added
-IBool IAddSibling(IFileNode far* pre,IFileNode far* next);// 1 for added
-IBool IDelFileNode(IFileNode far *parent,char* name);
-void IDelFilelist(IFileNode far* root);
-void IAddFilelist(IFileNode far* root);
-IFileNode far* IGetFileNodeList(char far* path);// enlarge the filetree
-void IPeek(IFileNode far* oldParent);
+IBool IAddChild(IFileNode * parent,IFileNode * child);//添加子节点
+IBool IAddFileNode(IFileNode  *parent,char* name);  //在parent文件夹中添加name文件节点
+IBool IDelFileNode(IFileNode  *parent,char* name);
+//在parent文件夹中删除name文件节点
+void IDelFilelist(IFileNode * root);    //递归删除整个链表
+void IAddFilelist(IFileNode * root);    //递归添加整个树
+IFileNode * IGetFileNodeList(char * path);  //得到路径下的所有文件，以链表的形式返回
+void IPeek(IFileNode * oldParent);  //查找文件夹中的文件数和子文件夹数
 
 #endif

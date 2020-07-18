@@ -5,7 +5,7 @@
 #include"IMouse.h"
 
 
-void IMouseMath(int (*mouseDraw)[16])/*计算鼠标的样子*/
+void IMouseMath(int (*mouseDraw)[16])   //计算鼠标的形状
 {
     int i,j,u,k;
     int up[16][16],down[16][16];
@@ -30,7 +30,7 @@ void IMouseMath(int (*mouseDraw)[16])/*计算鼠标的样子*/
             up[i][k]=0;
         for(k=u;k>=0;k--)
             down[i][k]=0;
-        for(k=0;k<16;k++)/*四种组合方式*/
+        for(k=0;k<16;k++)
         {
             if(up[i][k]==0&&down[i][k]==0)
                 mouseDraw[i][k]=1;
@@ -42,7 +42,7 @@ void IMouseMath(int (*mouseDraw)[16])/*计算鼠标的样子*/
                 mouseDraw[i][k]=4;
         }
     }
-    mouseDraw[1][2]=4;/*特殊点*/
+    mouseDraw[1][2]=4;
 }
 /*鼠标光标显示*/
 void IMouseOn(int x,int y,int (*mouseDraw)[16],int(*pixelSave)[16])
@@ -79,38 +79,44 @@ int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[
     int status=0,i,j,color;
     int x=*pMouseX;
     int y=*pMouseY;/*默认鼠标没有移动*/
-    long t;
-
     
     while(x==*pMouseX&&y==*pMouseY&&status==0)
     {
         IMouseGetXY(pMouseX,pMouseY);
-        if(*pMouseX!=x||*pMouseY!=y)
+        if(*pMouseX!=x||*pMouseY!=y)    /*鼠标移动，status bit0 置1*/
         {
             status+=1;
             IMouseOff(x,y,mouseDraw,pixelSave);
             IMouseOn(*pMouseX,*pMouseY,mouseDraw,pixelSave);/*新位置显示*/
         }
-        if(ILeftPress())
+        if(ILeftPress())    /*鼠标左键单击，status bit1 置1*/
         {
             status+=2;
-            for(t=0;t<3000000;t++);
-            if(!ILeftPress())
+            delay(100);
+            if(!ILeftPress())   /*鼠标左键双击，status bit4 置1*/
             {
-                for(t=0;t<3000000;t++);
+                delay(100);
                 if(ILeftPress())
                     status+=8;
             }
         }
-        if(IRightPress())
+        if(IRightPress())   /*鼠标右键单击，status bit3 置1*/
             status+=4;
-        if(IMouseLeftRelease())
+        if(IMouseLeftRelease()) /*鼠标左键释放，status bit5 置1*/
             status+=16;
     }
     return status;
 } 
-//获取鼠标当前位置
-void IMouseGetXY(int *pMouseX,int *pMouseY)
+
+/*
+**
+***
+    以上代码来自网络，略有修改
+***
+**
+*/
+
+void IMouseGetXY(int *pMouseX,int *pMouseY)     //获取鼠标当前位置
 {
     union REGS regs; 
     regs.x.ax=3;
@@ -132,7 +138,7 @@ int IRightPress()
     int86(0x33,&regs,&regs);
     return(regs.x.bx&2);
 }
-void IMouseSetLimit(int xMax,int yMax) //640*480
+void IMouseSetLimit(int xMax,int yMax)  //请使用640*480
 {
     union REGS regs; 
     regs.x.ax=7;

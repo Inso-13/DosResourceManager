@@ -9,21 +9,18 @@
 #ifdef DB
     #include<STDIO.H>
 #endif
-IBool IAddSibling(IFileNode far* pre,IFileNode far* next)
+IBool IAddChild(IFileNode * parent,IFileNode * child)
 {
-    return IAddChild(IFindParent(pre),next);
-}
-IBool IAddChild(IFileNode far* parent,IFileNode far* child)
-{
-    IFileNode far* temp=NULL;
-    if(!parent) return 0;
-    if(!strcmp(child->file.name,""))
+    IFileNode * temp=NULL;
+
+    if(!parent) return 0;   //父节点为空，返回0
+    if(!strcmp(child->file.name,""))    //子节点为僵尸节点，清除并返回0
     {
-        farfree(child);
+        free(child);
         child=NULL;
         return 0;
     }
-    if(parent->child)
+    if(parent->child)   //如果父节点已有子节点
     {
         temp=parent->child;
         while(temp->next)
@@ -34,7 +31,7 @@ IBool IAddChild(IFileNode far* parent,IFileNode far* child)
         child->pre=temp;
         child->isHead=0;
     }
-    else
+    else    //如果父节点未有子节点
     {
         parent->child=child;
         child->pre=parent;
@@ -44,18 +41,18 @@ IBool IAddChild(IFileNode far* parent,IFileNode far* child)
     printf("%s is added as %s's child\n",child->file.name,parent->file.name);
     printf("its path is %s\n",child->file.path);
 #endif
-    return 1;
+    return 1;   //成功添加，返回1
 }
-IFileNode far* IGetFileNodeList(char far* path)
+IFileNode *IGetFileNodeList(char * path)
 {
-    IFileNode far* childRoot=(IFileNode far*)farmalloc(sizeof(IFileNode)), far*tempNode=childRoot, far*lastNode=childRoot;
+    IFileNode * childRoot=(IFileNode *)malloc(sizeof(IFileNode)), *tempNode=childRoot, *lastNode=childRoot;
     int ret,i,j=0;
     struct find_t ft;
     if(childRoot==NULL)
     {
 #ifdef  DB
         printf("not enough memory\n");
-        printf("%ld",farcoreleft());
+        printf("%ld",coreleft());
 #endif
         IQuit();
     }
@@ -109,12 +106,12 @@ IFileNode far* IGetFileNodeList(char far* path)
         ret=_dos_findnext(&ft);
         if(ret) break;
         lastNode=tempNode;
-        tempNode=(IFileNode far*)farmalloc(sizeof(IFileNode));
+        tempNode=(IFileNode *)malloc(sizeof(IFileNode));
         if(tempNode==NULL)
         {
 #ifdef  DB
             printf("not enough memory\n");
-            printf("%ld",farcoreleft());
+            printf("%ld",coreleft());
 #endif
             IQuit();
         }
@@ -124,24 +121,24 @@ IFileNode far* IGetFileNodeList(char far* path)
     }
     return childRoot;
 }
-IBool IAddFileNode(IFileNode far *parent,char* name)
+IBool IAddFileNode(IFileNode  *parent,char* name)
 {
-    IFileNode far* child=(IFileNode far*)farmalloc(sizeof(IFileNode));
+    IFileNode * child=(IFileNode *)malloc(sizeof(IFileNode));
     int ret,i;
     struct find_t ft;
     if(child==NULL)
     {
 #ifdef  DB
         printf("not enough memory\n");
-        printf("%ld",farcoreleft());
+        printf("%ld",coreleft());
 #endif
         IQuit();
     }
     Icd(parent->file.path);
     IFileNodeSetNull(child);
-    ret=_dos_findfirst(name,0xf7,&ft);
+    ret=_dos_findfirst(name,0xf7,&ft);  //查找name文件
 
-    if(ret) return 0;
+    if(ret) return 0;   //查找不到，返回0
         
     strcpy(child->file.name,ft.name);
     child->file.size=(ft.size/512+1)/2;
@@ -178,9 +175,9 @@ IBool IAddFileNode(IFileNode far *parent,char* name)
 
     return IAddChild(parent,child);
 }
-IBool IDelFileNode(IFileNode far *parent,char* name)
+IBool IDelFileNode(IFileNode  *parent,char* name)
 {
-    IFileNode far* child=parent->child;
+    IFileNode * child=parent->child;
     int ret,i;
 
     if(child==NULL)
@@ -214,36 +211,30 @@ IBool IDelFileNode(IFileNode far *parent,char* name)
         child->pre->next=child->next;
         if(child->next) child->next->pre=child->pre;
     }
-    farfree(child);
+    free(child);
     return 1;
 }
-void IDelFilelist(IFileNode far* root)
+void IDelFilelist(IFileNode * root)
 {
     if(root->child)
     {
         IDelFilelist(root->child);
-        root->child=NULL;
     }
     if(root->next)
     {
         IDelFilelist(root->next);
-        root->next=NULL;
     }
 #ifdef  DB
     printf("%s is freed\n",root->file.name);
-    printf("%ld",farcoreleft());
+    printf("near:%u\n",coreleft());
 #endif
-    IFileNodeSetNull(root);
-    farfree(root);
-    root=NULL;
+    free(root);
 }
-void IAddFilelist(IFileNode far* root)
+void IAddFilelist(IFileNode * root)
 {
-    IFileNode far* childRoot;
+    IFileNode * childRoot;
 
-    if(!strcmp(root->file.type,"0"))
-        strcpy(root->file.type,"1");
-    if(IisFolder(root))
+    if(!root->child&&IisFolder(root))
     {
         childRoot=IGetFileNodeList(root->file.path);
         IAddChild(root,childRoot);
@@ -251,22 +242,22 @@ void IAddFilelist(IFileNode far* root)
         printf("%s is entreed\n",root->file.name);
 #endif    
     }
-    if(root->child&&!strcmp(root->child->file.type,"1"))
+    if(root->child)
         IAddFilelist(root->child);
     if(root->next)
         IAddFilelist(root->next);
 }
-void IPeek(IFileNode far* node)
+void IPeek(IFileNode * node)
 {
     int ret;
     struct find_t ft;
     char temp[80];
-    IFileNode far* tempNode=(IFileNode far*)malloc(sizeof(IFileNode));
+    IFileNode * tempNode=(IFileNode *)malloc(sizeof(IFileNode));
     if(tempNode==NULL)
     {
 #ifdef  DB
         printf("not enough memory\n");
-        printf("%ld",farcoreleft());
+        printf("%ld",coreleft());
 #endif
         IQuit();  
     }
@@ -291,7 +282,7 @@ void IPeek(IFileNode far* node)
             strcat(temp,"\\");
             strcat(temp,ft.name);
             strcpy(tempNode->file.path,temp);
-            IPeek(tempNode);
+            IPeek(tempNode);    //深度优先搜索
             node->hasFile+=tempNode->hasFile;
             node->hasFolder+=tempNode->hasFolder;
         }
@@ -303,5 +294,5 @@ void IPeek(IFileNode far* node)
         if(ret) break;
     }
     Icd(node->file.path);
-    farfree(tempNode);
+    free(tempNode);
 }

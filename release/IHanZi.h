@@ -1,6 +1,9 @@
 #ifndef __IHANZI_H
 #define __IHANZI_H
 
-void IPutsHZ16(int x,int y,int wid,int color,char *str,FILE far* fp);// fp should be fpHZ
-
+void IPutsHZ16(int x,int y,int wid,int color,int size,char *str,FILE * fp);
+// 中文输出，wid为字间距，size为放大倍数（整数），fp为fpHZ
+void Iouttextxy(int x,int y,int wid,int color,int size,char *str,FILE * fp);
+// 自动判断中英文输出，wid为字间距，size为放大倍数（整数），fp为fpHZ
+// 未测试
 #endif

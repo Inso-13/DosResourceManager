@@ -9,12 +9,12 @@
 #include"INode.h"
 #include"IDirBase.h"
 
-#define BUFFSIZE 1024
+#define BUFFSIZE 256
 
-IBool Icopy(IFileNode far* inFile,IFileNode far* outParent)
+IBool Icopy(IFileNode * inFile,IFileNode * outParent)
 {
-    FILE far* fin,*fout;
-    char far* buff,temp[80],ttemp[80],i[4];
+    FILE * fin,*fout;
+    char * buff,temp[80],ttemp[80],i[4];
     int ret;
 
     fin=fopen(inFile->file.path,"r");
@@ -31,7 +31,7 @@ IBool Icopy(IFileNode far* inFile,IFileNode far* outParent)
     strcpy(temp,outParent->file.path);
     strcat(temp,"\\");
     strcat(temp,inFile->file.name);
-    if(!strcmp(inFile->file.path,temp))
+    if(!strcmp(inFile->file.path,temp)) //原位置拷贝
     {
         strcpy(i,"(1)");
 
@@ -56,7 +56,7 @@ IBool Icopy(IFileNode far* inFile,IFileNode far* outParent)
         return 0;
     }
 
-    buff=farmalloc(BUFFSIZE);
+    buff=malloc(BUFFSIZE);
     if(buff==NULL)
     {
 #ifdef DB
@@ -74,34 +74,27 @@ IBool Icopy(IFileNode far* inFile,IFileNode far* outParent)
     }
     fclose(fin);
     fclose(fout);
-    farfree(buff);
+    free(buff);
 
-    IAddFileNode(outParent,inFile->file.name);
+    IAddFileNode(outParent,inFile->file.name);  //添加新文件节点
     return 1;
 }
-IBool Irmf(IFileNode far* fileNode)
+IBool Irmf(IFileNode * fileNode)
 {
-    remove(fileNode->file.path);
-    return IDelFileNode(IFindParent(fileNode),fileNode->file.name);
+    remove(fileNode->file.path);    //删除文件
+    return IDelFileNode(IFindParent(fileNode),fileNode->file.name);     //删除文件节点
 }
-IBool Inew(IFileNode far* pathNode,IFileNode far* fileName)
-{
-    Icd(pathNode->file.path);
-    if(creatnew(fileName->file.name,0)==-1)
-        return 0;
-    return IAddFileNode(pathNode,fileName->file.name);    
-}
-void Imkdir(IFileNode far* pathNode,IFileNode far* folderName)
+void Imkdir(IFileNode * pathNode,IFileNode * folderName)    //创建文件夹，并更新节点
 {
     char temp[80];
 
     strcpy(temp,pathNode->file.path);
     strcat(temp,"\\");
     strcat(temp,folderName->file.name);
-    mkdir(temp);
+    mkdir(temp);    //创建文件夹
     IAddFileNode(pathNode,folderName->file.name);
 }
-IBool Irmdir(IFileNode far* node)
+IBool Irmdir(IFileNode * node)  //删除所有空文件夹，并更新节点
 {
     if(node->child) 
         return Irmdir(node->child);
@@ -110,12 +103,7 @@ IBool Irmdir(IFileNode far* node)
     IDelFileNode(IFindParent(node),node->file.name);
     return !rmdir(node->file.path);
 }
-void Imvdir(IFileNode far* oldChild,IFileNode far* newParent)
-{
-    Imkdir(newParent,oldChild);
-    Irmdir(oldChild);
-}
-void ICopyAll(IFileNode far* oldChildChild,IFileNode far* newChild)
+void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //复制链表
 {
     if(IisFolder(oldChildChild))
     {
@@ -134,7 +122,7 @@ void ICopyAll(IFileNode far* oldChildChild,IFileNode far* newChild)
         ICopyAll(oldChildChild->next,newChild);
     }
 }
-void Icpr(IFileNode far* oldChild,IFileNode far* newParent)
+void Icpr(IFileNode * oldChild,IFileNode * newParent) //递归复制所有文件和文件夹
 {
     if(IisFolder(oldChild))
     {
@@ -143,8 +131,8 @@ void Icpr(IFileNode far* oldChild,IFileNode far* newParent)
     }
     else
         Icopy(oldChild,newParent);
-}
-void IDelAll(IFileNode far* oldChildChild)
+}   
+void IDelAll(IFileNode * oldChildChild) //删除链表
 {
     if(IisFolder(oldChildChild))
     {
@@ -161,7 +149,7 @@ void IDelAll(IFileNode far* oldChildChild)
     }
     Irmdir(oldChildChild);
 }
-void Irmr(IFileNode far* oldChild)
+void Irmr(IFileNode * oldChild)//递归删除所有文件和文件夹
 {
     if(IisFolder(oldChild))
     {

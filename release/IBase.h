@@ -1,11 +1,8 @@
 #ifndef __IBASE_H
 #define __IBASE_H
 
-#ifndef far
-    #define far 
-#endif
-#define DB
+//#define DB  //开启debug模式
 
-void IQuit(void);
+void IQuit(void);   //退出程序
 
 #endif

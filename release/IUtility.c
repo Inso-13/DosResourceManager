@@ -6,37 +6,37 @@
 #ifdef DB
     #include<STDIO.H>
 #endif
-IFileNode far* IFindNodeByPath(char far* path,IFileNode far* root)
+IFileNode * IFindNodeByPath(char * path,IFileNode * root)
 {
-    IFileNode far* temp;
+    IFileNode * tempNode;
 
     if(!root)
         return 0;
 
-    if(!strcmp(root->file.path,path))
+    if(!strcmp(root->file.path,path))   //比较路径，一致则返回
         return root;
     
-    temp=IFindNodeByPath(path,root->child);
-    if(temp)
-        return temp;
+    tempNode=IFindNodeByPath(path,root->child); //深度优先搜索
+    if(tempNode)
+        return tempNode;
 
-    temp=IFindNodeByPath(path,root->next);
-    if(temp)
-        return temp;
+    tempNode=IFindNodeByPath(path,root->next);
+    if(tempNode)
+        return tempNode;
     
-    return 0;
+    return 0;   //未找到，则返回NULL
 }
-IFileNode far* IFindNodeByName(char far* name,IFileNode far* root)
+IFileNode * IFindNodeByName(char * name,IFileNode * root)
 {
-    IFileNode far* temp;
+    IFileNode * temp;
 
     if(!root)
         return 0;
 
-    if(!strcmp(root->file.name,name))
+    if(!strcmp(root->file.name,name))   //比较文件名，一致则返回
         return root;
     
-    temp=IFindNodeByName(name,root->next);
+    temp=IFindNodeByName(name,root->next);     //广度优先搜索
     if(temp)
         return temp;
 
@@ -44,19 +44,19 @@ IFileNode far* IFindNodeByName(char far* name,IFileNode far* root)
     if(temp)
         return temp;
     
-    return 0;
+    return 0;   //未找到，则返回NULL
 }
-void Icd(char far* path)
+void Icd(char * path)
 {
     char temp[80]="";
 
-    if(path[1]==':'&&getdisk()!=(path[0]-'A'))
+    if(path[1]==':'&&getdisk()!=(path[0]-'A'))  //当前磁盘与目标不一致
     {
-        setdisk(path[0]-'A');
+        setdisk(path[0]-'A');   //更改磁盘
 #ifdef  DB
         printf("switch to disk %c\n",getdisk()+'A');
 #endif
-        if(strlen(path)<=3)
+        if(strlen(path)<=3)     //路径标准化
         {
             strcpy(temp,path);
             strcpy(temp+1,"");
@@ -64,33 +64,15 @@ void Icd(char far* path)
             chdir(temp);
         }
     }    
-    chdir(path);
+    chdir(path);    //更改路径
 #ifdef  DB
     getcwd(temp,80);
     puts(temp);
 #endif
 }
-int Istrcmp(char *s,char *t)
+IBool IisFolder(IFileNode * node)
 {
-    while((*s==*t)&&(*s!='\0'))
-    {
-        s++;
-        t++;
-    }
-    return *s-*t;
-}
-IBool IisFolder(IFileNode far* node)
-{
-    int flag=0;
-    if(!strcmp(node->file.type,"0"))
-    {
-        flag=1;
-    }
-    if(!strcmp(node->file.type,"1"))
-    {
-        flag=1;
-    }
-    return flag;
+    return !strcmp(node->file.type,"0")||!strcmp(node->file.type,"1");
 }
 IBool IMatch(char* s,char* p)
 {
@@ -132,13 +114,13 @@ IBool IMatch(char* s,char* p)
     else
         return 1;
 }
-IBool IGetPath(IFileNode far* node,char* temp)
+IBool IGetPath(IFileNode * node,char* temp)
 {
     int i,n;
 
     n=strlen(node->file.path);
     i=n-1;
-    while(node->file.path[i]!='\\')
+    while(node->file.path[i]!='\\') //找到最后一个反斜杠
     {
         i--;
         if(i==0)
@@ -148,9 +130,9 @@ IBool IGetPath(IFileNode far* node,char* temp)
     strcpy(temp+i,"");
     return 1;
 }
-IFileNode far* IDiskInit()
+IFileNode * IDiskInit()
 {
-    IFileNode far* root=(IFileNode far*)malloc(sizeof(IFileNode)),* rootC=(IFileNode far*)malloc(sizeof(IFileNode)),*tempNode=rootC,*lastNode=rootC;
+    IFileNode * root=(IFileNode *)malloc(sizeof(IFileNode)),* rootC=(IFileNode *)malloc(sizeof(IFileNode)),*tempNode=rootC,*lastNode=rootC;
     int i,disk;
     char temp[3];
 
@@ -160,11 +142,11 @@ IFileNode far* IDiskInit()
     rootC->pre=root;
     rootC->isHead=1;
     strcpy(temp,"C:");
-    for(i=0;i<26;i++)
+    for(i=0;i<26;i++)   //遍历26个英文字母，查找所有磁盘
     {
         setdisk(i);
         disk=getdisk();
-        if(disk==i)
+        if(disk==i)     //如果磁盘存在，初始化磁盘节点
         {
             if(disk<2||disk>24)
                 continue;
@@ -178,7 +160,7 @@ IFileNode far* IDiskInit()
             temp[0]=disk+'A';
             strcpy(tempNode->file.name,temp);
             strcpy(tempNode->file.path,temp);
-            tempNode=(IFileNode far*)farmalloc(sizeof(IFileNode));
+            tempNode=(IFileNode *)malloc(sizeof(IFileNode));
             IFileNodeSetNull(tempNode);
             lastNode->next=tempNode;
             tempNode->pre=lastNode;
@@ -186,11 +168,14 @@ IFileNode far* IDiskInit()
         }
     }
     lastNode->pre->next=NULL;
-    farfree(lastNode);
+    free(lastNode);
+#ifdef DB
+    printf("near:%u\n",coreleft());
+#endif
     Icd("C:");
-    return root;
+    return root;    //返回磁盘节点的根节点
 }
-void IFileNodeSetNull(IFileNode far* node)
+void IFileNodeSetNull(IFileNode * node)
 {
     node->isHead=0;
     node->isSelect=0;
@@ -200,11 +185,11 @@ void IFileNodeSetNull(IFileNode far* node)
     node->next=NULL;
     node->pre=NULL;
 }
-IFileNode far* IFindParent(IFileNode far* child)
+IFileNode * IFindParent(IFileNode * child)
 {
-    IFileNode far* temp=child;
+    IFileNode * temp=child;
     
-    while(!temp->isHead)
+    while(!temp->isHead)    //找到链表头
     {
         temp=temp->pre;
     }
