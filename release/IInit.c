@@ -1,3 +1,4 @@
+#include<GRAPHICS.H>
 #include"IInit.h"
 
 void IInitGraph()

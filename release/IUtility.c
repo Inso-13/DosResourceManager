@@ -2,6 +2,7 @@
 #include<DIR.H>
 #include<CONIO.H>
 #include<ALLOC.H>
+#include"IType.h"
 #include"IUtility.h"
 #ifdef DB
     #include<STDIO.H>
@@ -56,14 +57,14 @@ void Icd(char * path)
 #ifdef  DB
         printf("switch to disk %c\n",getdisk()+'A');
 #endif
-        if(strlen(path)<=3)     //路径标准化
-        {
-            strcpy(temp,path);
-            strcpy(temp+1,"");
-            strcat(temp,":\\.");
-            chdir(temp);
-        }
-    }    
+    } 
+    if(strlen(path)<=3)     //路径标准化
+    {
+        strcpy(temp,path);
+        strcpy(temp+1,"");
+        strcat(temp,":\\.");
+        chdir(temp);
+    }   
     chdir(path);    //更改路径
 #ifdef  DB
     getcwd(temp,80);
@@ -72,7 +73,7 @@ void Icd(char * path)
 }
 IBool IisFolder(IFileNode * node)
 {
-    return !strcmp(node->file.type,"0")||!strcmp(node->file.type,"1");
+    return (node->file.type[0]=='0')||(node->file.type[0]=='1');
 }
 IBool IMatch(char* s,char* p)
 {
@@ -139,8 +140,11 @@ IFileNode * IDiskInit()
     IFileNodeSetNull(root);
     IFileNodeSetNull(rootC);
     root->child=rootC;
+    strcpy(root->file.type,"1\\");
+    strcpy(root->file.name,"DOS");
+    root->hasFolder=-1;
     rootC->pre=root;
-    rootC->isHead=1;
+    rootC->flags|=4;
     strcpy(temp,"C:");
     for(i=0;i<26;i++)   //遍历26个英文字母，查找所有磁盘
     {
@@ -156,7 +160,8 @@ IFileNode * IDiskInit()
             tempNode->file.date.day=1;
             tempNode->file.date.hour=0;
             tempNode->file.date.minute=0;
-            strcpy(tempNode->file.type,"0");
+            tempNode->hasFolder=-1;
+            strcpy(tempNode->file.type,"0d");
             temp[0]=disk+'A';
             strcpy(tempNode->file.name,temp);
             strcpy(tempNode->file.path,temp);
@@ -177,8 +182,7 @@ IFileNode * IDiskInit()
 }
 void IFileNodeSetNull(IFileNode * node)
 {
-    node->isHead=0;
-    node->isSelect=0;
+    node->flags=0;
     node->hasFile=0;
     node->hasFolder=0;
     node->child=NULL;
@@ -189,9 +193,22 @@ IFileNode * IFindParent(IFileNode * child)
 {
     IFileNode * temp=child;
     
-    while(!temp->isHead)    //找到链表头
+    while(!(temp->flags&4))    //找到链表头
     {
         temp=temp->pre;
     }
     return temp->pre;
+}
+void ISetEvent(IEvent* event,int key,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change)
+{
+    event->key=key;
+    event->x1=x1;
+    event->y1=y1;
+    event->x2=x2;
+    event->y2=y2;
+    event->type=type;
+    event->pfun=pfun;
+    event->node0=node0;
+    event->node1=node1;
+    event->change=change;
 }

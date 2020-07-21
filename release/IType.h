@@ -28,8 +28,9 @@ typedef struct IFile    //文件结构
 typedef struct IFileNode    //文件节点
 {
     IFile file;                 //文件
-    IBool isSelect;             //是否被选中
-    IBool isHead;               //是否为链表头
+    char flags;                 // bit0 是否鼠标hover,bit1 是否被选中,bit2 是否为链表头
+    // IBool isSelect;             //是否被选中
+    // IBool isHead;               //是否为链表头
     int hasFile;                //包含的文件数
     int hasFolder;              //包含的文件夹数
     struct IFileNode * pre;     //前一个节点（如果是链表头，则pre为父节点）
@@ -44,10 +45,11 @@ typedef struct IEvent   //事件
     int y1;
     int x2;
     int y2;
-    int type;           //点击类型
+    int type;               //点击类型
     void (*pfun)(IFileNode *,IFileNode *);     //槽函数
     IFileNode * node0;      //槽函数的第一个参数
     IFileNode * node1;      //槽函数的第二个参数
+    char change;            //改变的位置
 }IEvent;
 
 typedef struct IEventStackNode      //事件栈

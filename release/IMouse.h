@@ -10,7 +10,7 @@ void IMouseGetXY(int*,int*);    //得到鼠标的当前位置
 int IMouseLeftRelease(void);    //鼠标左键是否释放
 int ILeftPress(void);           //鼠标左键是否按下
 int IRightPress(void);          //鼠标右键是否按下
-int IMouseStatus(int*,int*,int (*mouseDraw)[16],int (*pixelSave)[16]);
-//返回鼠标的状态
+int IMouseStatus(int*,int*,int (*mouseDraw)[16],int (*pixelSave)[16]);//返回鼠标的状态
+void IMouseReset(void);
 
 #endif

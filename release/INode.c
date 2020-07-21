@@ -29,13 +29,13 @@ IBool IAddChild(IFileNode * parent,IFileNode * child)
         }
         temp->next=child;
         child->pre=temp;
-        child->isHead=0;
+        child->flags&=3;       //child->isHead=0;
     }
     else    //如果父节点未有子节点
     {
         parent->child=child;
         child->pre=parent;
-        child->isHead=1;
+        child->flags|=4;        //child->isHead=1;
     }
 #ifdef  DB
     printf("%s is added as %s's child\n",child->file.name,parent->file.name);
@@ -60,7 +60,7 @@ IFileNode *IGetFileNodeList(char * path)
     IFileNodeSetNull(childRoot);
     ret=_dos_findfirst("*.*",0xf7,&ft);
 
-    while(j<100)
+    while(j<=30)
     {
         j++;
         while(!strcmp(ft.name,".")||!strcmp(ft.name,".."))
@@ -197,13 +197,13 @@ IBool IDelFileNode(IFileNode  *parent,char* name)
 #endif
         return 0;
     }
-    if(child->isHead)
+    if(child->flags&4)
     {
         child->pre->child=child->next;
         if(child->next)
         {
             child->next->pre=child->pre;
-            child->next->isHead=1;
+            child->next->flags|=4;
         }
     }
     else
@@ -253,6 +253,7 @@ void IPeek(IFileNode * node)
     struct find_t ft;
     char temp[80];
     IFileNode * tempNode=(IFileNode *)malloc(sizeof(IFileNode));
+    if(!IisFolder(node)) return;
     if(tempNode==NULL)
     {
 #ifdef  DB
@@ -278,10 +279,8 @@ void IPeek(IFileNode * node)
         {
             node->hasFolder++;
             IFileNodeSetNull(tempNode);
-            strcpy(temp,node->file.path);
-            strcat(temp,"\\");
-            strcat(temp,ft.name);
-            strcpy(tempNode->file.path,temp);
+            sprintf(tempNode->file.path,"%s\\%s",node->file.path,ft.name);
+            strcpy(tempNode->file.type,"0t");
             IPeek(tempNode);    //深度优先搜索
             node->hasFile+=tempNode->hasFile;
             node->hasFolder+=tempNode->hasFolder;

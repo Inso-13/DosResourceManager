@@ -55,9 +55,9 @@ void IMouseOn(int x,int y,int (*mouseDraw)[16],int(*pixelSave)[16])
         {
             pixelSave[i][j]=getpixel(x+j,y+i);/*保存原来的颜色*/
             if(mouseDraw[i][j]==1)
-                putpixel(x+j,y+i,0);
+                putpixel(x+j,y+i,DARKGRAY);
             else if(mouseDraw[i][j]==2)
-                putpixel(x+j,y+i,15);
+                putpixel(x+j,y+i,DARKGRAY);
         }
     }
 }
@@ -91,8 +91,10 @@ int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[
         }
         if(ILeftPress())    /*鼠标左键单击，status bit1 置1*/
         {
-            status+=2;
-            delay(100);
+            delay(18);
+            if(ILeftPress())    /*防抖动*/
+                status+=2;
+            delay(82);
             if(!ILeftPress())   /*鼠标左键双击，status bit4 置1*/
             {
                 delay(100);
@@ -101,7 +103,11 @@ int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[
             }
         }
         if(IRightPress())   /*鼠标右键单击，status bit3 置1*/
-            status+=4;
+        {
+            delay(18);
+            if(IRightPress())    /*防抖动*/
+               status+=4;
+        }
         if(IMouseLeftRelease()) /*鼠标左键释放，status bit5 置1*/
             status+=16;
     }
@@ -164,5 +170,11 @@ void IMouseSetXY(int x,int y)
     regs.x.ax=4;
     regs.x.cx=x;
     regs.x.dx=y;
+    int86(0x33,&regs,&regs);
+}
+void IMouseReset()
+{
+    union REGS regs;
+    regs.x.ax=0;
     int86(0x33,&regs,&regs);
 }

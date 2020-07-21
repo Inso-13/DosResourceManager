@@ -11,4 +11,5 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);//复制链表
 void IDelAll(IFileNode * oldChildChild); //删除链表
 void Icpr(IFileNode * oldChild,IFileNode * newParent);//递归复制所有文件和文件夹
 void Irmr(IFileNode * oldChild);//递归删除所有文件和文件夹
+
 #endif

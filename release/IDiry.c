@@ -9,7 +9,6 @@
 #include"IUtility.h"
 #include"IDiry.h"
 
-void Imkdir(IFileNode * pathNode,IFileNode * folderName);    //创建文件夹，并更新节点
 IBool Inew(IFileNode * pathNode,IFileNode * fileName)
 {
     Icd(pathNode->file.path);
@@ -30,28 +29,47 @@ IBool Irename(IFileNode * oldName,IFileNode * newName) //重命名oldName文件
     strcpy(oldName->file.path,temp);    //更新节点
     return 1;
 }
-void IDetree(IFileNode * root) //将root目录下的文件从文件树上减除
+void IDetree(IFileNode * root,IFileNode* null) //将root目录下的文件从文件树上减除
 {
     if(!root) return;
-    strcpy(root->file.type,"0");
+    if(root->file.type[1]=='\\')
+    {
+        root->file.type[0]='0';
+        return;
+    }
+    if(!IisFolder(root)) return;
+    root->file.type[0]='0';
     IDelFilelist(root->child);
     root->child=NULL;
 }
-void IEntree(IFileNode * root) //将root目录下的文件加到文件树上
+void IEntree(IFileNode * root,IFileNode* null) //将root目录下的文件加到文件树上
 {
     IFileNode * childRoot;
 
     if(!root) return;
+    if(root->file.type[1]=='\\')
+    {
+        root->file.type[0]='1';
+        return;
+    }
+    if(root->file.type[0]=='1'||root->child)
+        return;
     if(IisFolder(root))
     {
         childRoot=IGetFileNodeList(root->file.path);
         IAddChild(root,childRoot);
+        while(childRoot)
+        {
+            IPeek(childRoot);
+            childRoot=childRoot->next;
+        }
+        
 #ifdef  DB
         printf("%s is entreed\n",root->file.name);
         printf("%u\n",coreleft());
 #endif    
     }
-    strcpy(root->file.type,"1");
+    root->file.type[0]='1';
 }
 void Icplr(IFileNode * oldParent,IFileNode * newParent)//复制oldParent目录下所有被选中的文件
 {
@@ -59,7 +77,7 @@ void Icplr(IFileNode * oldParent,IFileNode * newParent)//复制oldParent目录�
 
     while(tempNode)
     {
-        if(tempNode->isSelect)
+        if(tempNode->flags&1)
             Icpr(tempNode,newParent);
         tempNode=tempNode->next;
     }
@@ -71,7 +89,7 @@ void Irmlr(IFileNode * oldParent,IFileNode * rootR) //删除oldParent目录下�
     if(rootR) Icplr(oldParent,rootR);
     while(tempNode)
     {
-        if(tempNode->isSelect)
+        if(tempNode->flags&1)
             Irmr(tempNode);
         tempNode=tempNode->next;
     }
@@ -93,8 +111,8 @@ IFileNode * ISearch(IFileNode * node,IFileNode * name) //按文件名查找文�
     }
     if(IisFolder(node))
     {
-        IEntree(node);
-        strcpy(node->file.type,"0");
+        IEntree(node,0);
+        node->file.type[0]='0';
         tempNode=node->child;
         while(tempNode)
         {
@@ -115,7 +133,7 @@ IFileNode * ISearch(IFileNode * node,IFileNode * name) //按文件名查找文�
             tempNode=tempNode->next;
         }
         if(!headNode->next)
-            IDetree(node);
+            IDetree(node,0);
     }
 
     if(!headNode->next&&!headNode->child)

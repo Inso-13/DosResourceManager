@@ -9,4 +9,3 @@ void IQuit()
     fcloseall();    //关闭所有文件
     exit(0);    //退出
 }
-

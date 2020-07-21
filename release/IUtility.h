@@ -12,5 +12,6 @@ void Icd(char *); //更换磁盘并进入目录
 IBool IisFolder(IFileNode * node);  //是否为目录
 IFileNode * IFindNodeByPath(char * path,IFileNode * root);  //根据路径得到文件节点
 IFileNode * IFindNodeByName(char * name,IFileNode * root);  //根据文件名得到文件节点
+void ISetEvent(IEvent* event,int key,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change);
 
 #endif
