@@ -22,7 +22,7 @@ void ISelect(IFileNode* node,IFileNode* null);
 void ICtrlSelect(IFileNode* node,IFileNode* null);
 void INOP(IFileNode* null1,IFileNode* null2);
 void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNode** curNode,IFileNode** nodeX);
-void IDrawMenu(int x,int y,int numOfSelected,IFileNode** nodeX);
+void IDrawMenu(int x,int y,int numOfSelected,IFileNode** curNode,IFileNode** nodeX);
 void ISetCopy(IFileNode* cur,IFileNode* nodeX);
 void ISetDelete(IFileNode* cur,IFileNode* null);
 void ISetPaste(IFileNode* cur,IFileNode* X);

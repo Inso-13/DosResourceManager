@@ -4,11 +4,10 @@
 #include<DIR.H>
 #include<IO.H>
 #include<ALLOC.H>
+#include<STDIO.H>
 #include"IUtility.h"
 #include"INode.h"
-#ifdef DB
-    #include<STDIO.H>
-#endif
+
 IBool IAddChild(IFileNode * parent,IFileNode * child)
 {
     IFileNode * temp=NULL;
@@ -29,7 +28,7 @@ IBool IAddChild(IFileNode * parent,IFileNode * child)
         }
         temp->next=child;
         child->pre=temp;
-        child->flags&=3;       //child->isHead=0;
+        child->flags&=27;       //child->isHead=0;
     }
     else    //如果父节点未有子节点
     {
@@ -39,7 +38,6 @@ IBool IAddChild(IFileNode * parent,IFileNode * child)
     }
 #ifdef  DB
     printf("%s is added as %s's child\n",child->file.name,parent->file.name);
-    printf("its path is %s\n",child->file.path);
 #endif
     return 1;   //成功添加，返回1
 }
@@ -71,8 +69,10 @@ IFileNode *IGetFileNodeList(char * path)
         if(ret) break;
         strcpy(tempNode->file.name,ft.name);
         tempNode->file.size=(ft.size/512+1)/2;
-        tempNode->file.readOnly=ft.attrib&0x01;
-        tempNode->file.isHidden=ft.attrib&0x02;
+        if(ft.attrib&0x01)
+            tempNode->flags|=8;
+        if(ft.attrib&0x02)
+            tempNode->flags|=16;
         if(ft.attrib&0x10)
         {
             strcpy(tempNode->file.type,"0");
@@ -90,19 +90,9 @@ IFileNode *IGetFileNodeList(char * path)
                     strcpy(tempNode->file.type,"NOT");
             }
         }
+        tempNode->file.date=ft.wr_date;
+        tempNode->file.time=ft.wr_time;
         
-        tempNode->file.date.year=ft.wr_date/512+1980;
-        ft.wr_date%=512;
-        tempNode->file.date.month=ft.wr_date/32;
-        tempNode->file.date.day=ft.wr_date%32;
-        
-        tempNode->file.date.hour=ft.wr_time/2048;
-        ft.wr_time%=2048;
-        tempNode->file.date.minute=ft.wr_time/32;
-        
-        strcpy(tempNode->file.path,path);
-        strcat(tempNode->file.path,"\\");
-        strcat(tempNode->file.path,tempNode->file.name);
         ret=_dos_findnext(&ft);
         if(ret) break;
         lastNode=tempNode;
@@ -126,6 +116,8 @@ IBool IAddFileNode(IFileNode  *parent,char* name)
     IFileNode * child=(IFileNode *)malloc(sizeof(IFileNode));
     int ret,i;
     struct find_t ft;
+    char temp[50];
+
     if(child==NULL)
     {
 #ifdef  DB
@@ -134,30 +126,23 @@ IBool IAddFileNode(IFileNode  *parent,char* name)
 #endif
         IQuit();
     }
-    Icd(parent->file.path);
+    IGetAbsolutePath(parent,temp);
+    Icd(temp);
     IFileNodeSetNull(child);
     ret=_dos_findfirst(name,0xf7,&ft);  //查找name文件
 
     if(ret) return 0;   //查找不到，返回0
         
     strcpy(child->file.name,ft.name);
+    child->file.date=ft.wr_date;
+    child->file.time=ft.wr_time;
     child->file.size=(ft.size/512+1)/2;
-    child->file.date.year=ft.wr_date/512+1980;
-    ft.wr_date%=512;
-    child->file.date.month=ft.wr_date/32;
-    child->file.date.day=ft.wr_date%32;
     
-    child->file.date.hour=ft.wr_time/2048;
-    ft.wr_time%=2048;
-    child->file.date.minute=ft.wr_time/32;
-    
-    strcpy(child->file.path,parent->file.path);
-    strcat(child->file.path,"\\");
-    strcat(child->file.path,child->file.name);
     if(ft.attrib&0x10)
     {
         strcpy(child->file.type,"0");
-        IPeek(child);
+        IGetAbsolutePath(child,temp);
+        IPeek(child,temp);
     }
     else
     {
@@ -179,6 +164,7 @@ IBool IDelFileNode(IFileNode  *parent,char* name)
 {
     IFileNode * child=parent->child;
     int ret,i;
+    char temp[50];
 
     if(child==NULL)
     {
@@ -186,7 +172,8 @@ IBool IDelFileNode(IFileNode  *parent,char* name)
         printf("nothing to del\n");
 #endif
     }
-    Icd(parent->file.path);
+    IGetAbsolutePath(parent,temp);
+    Icd(temp);
 
    while(strcmp(child->file.name,name)&&child!=NULL)
        child=child->next;
@@ -233,10 +220,12 @@ void IDelFilelist(IFileNode * root)
 void IAddFilelist(IFileNode * root)
 {
     IFileNode * childRoot;
+    char temp[50];
 
     if(!root->child&&IisFolder(root))
     {
-        childRoot=IGetFileNodeList(root->file.path);
+        IGetAbsolutePath(root,temp);
+        childRoot=IGetFileNodeList(temp);
         IAddChild(root,childRoot);
 #ifdef  DB
         printf("%s is entreed\n",root->file.name);
@@ -247,12 +236,13 @@ void IAddFilelist(IFileNode * root)
     if(root->next)
         IAddFilelist(root->next);
 }
-void IPeek(IFileNode * node)
+void IPeek(IFileNode* node,char* path)
 {
     int ret;
     struct find_t ft;
-    char temp[80];
+    char temp[50];
     IFileNode * tempNode=(IFileNode *)malloc(sizeof(IFileNode));
+
     if(!IisFolder(node)) return;
     if(tempNode==NULL)
     {
@@ -264,7 +254,7 @@ void IPeek(IFileNode * node)
     }
     node->hasFile=0;
     node->hasFolder=0;
-    Icd(node->file.path);
+    Icd(path);
     ret=_dos_findfirst("*.*",0xf7,&ft);
 
     while(1)
@@ -279,9 +269,9 @@ void IPeek(IFileNode * node)
         {
             node->hasFolder++;
             IFileNodeSetNull(tempNode);
-            sprintf(tempNode->file.path,"%s\\%s",node->file.path,ft.name);
+            sprintf(temp,"%s\\%s",path,ft.name);
             strcpy(tempNode->file.type,"0t");
-            IPeek(tempNode);    //深度优先搜索
+            IPeek(tempNode,temp);    //深度优先搜索
             node->hasFile+=tempNode->hasFile;
             node->hasFolder+=tempNode->hasFolder;
         }
@@ -292,6 +282,6 @@ void IPeek(IFileNode * node)
         ret=_dos_findnext(&ft);
         if(ret) break;
     }
-    Icd(node->file.path);
+    Icd(path);
     free(tempNode);
 }

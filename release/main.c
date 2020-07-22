@@ -19,6 +19,7 @@ void main()
     int mouseDraw[16][16],mouseSave[16][16];
     int mouseX,mouseY,mouseStatus,increaseX;
     char activeFlag=0,temp[50],isCtrl=0,numOfSelected=0;
+    // char tempStr[80];
     IFileNode *root,*rootR;
     IFileNode **curNode=(IFileNode**)malloc(sizeof(IFileNode*));
     IFileNode **nodeX=(IFileNode**)malloc(sizeof(IFileNode*));
@@ -31,12 +32,14 @@ void main()
     rootR->pre=NULL;
     rootR->flags|=4;
     strcpy(rootR->file.name,"ReBin");
-    strcpy(rootR->file.path,"ReBin");
     strcpy(rootR->file.type,"0r");
     top0=IInitEventStack();
     top1=IInitEventStack();
     *curNode=root;
     *nodeX=NULL;
+
+
+
 
     IInitGraph();
     //  init above
@@ -51,9 +54,9 @@ void main()
     while(!kbhit())
     {   
         mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);
-        activeFlag=IEventStackActive(top0,mouseX,mouseY,mouseStatus,0);
+        activeFlag=IEventStackActive(top0,mouseX,mouseY,mouseStatus);
         if(!activeFlag)
-            activeFlag=IEventStackActive(top1,mouseX,mouseY,mouseStatus,0);
+            activeFlag=IEventStackActive(top1,mouseX,mouseY,mouseStatus);
         
         if(bioskey(2)&4)
             isCtrl=1;

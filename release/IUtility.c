@@ -2,19 +2,20 @@
 #include<DIR.H>
 #include<CONIO.H>
 #include<ALLOC.H>
+#include<STDIO.H>
 #include"IType.h"
 #include"IUtility.h"
-#ifdef DB
-    #include<STDIO.H>
-#endif
+
 IFileNode * IFindNodeByPath(char * path,IFileNode * root)
 {
     IFileNode * tempNode;
+    char temp[50];
 
     if(!root)
         return 0;
 
-    if(!strcmp(root->file.path,path))   //比较路径，一致则返回
+    IGetAbsolutePath(root,temp);
+    if(!strcmp(temp,path))   //比较路径，一致则返回
         return root;
     
     tempNode=IFindNodeByPath(path,root->child); //深度优先搜索
@@ -115,21 +116,16 @@ IBool IMatch(char* s,char* p)
     else
         return 1;
 }
-IBool IGetPath(IFileNode * node,char* temp)
+void IGetAbsolutePath(IFileNode * node,char* temp)
 {
-    int i,n;
-
-    n=strlen(node->file.path);
-    i=n-1;
-    while(node->file.path[i]!='\\') //找到最后一个反斜杠
+    if(node->file.name[1]==':'||!strcmp(node->file.name,"DOS")||!strcmp(node->file.name,"ReBin"))
+        strcpy(temp,node->file.name);
+    else
     {
-        i--;
-        if(i==0)
-            return 0;
+        IGetAbsolutePath(IFindParent(node),temp);
+        strcat(temp,"\\");
+        strcat(temp,node->file.name);
     }
-    strcpy(temp,node->file.path);
-    strcpy(temp+i,"");
-    return 1;
 }
 IFileNode * IDiskInit()
 {
@@ -142,7 +138,6 @@ IFileNode * IDiskInit()
     root->child=rootC;
     strcpy(root->file.type,"1\\");
     strcpy(root->file.name,"DOS");
-    strcpy(root->file.path,"DOS");
     root->hasFolder=-1;
     rootC->pre=root;
     rootC->flags|=4;
@@ -155,17 +150,13 @@ IFileNode * IDiskInit()
         {
             if(disk<2||disk>24)
                 continue;
+            tempNode->file.date=33;
+            tempNode->file.time=0;
             tempNode->file.size=0;
-            tempNode->file.date.year=1980;
-            tempNode->file.date.month=1;
-            tempNode->file.date.day=1;
-            tempNode->file.date.hour=0;
-            tempNode->file.date.minute=0;
             tempNode->hasFolder=-1;
             strcpy(tempNode->file.type,"0d");
             temp[0]=disk+'A';
             strcpy(tempNode->file.name,temp);
-            strcpy(tempNode->file.path,temp);
             tempNode=(IFileNode *)malloc(sizeof(IFileNode));
             IFileNodeSetNull(tempNode);
             lastNode->next=tempNode;
@@ -200,9 +191,8 @@ IFileNode * IFindParent(IFileNode * child)
     }
     return temp->pre;
 }
-void ISetEvent(IEvent* event,int key,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change)
+void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change)
 {
-    event->key=key;
     event->x1=x1;
     event->y1=y1;
     event->x2=x2;

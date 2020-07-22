@@ -14,10 +14,10 @@
 IBool Icopy(IFileNode * inFile,IFileNode * outParent)
 {
     FILE * fin,*fout;
-    char * buff,temp[80],ttemp[80],i[4];
-    int ret;
-
-    fin=fopen(inFile->file.path,"r");
+    char * buff,inPath[50],outPath[50],temp[50],i[2],name[18],ext[5];
+    int ret,j;
+    IGetAbsolutePath(inFile,inPath);
+    fin=fopen(inPath,"r");
     if(fin==NULL)
     {
 #ifdef DB
@@ -26,28 +26,32 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
         return 0;
     }
 
-    Icd(outParent->file.path);
-
-    strcpy(temp,outParent->file.path);
-    strcat(temp,"\\");
-    strcat(temp,inFile->file.name);
-    if(!strcmp(inFile->file.path,temp)) //原位置拷贝
+    IGetAbsolutePath(outParent,outPath);
+    strcat(outPath,"\\");
+    strcat(outPath,inFile->file.name);
+    strcpy(name,inFile->file.name);
+    if(!strcmp(inPath,outPath)) //原位置拷贝
     {
-        strcpy(i,"(1)");
-
-        strcpy(temp,outParent->file.path);
-        strcat(temp,"\\");
-        strcat(temp,inFile->file.name);
+        strcpy(i,"1");
+        for(j=0;j<strlen(inFile->file.name);j++)
+            if(inFile->file.name[j]=='.')
+                break;
+        strcpy(name+j,"");
+        strcpy(ext,inFile->file.name+j);
+        IGetAbsolutePath(outParent,outPath);
+        strcat(outPath,"\\");
         do
         {
-            strcpy(ttemp,temp);
-            strcat(ttemp,i);
-            i[1]++;
-        }while(searchpath(ttemp));
-        strcpy(temp,ttemp);
+            strcat(name,i);
+            strcat(name,ext);
+            strcpy(temp,outPath);
+            strcat(temp,name);
+            i[0]++;
+        }while(searchpath(temp));
+        strcpy(outPath,temp);
     }
 
-    fout=fopen(temp,"w");
+    fout=fopen(outPath,"w");
     if(fout==NULL)
     {
 #ifdef DB
@@ -76,19 +80,21 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
     fclose(fout);
     free(buff);
 
-    IAddFileNode(outParent,inFile->file.name);  //添加新文件节点
+    IAddFileNode(outParent,name);  //添加新文件节点
     return 1;
 }
 IBool Irmf(IFileNode * fileNode)
 {
-    remove(fileNode->file.path);    //删除文件
+    char tempStr[50];
+    IGetAbsolutePath(fileNode,tempStr);
+    remove(tempStr);    //删除文件
     return IDelFileNode(IFindParent(fileNode),fileNode->file.name);     //删除文件节点
 }
 void Imkdir(IFileNode * pathNode,IFileNode * folderName)    //创建文件夹，并更新节点
 {
     char temp[80];
-
-    strcpy(temp,pathNode->file.path);
+    
+    IGetAbsolutePath(pathNode,temp);
     strcat(temp,"\\");
     strcat(temp,folderName->file.name);
     mkdir(temp);    //创建文件夹
@@ -96,12 +102,16 @@ void Imkdir(IFileNode * pathNode,IFileNode * folderName)    //创建文件夹，
 }
 IBool Irmdir(IFileNode * node)  //删除所有空文件夹，并更新节点
 {
+    char temp[50];
+
     if(node->child) 
         return Irmdir(node->child);
     if(node->next)
         return Irmdir(node->next);
     IDelFileNode(IFindParent(node),node->file.name);
-    return !rmdir(node->file.path);
+    
+    IGetAbsolutePath(node,temp);
+    return !rmdir(temp);
 }
 void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //复制链表
 {

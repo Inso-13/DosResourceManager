@@ -158,9 +158,9 @@ int IView0(IFileNode* root,IFileNode** curNode,IEventStackNode* top,int beginX,i
         IPointerRight(beginX+1,beginY+5);
         outtextxy(beginX+16,beginY+4,root->file.name);
         increaceY+=15;
-        ISetEvent(&tempEvent,0,beginX,beginY+4,beginX+10,beginY+9,2,IEntreeActive,root,curNode,6);
+        ISetEvent(&tempEvent,beginX,beginY+4,beginX+10,beginY+9,2,IEntreeActive,root,curNode,6);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,0,0,beginY,149,beginY+14,8,IEntreeActive,root,curNode,6);
+        ISetEvent(&tempEvent,0,beginY,149,beginY+14,8,IEntreeActive,root,curNode,6);
         IEventStackPush(top,tempEvent);
     }
     else        //如果是打开的文件夹
@@ -168,9 +168,9 @@ int IView0(IFileNode* root,IFileNode** curNode,IEventStackNode* top,int beginX,i
         IPointerDown(beginX,beginY+6);
         outtextxy(beginX+16,beginY+4,root->file.name);
         increaceY+=15;
-        ISetEvent(&tempEvent,0,beginX,beginY+4,beginX+10,beginY+9,2,IDetreeActive,root,curNode,6);
+        ISetEvent(&tempEvent,beginX,beginY+4,beginX+10,beginY+9,2,IDetreeActive,root,curNode,6);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,0,0,beginY,149,beginY+14,8,IDetreeActive,root,curNode,6);
+        ISetEvent(&tempEvent,0,beginY,149,beginY+14,8,IDetreeActive,root,curNode,6);
         IEventStackPush(top,tempEvent);
         if(root->child)
         {
@@ -189,7 +189,7 @@ int IView1(IFileNode** curNode,IEventStackNode* top,char isCtrl)
     int y,numOfItem=0,numOfSelected=0;
     IFileNode* tempNode;
     IEvent tempEvent;
-    char temp[20];
+    char temp[50];
 
     setcolor(BLUE);
     outtextxy(160,60,"Name");
@@ -204,8 +204,10 @@ int IView1(IFileNode** curNode,IEventStackNode* top,char isCtrl)
     setcolor(DARKGRAY);
 
     tempNode=(*curNode);
-    outtextxy(70,38,tempNode->file.path);
-    ISetEvent(&tempEvent,0,553,32,635,49,2,INOP,NULL,NULL,6);
+    
+    IGetAbsolutePath(tempNode,temp);
+    outtextxy(70,38,temp);
+    ISetEvent(&tempEvent,553,32,635,49,2,INOP,NULL,NULL,6);
     IEventStackPush(top,tempEvent);
 
     if(isCtrl&&!lastCtrl) numOfCtrl++;
@@ -227,18 +229,18 @@ int IView1(IFileNode** curNode,IEventStackNode* top,char isCtrl)
         }
 
         outtextxy(160,y+4,tempNode->file.name);
-        sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date.year,tempNode->file.date.month,tempNode->file.date.day,tempNode->file.date.hour,tempNode->file.date.minute);
+        sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date/512+1980,(tempNode->file.date%512)/32,tempNode->file.date%32,tempNode->file.time/2048,(tempNode->file.time%2048)/32);
         outtextxy(270,y+4,temp);
 
         if(numOfCtrl%2)
-            ISetEvent(&tempEvent,0,155,y,585,y+12,2,ICtrlSelect,tempNode,NULL,4);
+            ISetEvent(&tempEvent,155,y,585,y+12,2,ICtrlSelect,tempNode,NULL,4);
         else
-            ISetEvent(&tempEvent,0,155,y,585,y+12,2,ISelect,tempNode,NULL,4);
+            ISetEvent(&tempEvent,155,y,585,y+12,2,ISelect,tempNode,NULL,4);
         IEventStackPush(top,tempEvent);
 
         if(IisFolder(tempNode))
         {
-            ISetEvent(&tempEvent,0,155,y,585,y+12,8,IEntreeActive,tempNode,curNode,6);
+            ISetEvent(&tempEvent,155,y,585,y+12,8,IEntreeActive,tempNode,curNode,6);
             IEventStackPush(top,tempEvent);
             if(tempNode->file.type[1]=='d')
                 outtextxy(430,y+4,"Disk");
@@ -249,7 +251,7 @@ int IView1(IFileNode** curNode,IEventStackNode* top,char isCtrl)
         if(!IisFolder(tempNode))
         {
             settextjustify(2,2);
-            sprintf(temp,"%ld KB",tempNode->file.size);
+            sprintf(temp,"%d KB",tempNode->file.size);
             outtextxy(580,y+4,temp);
             settextjustify(0,2);
         }
@@ -299,7 +301,7 @@ void ISelect(IFileNode* node,IFileNode* null)
     IFileNode* tempNode=IFindParent(node)->child;
     while(tempNode)
     {
-        tempNode->flags&=5;
+        tempNode->flags&=29;
         tempNode=tempNode->next;
     }
     node->flags|=2;
@@ -317,28 +319,28 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     IEvent tempEvent;
     if(mouseX>590) mouseX=590;
     if(mouseY>380) mouseY=380;
-    IDrawMenu(mouseX,mouseY,numOfSelected,nodeX);
+    IDrawMenu(mouseX,mouseY,numOfSelected,curNode,nodeX);
     if(numOfSelected)
     {
         // if(numOfSelected==1)
         // {
-        //     ISetEvent(&tempEvent,0,mouseX+1,mouseY+1+15*4,mouseX+54,mouseY+14+15*4,2,ISetRename,null,null,4);
+        //     ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*4,mouseX+54,mouseY+14+15*4,2,ISetRename,null,null,4);
         //     IEventStackPush(top,tempEvent);
         // }
-        ISetEvent(&tempEvent,0,mouseX+1,mouseY+1,mouseX+54,mouseY+14,2,ISetCopy,curNode,nodeX,4);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1,mouseX+54,mouseY+14,2,ISetCopy,curNode,nodeX,4);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,0,mouseX+1,mouseY+1+15*1,mouseX+54,mouseY+14+15*1,2,ISetCut,curNode,nodeX,4);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*1,mouseX+54,mouseY+14+15*1,2,ISetCut,curNode,nodeX,4);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,0,mouseX+1,mouseY+1+15*2,mouseX+54,mouseY+14+15*2,2,ISetDelete,curNode,NULL,4);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*2,mouseX+54,mouseY+14+15*2,2,ISetDelete,curNode,NULL,4);
         IEventStackPush(top,tempEvent);
-}
-    else
+    }
+    if(!numOfSelected||((*curNode)==(*nodeX)))
     {
-        ISetEvent(&tempEvent,0,mouseX+1,mouseY+1+15*3,mouseX+54,mouseY+14+15*3,2,ISetPaste,curNode,nodeX,4);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*3,mouseX+54,mouseY+14+15*3,2,ISetPaste,curNode,nodeX,4);
         IEventStackPush(top,tempEvent);
     }
 }
-void IDrawMenu(int x,int y,int numOfSelected,IFileNode** nodeX)
+void IDrawMenu(int x,int y,int numOfSelected,IFileNode** curNode,IFileNode** nodeX)
 {
     int i;
     char str[5][7]={"copy","cut","delete","paste","rename"};
@@ -352,7 +354,7 @@ void IDrawMenu(int x,int y,int numOfSelected,IFileNode** nodeX)
             setcolor(LIGHTGRAY);
         outtextxy(x+3,y+15*i+3,str[i]);    
     }
-    if(!numOfSelected&&(*nodeX))
+    if((!numOfSelected||(*curNode)==(*nodeX))&&(*nodeX))
         setcolor(BLUE);
     else
         setcolor(LIGHTGRAY);
@@ -370,7 +372,7 @@ void ISetCopy(IFileNode* cur,IFileNode* X)
     if(*nodeX)
     {
         if((*nodeX)->flags&1)
-            (*nodeX)->flags&=6;
+            (*nodeX)->flags&=30;
     }
     *nodeX=*curNode;
 }

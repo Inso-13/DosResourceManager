@@ -45,13 +45,13 @@ IBool IEventStackPop(IEventStackNode * top,int n)
     }
     return 1;       //正常返回1
 }
-char IEventStackActive(IEventStackNode * top,int x,int y,int type,int key)
+char IEventStackActive(IEventStackNode * top,int x,int y,int type)
 {
     IEventStackNode * temp=top->next;
     
     while(temp)
     {
-        if((!(temp->event.key)||key==temp->event.key)&&x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2&&(temp->event.type&type))
+        if(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2&&(temp->event.type&type))
         {
             temp->event.pfun(temp->event.node0,temp->event.node1);      //激活槽函数
             return temp->event.change;
@@ -64,6 +64,6 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type,int key)
 void IDelStack(IEventStackNode * top)
 {
     while(top->next)
-        IEventStackPop(top,1);  //不断出栈
+        IEventStackPop(top,5);  //不断出栈
     free(top);  //释放栈顶
 }

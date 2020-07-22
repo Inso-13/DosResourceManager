@@ -9,6 +9,6 @@ IBool IDelFileNode(IFileNode  *parent,char* name);//在parent文件夹中删除n
 void IDelFilelist(IFileNode * root);    //递归删除整个链表
 void IAddFilelist(IFileNode * root);    //递归添加整个树
 IFileNode * IGetFileNodeList(char * path);  //得到路径下的所有文件，以链表的形式返回
-void IPeek(IFileNode * oldParent);  //查找文件夹中的文件数和子文件夹数
+void IPeek(IFileNode * oldParent,char* path);  //查找文件夹中的文件数和子文件夹数
 
 #endif

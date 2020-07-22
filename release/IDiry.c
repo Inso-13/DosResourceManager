@@ -11,7 +11,9 @@
 
 IBool Inew(IFileNode * pathNode,IFileNode * fileName)
 {
-    Icd(pathNode->file.path);
+    char temp[50];
+    IGetAbsolutePath(pathNode,temp);
+    Icd(temp);
     if(creatnew(fileName->file.name,0)==-1)
         return 0;
     return IAddFileNode(pathNode,fileName->file.name);    
@@ -20,13 +22,10 @@ IBool Irename(IFileNode * oldName,IFileNode * newName) //重命名oldName文件
 {
     char temp[80];
 
-    if(!IGetPath(oldName,temp)) return 0;
+    IGetAbsolutePath(IFindParent(oldName),temp);
     Icd(temp);
     rename(oldName->file.name,newName->file.name);  //重命名
     strcpy(oldName->file.name,newName->file.name);
-    strcat(temp,"\\");
-    strcat(temp,newName->file.name);
-    strcpy(oldName->file.path,temp);    //更新节点
     return 1;
 }
 void IDetree(IFileNode * root,IFileNode* null) //将root目录下的文件从文件树上减除
@@ -45,6 +44,7 @@ void IDetree(IFileNode * root,IFileNode* null) //将root目录下的文件从文
 void IEntree(IFileNode * root,IFileNode* null) //将root目录下的文件加到文件树上
 {
     IFileNode * childRoot;
+    char temp[50];
 
     if(!root) return;
     if(root->file.type[1]=='\\')
@@ -59,11 +59,13 @@ void IEntree(IFileNode * root,IFileNode* null) //将root目录下的文件加到
     }
     if(IisFolder(root))
     {
-        childRoot=IGetFileNodeList(root->file.path);
+        IGetAbsolutePath(root,temp);
+        childRoot=IGetFileNodeList(temp);
         IAddChild(root,childRoot);
         while(childRoot)
         {
-            IPeek(childRoot);
+            IGetAbsolutePath(childRoot,temp);
+            IPeek(childRoot,temp);
             childRoot=childRoot->next;
         }
         
