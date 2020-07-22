@@ -87,7 +87,7 @@ IFileNode *IGetFileNodeList(char * path)
                     break;
                 }
                 if(i==strlen(tempNode->file.name)-1)
-                    strcpy(tempNode->file.type,"no");
+                    strcpy(tempNode->file.type,"NOT");
             }
         }
         
@@ -169,7 +169,7 @@ IBool IAddFileNode(IFileNode  *parent,char* name)
                 break;
             }
             if(i==strlen(child->file.name)-1)
-                strcpy(child->file.type,"no");
+                strcpy(child->file.type,"NOT");
         }
     }
 

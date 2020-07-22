@@ -53,7 +53,10 @@ void IEntree(IFileNode * root,IFileNode* null) //将root目录下的文件加到
         return;
     }
     if(root->file.type[0]=='1'||root->child)
+    {
+        root->file.type[0]='1';
         return;
+    }
     if(IisFolder(root))
     {
         childRoot=IGetFileNodeList(root->file.path);
@@ -68,8 +71,8 @@ void IEntree(IFileNode * root,IFileNode* null) //将root目录下的文件加到
         printf("%s is entreed\n",root->file.name);
         printf("%u\n",coreleft());
 #endif    
-    }
     root->file.type[0]='1';
+    }
 }
 void Icplr(IFileNode * oldParent,IFileNode * newParent)//复制oldParent目录下所有被选中的文件
 {
@@ -77,7 +80,7 @@ void Icplr(IFileNode * oldParent,IFileNode * newParent)//复制oldParent目录�
 
     while(tempNode)
     {
-        if(tempNode->flags&1)
+        if(tempNode->flags&2)
             Icpr(tempNode,newParent);
         tempNode=tempNode->next;
     }
@@ -89,7 +92,7 @@ void Irmlr(IFileNode * oldParent,IFileNode * rootR) //删除oldParent目录下�
     if(rootR) Icplr(oldParent,rootR);
     while(tempNode)
     {
-        if(tempNode->flags&1)
+        if(tempNode->flags&2)
             Irmr(tempNode);
         tempNode=tempNode->next;
     }

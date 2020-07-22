@@ -142,6 +142,7 @@ IFileNode * IDiskInit()
     root->child=rootC;
     strcpy(root->file.type,"1\\");
     strcpy(root->file.name,"DOS");
+    strcpy(root->file.path,"DOS");
     root->hasFolder=-1;
     rootC->pre=root;
     rootC->flags|=4;

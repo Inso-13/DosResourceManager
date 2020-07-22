@@ -32,15 +32,16 @@ void IEventStackPush(IEventStackNode * top,IEvent newEvent)
 }
 IBool IEventStackPop(IEventStackNode * top,int n)
 {
-    IEventStackNode * q;
+    IEventStackNode *q=NULL;
     while(n--)      //出栈n次
     {
+        q=top;
         if(!q->next)
-        return 0;       //不足n返回0
+            return 0;       //不足n返回0
         q = top->next;
         top->next = q->next;
+        q->next = NULL;
         free(q);
-        q = NULL;
     }
     return 1;       //正常返回1
 }

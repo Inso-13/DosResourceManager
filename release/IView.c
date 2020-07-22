@@ -155,11 +155,6 @@ int IView0(IFileNode* root,IFileNode** curNode,IEventStackNode* top,int beginX,i
     }
     else if(root->file.type[0]=='0')   //如果是未打开的文件夹
     {
-        if(root->flags&1)
-        {
-            setfillstyle(SOLID_FILL,LIGHTBLUE);
-            pieslice(140,beginY+7,0,360,5);
-        }
         IPointerRight(beginX+1,beginY+5);
         outtextxy(beginX+16,beginY+4,root->file.name);
         increaceY+=15;
@@ -170,11 +165,6 @@ int IView0(IFileNode* root,IFileNode** curNode,IEventStackNode* top,int beginX,i
     }
     else        //如果是打开的文件夹
     {
-        if(root->flags&1)
-        {
-            setfillstyle(SOLID_FILL,LIGHTBLUE);
-            pieslice(140,beginY+7,0,360,5);
-        }
         IPointerDown(beginX,beginY+6);
         outtextxy(beginX+16,beginY+4,root->file.name);
         increaceY+=15;
@@ -193,10 +183,12 @@ int IView0(IFileNode* root,IFileNode** curNode,IEventStackNode* top,int beginX,i
     }
     return increaceY;
 }
-void IView1(IFileNode** curNode,IEventStackNode* top)
+int IView1(IFileNode** curNode,IEventStackNode* top,char isCtrl)
 {
-    int y;
+    static int numOfCtrl,lastCtrl;
+    int y,numOfItem=0,numOfSelected=0;
     IFileNode* tempNode;
+    IEvent tempEvent;
     char temp[20];
 
     setcolor(BLUE);
@@ -213,21 +205,41 @@ void IView1(IFileNode** curNode,IEventStackNode* top)
 
     tempNode=(*curNode);
     outtextxy(70,38,tempNode->file.path);
+    ISetEvent(&tempEvent,0,553,32,635,49,2,INOP,NULL,NULL,6);
+    IEventStackPush(top,tempEvent);
 
+    if(isCtrl&&!lastCtrl) numOfCtrl++;
+    lastCtrl=isCtrl;
     if(!tempNode->child)
     {
         outtextxy(350,150,"Nothing detected");
-        return;
+        return 0;
     }
     tempNode=tempNode->child;
     y=73;
     while(tempNode)
     {
+        if(tempNode->flags&2)
+        {
+            setfillstyle(SOLID_FILL,LIGHTGRAY);
+            bar(155,y,585,y+12);
+            numOfSelected++;
+        }
+
         outtextxy(160,y+4,tempNode->file.name);
         sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date.year,tempNode->file.date.month,tempNode->file.date.day,tempNode->file.date.hour,tempNode->file.date.minute);
         outtextxy(270,y+4,temp);
+
+        if(numOfCtrl%2)
+            ISetEvent(&tempEvent,0,155,y,585,y+12,2,ICtrlSelect,tempNode,NULL,4);
+        else
+            ISetEvent(&tempEvent,0,155,y,585,y+12,2,ISelect,tempNode,NULL,4);
+        IEventStackPush(top,tempEvent);
+
         if(IisFolder(tempNode))
         {
+            ISetEvent(&tempEvent,0,155,y,585,y+12,8,IEntreeActive,tempNode,curNode,6);
+            IEventStackPush(top,tempEvent);
             if(tempNode->file.type[1]=='d')
                 outtextxy(430,y+4,"Disk");
             else
@@ -241,11 +253,26 @@ void IView1(IFileNode** curNode,IEventStackNode* top)
             outtextxy(580,y+4,temp);
             settextjustify(0,2);
         }
-        if(y>440) return;
+        if(y>440) break;
         y+=13;
+        numOfItem++;
         tempNode=tempNode->next;
     }
+    sprintf(temp,"%d items",numOfItem);
+    outtextxy(10,470,temp);
+    if(numOfSelected)
+    {
+        sprintf(temp,"%d selected",numOfSelected);
+        outtextxy(100,470,temp);
+    }
+    if(numOfCtrl%2)
+    {
+        setcolor(RED);
+        outtextxy(200,470,"CTRL");
+    }
+    return numOfSelected;
 }
+
 void IEntreeActive(IFileNode* node,IFileNode* cur)
 {
     IFileNode** curNode=(IFileNode**)cur;
@@ -256,7 +283,117 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 void IDetreeActive(IFileNode* node,IFileNode* cur)
 {
     IFileNode** curNode=(IFileNode**)cur;
-    IDetree(node,0);   
-
+    //IDetree(node,0);   
+    if(!node) return;
+    if(node->file.type[1]=='\\')
+    {
+        node->file.type[0]='0';
+        return;
+    }
+    if(!IisFolder(node)) return;
+    node->file.type[0]='0';
     *curNode=node;
+}
+void ISelect(IFileNode* node,IFileNode* null)
+{
+    IFileNode* tempNode=IFindParent(node)->child;
+    while(tempNode)
+    {
+        tempNode->flags&=5;
+        tempNode=tempNode->next;
+    }
+    node->flags|=2;
+}
+void ICtrlSelect(IFileNode* node,IFileNode* null)
+{
+    if(!(node->flags&2))
+        node->flags|=2;
+    else
+        node->flags&=5;
+}
+void INOP(IFileNode* null1,IFileNode* null2){}
+void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNode** curNode,IFileNode** nodeX)
+{
+    IEvent tempEvent;
+    if(mouseX>590) mouseX=590;
+    if(mouseY>380) mouseY=380;
+    IDrawMenu(mouseX,mouseY,numOfSelected,nodeX);
+    if(numOfSelected)
+    {
+        // if(numOfSelected==1)
+        // {
+        //     ISetEvent(&tempEvent,0,mouseX+1,mouseY+1+15*4,mouseX+54,mouseY+14+15*4,2,ISetRename,null,null,4);
+        //     IEventStackPush(top,tempEvent);
+        // }
+        ISetEvent(&tempEvent,0,mouseX+1,mouseY+1,mouseX+54,mouseY+14,2,ISetCopy,curNode,nodeX,4);
+        IEventStackPush(top,tempEvent);
+        ISetEvent(&tempEvent,0,mouseX+1,mouseY+1+15*1,mouseX+54,mouseY+14+15*1,2,ISetCut,curNode,nodeX,4);
+        IEventStackPush(top,tempEvent);
+        ISetEvent(&tempEvent,0,mouseX+1,mouseY+1+15*2,mouseX+54,mouseY+14+15*2,2,ISetDelete,curNode,NULL,4);
+        IEventStackPush(top,tempEvent);
+}
+    else
+    {
+        ISetEvent(&tempEvent,0,mouseX+1,mouseY+1+15*3,mouseX+54,mouseY+14+15*3,2,ISetPaste,curNode,nodeX,4);
+        IEventStackPush(top,tempEvent);
+    }
+}
+void IDrawMenu(int x,int y,int numOfSelected,IFileNode** nodeX)
+{
+    int i;
+    char str[5][7]={"copy","cut","delete","paste","rename"};
+    setcolor(BLUE);
+    rectangle(x,y,x+55,y+75);
+    for(i=1;i<5;i++)
+        line(x+1,y+15*i,x+54,y+15*i);
+    for(i=0;i<3;i++)
+    {
+        if(!numOfSelected)
+            setcolor(LIGHTGRAY);
+        outtextxy(x+3,y+15*i+3,str[i]);    
+    }
+    if(!numOfSelected&&(*nodeX))
+        setcolor(BLUE);
+    else
+        setcolor(LIGHTGRAY);
+    outtextxy(x+3,y+48,str[3]);
+    if(numOfSelected==1)
+        setcolor(BLUE);
+    else
+        setcolor(LIGHTGRAY);
+    outtextxy(x+3,y+63,str[4]);        
+}
+void ISetCopy(IFileNode* cur,IFileNode* X)
+{
+    IFileNode** curNode=(IFileNode**)cur;
+    IFileNode** nodeX=(IFileNode**)X;
+    if(*nodeX)
+    {
+        if((*nodeX)->flags&1)
+            (*nodeX)->flags&=6;
+    }
+    *nodeX=*curNode;
+}
+void ISetCut(IFileNode* cur,IFileNode* X)
+{
+    IFileNode** curNode=(IFileNode**)cur;
+    IFileNode** nodeX=(IFileNode**)X;
+    
+    *nodeX=*curNode;
+    (*nodeX)->flags|=1;
+}
+void ISetPaste(IFileNode* cur,IFileNode* X)
+{
+    IFileNode** curNode=(IFileNode**)cur;
+    IFileNode** nodeX=(IFileNode**)X;
+
+    Icplr(*nodeX,*curNode);
+    if((*nodeX)->flags&1)
+        Irmlr(*nodeX,NULL);
+}
+void ISetDelete(IFileNode* cur,IFileNode* null)
+{
+    IFileNode** curNode=(IFileNode**)cur;
+    
+    Irmlr(*curNode,NULL);
 }
