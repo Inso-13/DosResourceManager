@@ -28,7 +28,7 @@ IBool Irename(IFileNode * oldName,IFileNode * newName) //重命名oldName文件
     strcpy(oldName->file.name,newName->file.name);
     return 1;
 }
-void IDetree(IFileNode * root,IFileNode* null) //将root目录下的文件从文件树上减除
+void IDetree(IFileNode * root) //将root目录下的文件从文件树上减除
 {
     if(!root) return;
     if(root->file.type[1]=='\\')
@@ -38,10 +38,11 @@ void IDetree(IFileNode * root,IFileNode* null) //将root目录下的文件从文
     }
     if(!IisFolder(root)) return;
     root->file.type[0]='0';
+    if(!root->child) return;
     IDelFilelist(root->child);
     root->child=NULL;
 }
-void IEntree(IFileNode * root,IFileNode* null) //将root目录下的文件加到文件树上
+void IEntree(IFileNode * root) //将root目录下的文件加到文件树上
 {
     IFileNode * childRoot;
     char temp[50];
@@ -62,17 +63,12 @@ void IEntree(IFileNode * root,IFileNode* null) //将root目录下的文件加到
         IGetAbsolutePath(root,temp);
         childRoot=IGetFileNodeList(temp);
         IAddChild(root,childRoot);
-        while(childRoot)
+        while(childRoot&&IisFolder(childRoot))
         {
             IGetAbsolutePath(childRoot,temp);
             IPeek(childRoot,temp);
             childRoot=childRoot->next;
         }
-        
-#ifdef  DB
-        printf("%s is entreed\n",root->file.name);
-        printf("%u\n",coreleft());
-#endif    
     root->file.type[0]='1';
     }
 }
@@ -116,7 +112,7 @@ IFileNode * ISearch(IFileNode * node,IFileNode * name) //按文件名查找文�
     }
     if(IisFolder(node))
     {
-        IEntree(node,0);
+        IEntree(node);
         node->file.type[0]='0';
         tempNode=node->child;
         while(tempNode)
@@ -138,7 +134,7 @@ IFileNode * ISearch(IFileNode * node,IFileNode * name) //按文件名查找文�
             tempNode=tempNode->next;
         }
         if(!headNode->next)
-            IDetree(node,0);
+            IDetree(node);
     }
 
     if(!headNode->next&&!headNode->child)

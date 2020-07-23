@@ -26,6 +26,15 @@ typedef struct IFileNode    //文件节点
     struct IFileNode * child;   //子链表头
 }IFileNode;
 
+typedef struct IFileNodePointer
+{
+    struct IFileNodePointer * pre;
+    struct IFileNodePointer * next;
+    IFileNode * child;
+    char flag;  //是否等待操作
+    int wait;
+}IFileNodePointer;
+
 typedef struct IEvent   //事件
 {
     int x1;

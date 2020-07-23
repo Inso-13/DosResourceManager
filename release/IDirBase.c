@@ -14,7 +14,7 @@
 IBool Icopy(IFileNode * inFile,IFileNode * outParent)
 {
     FILE * fin,*fout;
-    char * buff,inPath[50],outPath[50],temp[50],i[2],name[18],ext[5];
+    char * buff,inPath[50],outPath[50],temp[50],i[3],name[18],ext[5];
     int ret,j;
     IGetAbsolutePath(inFile,inPath);
     fin=fopen(inPath,"r");
@@ -32,21 +32,21 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
     strcpy(name,inFile->file.name);
     if(!strcmp(inPath,outPath)) //原位置拷贝
     {
-        strcpy(i,"1");
+        strcpy(i,"_1");
         for(j=0;j<strlen(inFile->file.name);j++)
             if(inFile->file.name[j]=='.')
                 break;
-        strcpy(name+j,"");
         strcpy(ext,inFile->file.name+j);
         IGetAbsolutePath(outParent,outPath);
         strcat(outPath,"\\");
         do
         {
+            strcpy(name+j,"");
             strcat(name,i);
             strcat(name,ext);
             strcpy(temp,outPath);
             strcat(temp,name);
-            i[0]++;
+            i[1]++;
         }while(searchpath(temp));
         strcpy(outPath,temp);
     }

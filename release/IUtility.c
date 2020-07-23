@@ -118,7 +118,7 @@ IBool IMatch(char* s,char* p)
 }
 void IGetAbsolutePath(IFileNode * node,char* temp)
 {
-    if(node->file.name[1]==':'||!strcmp(node->file.name,"DOS")||!strcmp(node->file.name,"ReBin"))
+    if(node->file.name[1]==':'||!strcmp(node->file.name,"DOS"))
         strcpy(temp,node->file.name);
     else
     {
@@ -139,6 +139,7 @@ IFileNode * IDiskInit()
     strcpy(root->file.type,"1\\");
     strcpy(root->file.name,"DOS");
     root->hasFolder=-1;
+    root->flags=4;
     rootC->pre=root;
     rootC->flags|=4;
     strcpy(temp,"C:");
