@@ -90,31 +90,35 @@ IBool Irmf(IFileNode * fileNode)
     remove(tempStr);    //删除文件
     return IDelFileNode(IFindParent(fileNode),fileNode->file.name);     //删除文件节点
 }
-void Imkdir(IFileNode * pathNode,IFileNode * folderName)    //创建文件夹，并更新节点
+void Imkdir(IFileNode * pathNode,char* folderName)    //创建文件夹，并更新节点
 {
     char temp[80];
     
     IGetAbsolutePath(pathNode,temp);
     strcat(temp,"\\");
-    strcat(temp,folderName->file.name);
+    strcat(temp,folderName);
     mkdir(temp);    //创建文件夹
-    IAddFileNode(pathNode,folderName->file.name);
+    IAddFileNode(pathNode,folderName);
 }
-IBool Irmdir(IFileNode * node)  //删除所有空文件夹，并更新节点
+IBool Irmdir(IFileNode * node,int flag)  //删除所有空文件夹，并更新节点
 {
     char temp[50];
-
-    if(node->child) 
-        return Irmdir(node->child);
-    if(node->next)
-        return Irmdir(node->next);
-    IDelFileNode(IFindParent(node),node->file.name);
     
+    if(node->child) 
+        return Irmdir(node->child,0);
+    if(!flag)
+    {
+        if(node->next)
+            return Irmdir(node->next,0);
+    }
     IGetAbsolutePath(node,temp);
+    IDelFileNode(IFindParent(node),node->file.name);
     return !rmdir(temp);
 }
 void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //复制链表
 {
+    char temp[50];
+
     if(IisFolder(oldChildChild))
     {
         if(!oldChildChild->child)
@@ -131,12 +135,15 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //复制链表
     {
         ICopyAll(oldChildChild->next,newChild);
     }
+    IGetAbsolutePath(newChild,temp);
+    IPeek(newChild,temp);
 }
 void Icpr(IFileNode * oldChild,IFileNode * newParent) //递归复制所有文件和文件夹
 {
     if(IisFolder(oldChild))
     {
         Imkdir(newParent,oldChild);
+        IEntree(oldChild);
         ICopyAll(oldChild->child,IFindNodeByName(oldChild->file.name,newParent));
     }
     else
@@ -144,8 +151,11 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent) //递归复制所有文件
 }   
 void IDelAll(IFileNode * oldChildChild) //删除链表
 {
+    IFileNode *tempNode=oldChildChild,*nextNode=oldChildChild->next;
+
     if(IisFolder(oldChildChild))
     {
+        IEntree(oldChildChild);
         if(oldChildChild->child)
             IDelAll(oldChildChild->child);
     }
@@ -153,19 +163,22 @@ void IDelAll(IFileNode * oldChildChild) //删除链表
     {
         Irmf(oldChildChild);
     }
-    if(oldChildChild->next)
+    if(nextNode)
     {
-        IDelAll(oldChildChild->next);
+        tempNode=nextNode;
+        nextNode=nextNode->next;
+        IDelAll(tempNode);
     }
-    Irmdir(oldChildChild);
 }
 void Irmr(IFileNode * oldChild)//递归删除所有文件和文件夹
 {
     if(IisFolder(oldChild))
     {
-        IDelAll(oldChild->child);
+        IEntree(oldChild);
+        if(oldChild->child)
+            IDelAll(oldChild->child);
     }
     else
         Irmf(oldChild);
-    while(Irmdir(oldChild));
+    while(Irmdir(oldChild,1));
 }

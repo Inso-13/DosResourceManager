@@ -58,7 +58,7 @@ IFileNode *IGetFileNodeList(char * path)  //48 pre node
     Icd(path);
     IFileNodeSetNull(childRoot);
     ret=_dos_findfirst("*.*",0xf7,&ft);
-
+    
     while(1)
     {
         j++;
@@ -96,7 +96,7 @@ IFileNode *IGetFileNodeList(char * path)  //48 pre node
         
         ret=_dos_findnext(&ft);
         if(ret) break;
-        if(j>30) break;
+        if(j>100) break;
         lastNode=tempNode;
         tempNode=(IFileNode *)malloc(sizeof(IFileNode));
 #ifdef  DB
@@ -147,8 +147,8 @@ IBool IAddFileNode(IFileNode  *parent,char* name)
     if(ft.attrib&0x10)
     {
         strcpy(child->file.type,"0");
-        IGetAbsolutePath(child,temp);
-        IPeek(child,temp);
+        strcat(temp,"\\");
+        strcat(temp,name);
     }
     else
     {

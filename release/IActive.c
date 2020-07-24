@@ -2,6 +2,9 @@
 #include<STDIO.H>
 #include<STRING.H>
 #include<STDLIB.H>
+#include<BIOS.H>
+#include<CONIO.H>
+#include<STRING.H>
 #include"IEvent.h"
 #include"IUtility.h"
 #include"IDiry.h"
@@ -12,8 +15,6 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * oldCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));
     IFileNodePointer * tempNode,*nextNode;
-
-
 
     tempNode=curNode->next;
     while(tempNode)
@@ -109,13 +110,17 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     if(mouseX>590) mouseX=590;
     if(mouseY>380) mouseY=380;
     IDrawMenu(mouseX,mouseY,numOfSelected,curNode,nodeX);
+    ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*5,mouseX+54,mouseY+14+15*5,2,ISetNewFile,curNode,nodeX,4);
+    IEventStackPush(top,tempEvent);
+    ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*6,mouseX+54,mouseY+14+15*6,2,ISetNewFolder,curNode,nodeX,6);
+    IEventStackPush(top,tempEvent);
     if(numOfSelected)
     {
-        // if(numOfSelected==1)
-        // {
-        //     ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*4,mouseX+54,mouseY+14+15*4,2,ISetRename,null,null,4);
-        //     IEventStackPush(top,tempEvent);
-        // }
+        if(numOfSelected==1)
+        {
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*4,mouseX+54,mouseY+14+15*4,2,ISetRename,curNode,NULL,4);
+            IEventStackPush(top,tempEvent);
+        }
         ISetEvent(&tempEvent,mouseX+1,mouseY+1,mouseX+54,mouseY+14,2,ISetCopy,curNode,nodeX,4);
         IEventStackPush(top,tempEvent);
         ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*1,mouseX+54,mouseY+14+15*1,2,ISetCut,curNode,nodeX,4);
@@ -223,4 +228,121 @@ void IGoRightActive(IFileNode* cur,IFileNode* null)
     IFileNodePointer ** curNode=(IFileNodePointer **)cur;
 
     *curNode=(*curNode)->next;
+}
+char* IGetString(int x,int y,int length,char* string)
+{
+    char* org=string;
+    char temp[13];
+    char tempChar='\0';
+    int i=0,n=0,t=0;
+
+    setcolor(DARKGRAY);
+    rectangle(x-1,y,x+length+1,y+15);
+    strcpy(string,"\0");
+    setfillstyle(SOLID_FILL,WHITE);
+
+    while(1)
+    {
+        bar(x,y+1,x+length,y+14);
+        tempChar=getch();
+
+        if(tempChar=='\r')
+            break;
+        else if(tempChar=='\b')
+        {
+            if(n&&i)
+            {
+                strcpy(string+i-1,string+i);
+                n--;
+                i--;
+            }
+        }
+        else if(tempChar==0x1B)
+        {
+            strcpy(string,"");
+            break;
+        }
+        else if(tempChar=='\0')
+        {
+            tempChar=getch();
+            if(tempChar=='K'&&i)  //左方向键
+                i--;
+            else if(tempChar=='M'&&n>i)    //右方向键
+                i++;
+            else
+            {
+                getch();
+                tempChar=getch();
+                continue;
+            }
+        }
+        else if(n<12&&((tempChar>='0'&&tempChar<='9')||(tempChar>='a'&&tempChar<='z')||(tempChar>='A'&&tempChar<='Z')||tempChar=='.'||tempChar=='_'))
+        {
+            strcpy(temp,string+i);
+            string[i++]=tempChar;
+            strcpy(string+i,temp);
+            n++;
+        }
+        setcolor(RED);
+        bar(x,y+1,x+length,y+14);
+        outtextxy(x,y+4,string);
+        while(!kbhit())
+        {
+            if(t>0)
+                setcolor(RED);
+            else
+                setcolor(WHITE);
+            line(x+8*i,y+3,x+8*i,y+12);
+            t++;
+        }
+    }
+    return org;
+}
+void ISetRename(IFileNode* cur,IFileNode* null)
+{
+    IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    IFileNode* tempNode=curNode->child->child;
+    int i=0;
+    char temp[13];
+
+    while(!(tempNode->flags&2))
+    {
+        i++;
+        tempNode=tempNode->next;
+    }
+    IGetString(156,73+13*i,100,temp);
+    if(temp[0])
+        Irename(tempNode,temp);
+}
+void ISetNewFile(IFileNode* cur,IFileNode* null)
+{
+    IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    IFileNode* tempNode=curNode->child->child;
+    int i=0;
+    char temp[13];
+
+    while(tempNode)
+    {
+        i++;
+        tempNode=tempNode->next;
+    }
+    IGetString(156,73+13*i,100,temp);
+    if(temp[0])
+        Inew(curNode->child,temp);
+}
+void ISetNewFolder(IFileNode* cur,IFileNode* null)
+{
+    IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    IFileNode* tempNode=curNode->child->child;
+    int i=0;
+    char temp[13];
+
+    while(tempNode)
+    {
+        i++;
+        tempNode=tempNode->next;
+    }
+    IGetString(156,73+13*i,100,temp);
+    if(temp[0])
+        Imkdir(curNode->child,temp);
 }

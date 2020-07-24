@@ -16,5 +16,9 @@ void ISetPaste(IFileNode* cur,IFileNode* X);
 void ISetCut(IFileNode* cur,IFileNode* X);
 void IGoLeftActive(IFileNode* cur,IFileNode* null);
 void IGoRightActive(IFileNode* cur,IFileNode* null);
+void ISetRename(IFileNode* cur,IFileNode* null);
+char* IGetString(int x,int y,int length,char* string);
+void ISetNewFile(IFileNode* cur,IFileNode* null);
+void ISetNewFolder(IFileNode* cur,IFileNode* null);
 
 #endif

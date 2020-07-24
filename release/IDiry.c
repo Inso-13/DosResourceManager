@@ -9,23 +9,23 @@
 #include"IUtility.h"
 #include"IDiry.h"
 
-IBool Inew(IFileNode * pathNode,IFileNode * fileName)
+IBool Inew(IFileNode * pathNode,char* fileName)
 {
     char temp[50];
     IGetAbsolutePath(pathNode,temp);
     Icd(temp);
-    if(creatnew(fileName->file.name,0)==-1)
+    if(creatnew(fileName,0)==-1)
         return 0;
-    return IAddFileNode(pathNode,fileName->file.name);    
+    return IAddFileNode(pathNode,fileName);    
 }
-IBool Irename(IFileNode * oldName,IFileNode * newName) //重命名oldName文件
+IBool Irename(IFileNode * oldName,char* newName) //重命名oldName文件
 {
-    char temp[80];
+    char temp[50];
 
     IGetAbsolutePath(IFindParent(oldName),temp);
     Icd(temp);
-    rename(oldName->file.name,newName->file.name);  //重命名
-    strcpy(oldName->file.name,newName->file.name);
+    rename(oldName->file.name,newName);  //重命名
+    strcpy(oldName->file.name,newName);
     return 1;
 }
 void IDetree(IFileNode * root) //将root目录下的文件从文件树上减除
