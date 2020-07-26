@@ -95,7 +95,7 @@ int IView0(IFileNode* root,IFileNodePointer * curNode,IEventStackNode* top,int b
 }
 int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* page)
 {
-    static int numOfCtrl,lastpage;
+    static int lastpage;
     static IFileNode* lastCurNode;
     int i,y,numOfItem=0,numOfSelected=0;
     IFileNode* tempNode;
@@ -138,8 +138,6 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         setcolor(LIGHTGRAY);
     IGoRight(39,38);
     setcolor(DARKGRAY);
-
-    if(isCtrl) numOfCtrl++;
 
 
     if(!tempNode->child)
@@ -194,7 +192,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date/512+1980,(tempNode->file.date%512)/32,tempNode->file.date%32,tempNode->file.time/2048,(tempNode->file.time%2048)/32);
         outtextxy(270,y+4,temp);
 
-        if(numOfCtrl%2)
+        if(isCtrl)
             ISetEvent(&tempEvent,155,y,585,y+12,2,ICtrlSelect,tempNode,NULL,4);
         else
             ISetEvent(&tempEvent,155,y,585,y+12,2,ISelect,tempNode,NULL,4);
@@ -228,7 +226,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         sprintf(temp,"%d selected",numOfSelected);
         outtextxy(100,470,temp);
     }
-    if(numOfCtrl%2)
+    if(isCtrl)
     {
         setcolor(RED);
         outtextxy(200,470,"CTRL");
@@ -245,7 +243,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     IGoLeft(580,450);
     sprintf(temp,"%d",*page);
     setcolor(DARKGRAY);
-    outtextxy(601,450,temp);
+    outtextxy(600,450,temp);
     
     lastpage=*page;
     return numOfSelected;

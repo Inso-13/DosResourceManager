@@ -77,13 +77,13 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
 
     if(!tempNode->flag)
         IDetree(node);
-    while(tempNode)
-    {
-        lastNode=tempNode->pre;
-        if(tempNode->flag==-1)
-            IDetree(node);
-        tempNode=lastNode;
-    }
+    // while(tempNode)
+    // {
+    //     lastNode=tempNode->pre;
+    //     if(tempNode->flag==-1)
+    //         IDetree(node);
+    //     tempNode=lastNode;
+    // }
     curNode->child=node;
 }
 void ISelect(IFileNode* node,IFileNode* null)
@@ -114,6 +114,8 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     IEventStackPush(top,tempEvent);
     ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*6,mouseX+54,mouseY+14+15*6,2,ISetNewFolder,curNode,nodeX,6);
     IEventStackPush(top,tempEvent);
+    if(curNode->child->file.type[1]=='\\')
+        return;
     if(numOfSelected)
     {
         if(numOfSelected==1)
@@ -130,7 +132,7 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     }
     if(!numOfSelected||(curNode->child==nodeX->child))
     {
-        ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*3,mouseX+54,mouseY+14+15*3,2,ISetPaste,curNode,nodeX,4);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1+15*3,mouseX+54,mouseY+14+15*3,2,ISetPaste,curNode,nodeX,6);
         IEventStackPush(top,tempEvent);
     }
 }
@@ -145,6 +147,9 @@ void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer * curNode,IFileNod
 
     for(i=1;i<7;i++)
         line(x+1,y+15*i,x+94,y+15*i);
+        
+    if(curNode->child->file.type[1]=='\\')
+        setcolor(LIGHTGRAY);
     outtextxy(x+3,y+15*5+3,str[5]);
     outtextxy(x+3,y+15*6+3,str[6]);
     for(i=0;i<3;i++)
@@ -153,12 +158,12 @@ void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer * curNode,IFileNod
             setcolor(LIGHTGRAY);
         outtextxy(x+3,y+15*i+3,str[i]);    
     }
-    if((!numOfSelected||curNode->child==nodeX->child)&&nodeX->child)
+    if((!numOfSelected||curNode->child==nodeX->child)&&nodeX->child&&curNode->child->file.type[1]!='\\')
         setcolor(BLUE);
     else
         setcolor(LIGHTGRAY);
     outtextxy(x+3,y+48,str[3]);
-    if(numOfSelected==1)
+    if(numOfSelected==1&&curNode->child->file.type[1]!='\\')
         setcolor(BLUE);
     else
         setcolor(LIGHTGRAY);
@@ -199,6 +204,11 @@ void ISetCut(IFileNode* cur,IFileNode* X)
         tempNode=tempNode->pre;
     }
     curNode->flag=1;
+    if(nodeX->child)
+    {
+        if(nodeX->child->flags&1)
+            nodeX->child->flags&=30;
+    }
     nodeX->child=curNode->child;
     nodeX->child->flags|=1;
 }
@@ -232,7 +242,7 @@ void IGoRightActive(IFileNode* cur,IFileNode* null)
 char* IGetString(int x,int y,int length,char* string)
 {
     char* org=string;
-    char temp[13];
+    char temp[20];
     char tempChar='\0';
     int i=0,n=0,t=0;
 
@@ -303,7 +313,7 @@ void ISetRename(IFileNode* cur,IFileNode* null)
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNode* tempNode=curNode->child->child;
     int i=0;
-    char temp[13];
+    char temp[20];
 
     while(!(tempNode->flags&2))
     {
@@ -319,7 +329,7 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNode* tempNode=curNode->child->child;
     int i=0;
-    char temp[13];
+    char temp[20];
 
     while(tempNode)
     {
@@ -335,7 +345,7 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNode* tempNode=curNode->child->child;
     int i=0;
-    char temp[13];
+    char temp[20];
 
     while(tempNode)
     {

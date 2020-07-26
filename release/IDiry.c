@@ -21,11 +21,22 @@ IBool Inew(IFileNode * pathNode,char* fileName)
 IBool Irename(IFileNode * oldName,char* newName) //重命名oldName文件
 {
     char temp[50];
+    int i;
 
     IGetAbsolutePath(IFindParent(oldName),temp);
     Icd(temp);
     rename(oldName->file.name,newName);  //重命名
     strcpy(oldName->file.name,newName);
+    for(i=0;i<strlen(oldName->file.name);i++)
+    {
+        if(oldName->file.name[i]=='.')
+        {
+            strcpy(oldName->file.type,oldName->file.name+i+1);
+            break;
+        }
+        if(i==strlen(oldName->file.name)-1)
+            strcpy(oldName->file.type,"NOT");
+    }
     return 1;
 }
 void IDetree(IFileNode * root) //将root目录下的文件从文件树上减除

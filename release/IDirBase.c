@@ -140,11 +140,15 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //复制链表
 }
 void Icpr(IFileNode * oldChild,IFileNode * newParent) //递归复制所有文件和文件夹
 {
+    char temp[50];
+    IGetAbsolutePath(newParent,temp);
+    strcat(temp,"\\");
     if(IisFolder(oldChild))
     {
         Imkdir(newParent,oldChild);
         IEntree(oldChild);
-        ICopyAll(oldChild->child,IFindNodeByName(oldChild->file.name,newParent));
+        strcat(temp,oldChild->file.name);
+        ICopyAll(oldChild->child,IFindNodeByPath(temp,newParent));
     }
     else
         Icopy(oldChild,newParent);

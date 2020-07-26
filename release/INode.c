@@ -67,7 +67,12 @@ IFileNode *IGetFileNodeList(char * path)  //48 pre node
             ret=_dos_findnext(&ft);
             if(ret) break;
         }
-        if(ret) break;
+        if(ret)
+        {
+            free(childRoot);
+            childRoot=NULL;
+            break;
+        }
         strcpy(tempNode->file.name,ft.name);
         tempNode->file.size=(ft.size/512+1)/2;
         if(ft.attrib&0x01)

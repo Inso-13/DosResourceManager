@@ -86,8 +86,8 @@ int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[
         if(*pMouseX!=x||*pMouseY!=y)    /*鼠标移动，status bit0 置1*/
         {
             status+=1;
-            // IMouseOff(x,y,mouseDraw,pixelSave);
-            // IMouseOn(*pMouseX,*pMouseY,mouseDraw,pixelSave);/*新位置显示*/
+            IMouseOff(x,y,mouseDraw,pixelSave);
+            IMouseOn(*pMouseX,*pMouseY,mouseDraw,pixelSave);/*新位置显示*/
         }
         if(ILeftPress())    /*鼠标左键单击，status bit1 置1*/
         {
