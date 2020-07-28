@@ -1,9 +1,9 @@
-#include<GRAPHICS.H>
 #include<STDIO.H>
 #include<ALLOC.H>
 #include<STRING.H>
 #include<CONIO.H>
 #include<DOS.H>
+#include<PROCESS.H>
 #include<BIOS.H>
 #include"IType.h"
 #include"IMouse.h"
@@ -19,9 +19,9 @@
 void main()
 {
     int mouseDraw[16][16],mouseSave[16][16];
-    int mouseX,mouseY,mouseStatus,exit=0,lastMenu=0,menu=0;
+    int mouseX,mouseY,mouseStatus,exit=0,lastMenu=0,menu=0,menuFlag=0;
     int lastMenuX,lastMenuY;
-    char activeFlag=0,temp[50],isCtrl=0,numOfSelected=0,page1=1;
+    char activeFlag=0,temp[50],isCtrl=0,numOfSelected=0,page1=1,delFlag=0;
     void *view1Image=NULL;
     IFileNode *root;
     IFileNodePointer *curNode=(IFileNodePointer*)malloc(sizeof(IFileNodePointer));
@@ -35,37 +35,36 @@ void main()
     curNode->pre=NULL;
     curNode->next=NULL;
     curNode->wait=15;
-    curNode->flag=0;
     nodeX->child=NULL;
     nodeX->pre=NULL;
     nodeX->next=NULL;
 
-    IInitGraph();
-    view1Image=malloc(5094);
+    SVGA_Init();
+    Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
     //  init above
+    view1Image=malloc(imagesize(0,0,95,160));
     IPlainView();
 
-    IView0(root,curNode,top0,3,69);
-    IView1(&curNode,top1,isCtrl,&page1);
+    IView0(root,curNode,top0,3*1.6,69*1.6);
+    IView1(&curNode,top1,isCtrl,&page1,&delFlag);
     IMouseMath(mouseDraw);
-    IMouseSetLimit(640,480);
+    IMouseSetLimit(1024,768);
     /*    the main loop    */
     while(!exit)
     {   
 #ifdef DB
-        setcolor(DARKGRAY);
+        setcolor(0);
         sprintf(temp,"left memory:%u Byte",coreleft());
-        outtextxy(330,470,temp);
+        outtextxy(330*1.6,470*1.6,temp);
 #endif
-
         mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);
         activeFlag=IEventStackActive(top0,mouseX,mouseY,mouseStatus);
         if(!activeFlag)
             activeFlag=IEventStackActive(top1,mouseX,mouseY,mouseStatus);
 
-        if((mouseStatus&2)&&mouseX>628&&mouseX<635&&mouseY>5&&mouseY<10)
+        if((mouseStatus&2)&&mouseX>628*1.6&&mouseX<635*1.6&&mouseY>5*1.6&&mouseY<10*1.6)
             exit=1;
-        if((mouseStatus&4)&&mouseX>150&&mouseX<640&&mouseY>55&&mouseY<465)
+        if(menuFlag||((mouseStatus&4)&&mouseX>150*1.6&&mouseX<1024&&mouseY>55*1.6&&mouseY<465*1.6))
             menu=1;
         else if(mouseStatus&2)
             menu=0;
@@ -78,12 +77,12 @@ void main()
                 activeFlag|=4;
             }
         }
-        if((mouseStatus&2)&&mouseX>620&&mouseX<626&&mouseY>450&&mouseY<457)
+        if((mouseStatus&2)&&mouseX>620*1.6&&mouseX<626*1.6&&mouseY>450*1.6&&mouseY<457*1.6)
         {
             page1++;
             activeFlag|=4;
         }
-        else if((mouseStatus&2)&&mouseX>580&&mouseX<586&&mouseY>450&&mouseY<457)
+        else if((mouseStatus&2)&&mouseX>580*1.6&&mouseX<586*1.6&&mouseY>450*1.6&&mouseY<457*1.6)
         {
             page1--;
             activeFlag|=4;
@@ -93,8 +92,17 @@ void main()
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenuX=mouseX;
             lastMenuY=mouseY;
-            getimage(mouseX,mouseY,mouseX+95,mouseY+105,view1Image);
-            IMenu(mouseX,mouseY,numOfSelected,top1,curNode,nodeX);
+            getimage(mouseX,mouseY,mouseX+95,mouseY+160,view1Image);
+            IMenu(mouseX,mouseY,numOfSelected,top1,curNode,nodeX,&menuFlag,&delFlag);
+            IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
+            if(!menuFlag)
+                lastMenu=1;
+            continue;
+        }
+        else if(menuFlag)
+        {
+            IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
+            IMenu(lastMenuX,lastMenuY,numOfSelected,top1,curNode,nodeX,&menuFlag,&delFlag);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenu=1;
             continue;
@@ -110,21 +118,21 @@ void main()
         if(activeFlag&2)
         {
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
-            setfillstyle(SOLID_FILL,WHITE);
-            bar(0,69,149,463);
+            setfillstyle(SOLID_FILL,255);
+            bar(0,69*1.6,149*1.6,463*1.6);
             IEventStackPop(top0,1000);
-            IView0(root,curNode,top0,3,69);
+            IView0(root,curNode,top0,3*1.6,69*1.6);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
-        if(activeFlag&4)
+        if((activeFlag&4)||delFlag)
         {
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
-            setfillstyle(SOLID_FILL,WHITE);
-            bar(155,73,639,463);
-            bar(120,33,500,48);
-            bar(0,466,620,479);
+            setfillstyle(SOLID_FILL,255);
+            bar(155*1.6,110,639*1.6,463*1.6);
+            bar(120*1.6,33*1.6,500*1.6,48*1.6);
+            bar(0,466*1.6,620*1.6,479*1.6);
             IEventStackPop(top1,1000);
-            numOfSelected=IView1(&curNode,top1,isCtrl,&page1);
+            numOfSelected=IView1(&curNode,top1,isCtrl,&page1,&delFlag);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
     }

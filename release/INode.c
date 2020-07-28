@@ -299,3 +299,36 @@ void IPeek(IFileNode* node,char* path)
     printf("%u\n",coreleft());
 #endif
 }
+void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
+{
+    if(node1->flags&4)
+    {
+        node1->flags&=27;
+        node2->flags|=4;
+        node1->pre->child=node2;
+        node2->pre=node1->pre;
+        if(node2->next)
+        {
+            node2->next->pre=node1;
+            node1->next=node2->next;
+        }
+        else 
+            node1->next=NULL;
+        node2->next=node1;
+        node1->pre=node2;
+    }
+    else
+    {
+        if(node2->next)
+        {
+            node2->next->pre=node1;
+            node1->next=node2->next;
+        }
+        else
+            node1->next=NULL;
+        node1->pre->next=node2;
+        node2->pre=node1->pre;
+        node2->next=node1;
+        node1->pre=node2;
+    }
+}

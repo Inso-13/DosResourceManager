@@ -14,7 +14,7 @@
 IBool Icopy(IFileNode * inFile,IFileNode * outParent)
 {
     FILE * fin,*fout;
-    char * buff,inPath[50],outPath[50],temp[50],i[3],name[18],ext[5];
+    char * buff,inPath[50],outPath[50],temp[50],i[2],name[18],ext[5];
     int ret,j;
     IGetAbsolutePath(inFile,inPath);
     fin=fopen(inPath,"r");
@@ -30,9 +30,9 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
     strcat(outPath,"\\");
     strcat(outPath,inFile->file.name);
     strcpy(name,inFile->file.name);
-    if(!strcmp(inPath,outPath)) //原位置拷贝
+    if(searchpath(outPath)||!strcmp(inPath,outPath)) //原位置拷贝
     {
-        strcpy(i,"_1");
+        strcpy(i,"1");
         for(j=0;j<strlen(inFile->file.name);j++)
             if(inFile->file.name[j]=='.')
                 break;
@@ -46,7 +46,7 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
             strcat(name,ext);
             strcpy(temp,outPath);
             strcat(temp,name);
-            i[1]++;
+            i[0]++;
         }while(searchpath(temp));
         strcpy(outPath,temp);
     }
@@ -123,7 +123,7 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //复制链表
     {
         if(!oldChildChild->child)
             IAddFilelist(oldChildChild);
-        Imkdir(newChild,oldChildChild);
+        Imkdir(newChild,oldChildChild->file.name);
         if(oldChildChild->child)
             ICopyAll(oldChildChild->child,newChild->child);
     }
@@ -145,7 +145,7 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent) //递归复制所有文件
     strcat(temp,"\\");
     if(IisFolder(oldChild))
     {
-        Imkdir(newParent,oldChild);
+        Imkdir(newParent,oldChild->file.name);
         IEntree(oldChild);
         strcat(temp,oldChild->file.name);
         ICopyAll(oldChild->child,IFindNodeByPath(temp,newParent));

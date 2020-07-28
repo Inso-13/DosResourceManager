@@ -89,18 +89,18 @@ IBool IMatch(char* s,char* p)
                 pattern++;
             if(!*pattern)
                 return 1;
-            while(*src && !(*src==*pattern))
+            while(*src && !IMatchi(*src,*pattern))
                 src++;
             if(!*src) 
                 return 0;
             flag=IMatch(src,pattern);
-            while((!flag)&&*(src+1)&&(*(src+1)==*pattern))
+            while((!flag)&&*(src+1)&&IMatchi(*(src+1),*pattern))
                 flag=IMatch(++src,pattern);
             return flag;
         }
         else
         {
-            if((*src==*pattern)||('?'==*pattern))
+            if(IMatchi(*src,*pattern)||('?'==*pattern))
                 return IMatch(++src,++pattern);
             else
                 return 0;
@@ -115,6 +115,17 @@ IBool IMatch(char* s,char* p)
     }
     else
         return 1;
+}
+int IMatchi(char a,char b)
+{
+    if(a>='a'&&a<='z')
+        a+='A'-'a';
+    if(b>='a'&&b<='z')
+        b+='A'-'a';
+    if(a==b)
+        return 1;
+    else
+        return 0;
 }
 void IGetAbsolutePath(IFileNode * node,char* temp)
 {
@@ -178,6 +189,7 @@ void IFileNodeSetNull(IFileNode * node)
     node->flags=0;
     node->hasFile=0;
     node->hasFolder=0;
+    node->del=0;
     node->child=NULL;
     node->next=NULL;
     node->pre=NULL;

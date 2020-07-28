@@ -19,6 +19,7 @@ typedef struct IFileNode    //文件节点
 {
     IFile file;                 //文件
     char flags;                 // bit0 是否等待cut,bit1 是否被选中,bit2 是否为链表头,bit 3 是否只读,bit 4 是否隐藏
+    char del;                   //空间回收控制
     int hasFile;                //包含的文件数
     int hasFolder;              //包含的文件夹数
     struct IFileNode * pre;     //前一个节点（如果是链表头，则pre为父节点）
@@ -31,7 +32,6 @@ typedef struct IFileNodePointer
     struct IFileNodePointer * pre;
     struct IFileNodePointer * next;
     IFileNode * child;
-    char flag;  //是否等待操作
     int wait;
 }IFileNodePointer;
 

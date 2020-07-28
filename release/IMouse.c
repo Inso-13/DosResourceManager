@@ -55,9 +55,9 @@ void IMouseOn(int x,int y,int (*mouseDraw)[16],int(*pixelSave)[16])
         {
             pixelSave[i][j]=getpixel(x+j,y+i);/*保存原来的颜色*/
             if(mouseDraw[i][j]==1)
-                putpixel(x+j,y+i,DARKGRAY);
+                putpixel(x+j,y+i,0);
             else if(mouseDraw[i][j]==2)
-                putpixel(x+j,y+i,DARKGRAY);
+                putpixel(x+j,y+i,0);
         }
     }
 }
@@ -144,7 +144,7 @@ int IRightPress()
     int86(0x33,&regs,&regs);
     return(regs.x.bx&2);
 }
-void IMouseSetLimit(int xMax,int yMax)  //请使用640*480
+void IMouseSetLimit(int xMax,int yMax)  //请使用640*480或800*600
 {
     union REGS regs; 
     regs.x.ax=7;

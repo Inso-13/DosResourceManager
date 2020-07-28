@@ -106,55 +106,81 @@ void Irmlr(IFileNode * oldParent,IFileNode * rootR) //删除oldParent目录下�
         tempNode=tempNode->next;
     }
 }
-IFileNode * ISearch(IFileNode * node,IFileNode * name) //按文件名查找文件，耗内存，请慎用
+void ISearch(IFileNode * parent,char* name) //按文件名在当前文件夹查找文件
 {
-    IFileNode * findedNode,*headNode,*tempNode,*ttempNode;
-    if(!node)
+    IFileNode *tempNode=parent->child;
+    while(tempNode)
     {
-        return NULL;
-    }
-
-    headNode=(IFileNode *)malloc(sizeof(IFileNode));
-    IFileNodeSetNull(headNode);
-
-    if(IMatch(node->file.name,name->file.name))
-    {
-        headNode->child=node;
-    }
-    if(IisFolder(node))
-    {
-        IEntree(node);
-        node->file.type[0]='0';
-        tempNode=node->child;
-        while(tempNode)
+        if(IMatch(tempNode->file.name,name))
         {
-            ttempNode=ISearch(tempNode,name);
-            if(ttempNode)
-            {
-                if(headNode->next)
-                {
-                    findedNode=ttempNode;
-                    while(findedNode->next)
-                        findedNode=findedNode->next;
-                    headNode->next->pre=findedNode;
-                    findedNode->next=headNode->next;
-                }
-                headNode->next=ttempNode;
-                ttempNode->pre=headNode;                
-            }
-            tempNode=tempNode->next;
+            tempNode->flags|=2;
         }
-        if(!headNode->next)
-            IDetree(node);
+        else
+        {
+            tempNode->flags&=29;
+        }
+        tempNode=tempNode->next;
     }
+}
+void ISort(IFileNode* parent,int (*fun)(IFileNode*,IFileNode*))
+{
+    IFileNode* tempNode=parent->child;
+    int n=0,i,j,u;
 
-    if(!headNode->next&&!headNode->child)
-        return NULL;
-    else if(!headNode->child)
+    while(tempNode)
     {
-        headNode=headNode->next;
-        free(headNode->pre);
-        headNode->pre=NULL;
+        n++;
+        tempNode=tempNode->next;
     }
-    return headNode;
+    for(i=0;i<n-1;i++)
+    {
+        for(j=0;j<n-i-1;j++)
+        {
+            tempNode=parent->child;
+            for(u=0;u<j;u++)
+                tempNode=tempNode->next;
+            if(fun(tempNode,tempNode->next)>0)
+                IExchangeFileNode(tempNode,tempNode->next);
+        }
+    }
+}
+int ISortDateUp(IFileNode* node1,IFileNode* node2)
+{
+    int t;
+    t=(int)node1->file.date-(int)node2->file.date;
+    if(t) return t;
+    t=(int)node1->file.time-(int)node2->file.time;
+    return t;
+}
+int ISortDateDown(IFileNode* node1,IFileNode* node2)
+{
+    int t;
+    t=(int)node2->file.date-(int)node1->file.date;
+    if(t) return t;
+    t=(int)node2->file.time-(int)node1->file.time;
+    return t;
+}
+int ISortSizeUp(IFileNode* node1,IFileNode* node2)
+{
+    return node1->file.size-node2->file.size;
+}
+int ISortSizeDown(IFileNode* node1,IFileNode* node2)
+{
+    return node2->file.size-node1->file.size;
+}
+int ISortNameUp(IFileNode* node1,IFileNode* node2)
+{
+    return strcmp(node1->file.name,node2->file.name);
+}
+int ISortNameDown(IFileNode* node1,IFileNode* node2)
+{
+    return strcmp(node2->file.name,node1->file.name);
+}
+int ISortTypeUp(IFileNode* node1,IFileNode* node2)
+{
+    return strcmp(node1->file.type,node2->file.type);
+}
+int ISortTypeDown(IFileNode* node1,IFileNode* node2)
+{
+    return strcmp(node2->file.type,node1->file.type);
 }
