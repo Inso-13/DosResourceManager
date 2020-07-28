@@ -43,7 +43,7 @@ void IPutsHZ16(int x,int y,char *str,FILE * fp) //中文输出
     }
     return;    
 }
-void Iouttextxy(int x,int y,char *str,FILE * fp) //自动判断中英文输出，未测试
+void Iouttextxy(int x,int y,char *str,FILE * fp) //自动判断中英文输出
 {
     int inc=0,n,i=0;
     char temp[3]={'\0','\0','\0'};

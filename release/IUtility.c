@@ -216,3 +216,18 @@ void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(I
     event->node1=node1;
     event->change=change;
 }
+void IDelPointer(IFileNodePointer* pointer)
+{
+    IFileNodePointer* tempNode=pointer;
+    while(tempNode->next)
+    {
+        tempNode=tempNode->next;
+    }
+    while(tempNode->pre)
+    {
+        tempNode=tempNode->pre;
+        free(tempNode->next);
+        tempNode->next=NULL;
+    }
+    free(tempNode);
+}

@@ -7,9 +7,11 @@
 #include"IView.h"
 #include"IUtility.h"
 #include"IDiry.h"
-#include"IActive.h"
+#include"ISort.h"
 #include"IInit.h"
 #include"IHanZi.h"
+#include"ISort.h"
+#include"IActive.h"
 
 void IEntreeActive(IFileNode* node,IFileNode* cur)
 {
@@ -142,29 +144,29 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     {
         if(curNode->child->file.type[1]=='\\')
             return;
-        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*5,mouseX+80,mouseY+19+20*5,2,ISetNewFile,curNode,nodeX,4);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*5,mouseX+80,mouseY+19+20*5,2,ISetNewFile,(IFileNode*)curNode,(IFileNode*)nodeX,4);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*6,mouseX+80,mouseY+19+20*6,2,ISetNewFolder,curNode,nodeX,6);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*6,mouseX+80,mouseY+19+20*6,2,ISetNewFolder,(IFileNode*)curNode,(IFileNode*)nodeX,6);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*7,mouseX+80,mouseY+19+20*7,2,ISortMenuActive,menuFlag,NULL,4);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*7,mouseX+80,mouseY+19+20*7,2,ISortMenuActive,(IFileNode*)menuFlag,NULL,4);
         IEventStackPush(top,tempEvent);
         if(numOfSelected)
         {
             if(numOfSelected==1)
             {
-                ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*4,mouseX+80,mouseY+19+20*4,2,ISetRename,curNode,NULL,4);
+                ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*4,mouseX+80,mouseY+19+20*4,2,ISetRename,(IFileNode*)curNode,NULL,4);
                 IEventStackPush(top,tempEvent);
             }
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1,mouseX+80,mouseY+19,2,ISetCopy,curNode,nodeX,4);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1,mouseX+80,mouseY+19,2,ISetCopy,(IFileNode*)curNode,(IFileNode*)nodeX,4);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*1,mouseX+80,mouseY+19+20*1,2,ISetCut,curNode,nodeX,4);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*1,mouseX+80,mouseY+19+20*1,2,ISetCut,(IFileNode*)curNode,(IFileNode*)nodeX,4);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*2,mouseX+80,mouseY+19+20*2,2,ISetDeleteComfirm,delFlag,NULL,4);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*2,mouseX+80,mouseY+19+20*2,2,ISetDeleteComfirm,(IFileNode*)delFlag,NULL,4);
             IEventStackPush(top,tempEvent);
         }
         if(!numOfSelected||(curNode->child==nodeX->child))
         {
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,2,ISetPaste,curNode,nodeX,6);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,2,ISetPaste,(IFileNode*)curNode,(IFileNode*)nodeX,6);
             IEventStackPush(top,tempEvent);
         }
     }
@@ -172,7 +174,7 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     {
         for(i=0;i<8;i++)
         {
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*i,mouseX+80,mouseY+19+20*i,2,ISortActive,curNode,lambda[i],4);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*i,mouseX+80,mouseY+19+20*i,2,ISortActive,(IFileNode*)curNode,(IFileNode*)lambda[i],4);
             IEventStackPush(top,tempEvent);
         }
         *menuFlag=0;
