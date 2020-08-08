@@ -3,13 +3,13 @@
 
 #include"IType.h"
 
-void IEntree(IFileNode * root);//å°†rootç›®å½•ä¸‹çš„æ–‡ä»¶åŠ åˆ°æ–‡ä»¶æ ‘ä¸Š
-void IDetree(IFileNode * root); //å°†rootç›®å½•ä¸‹çš„æ–‡ä»¶ä»æ–‡ä»¶æ ‘ä¸Šåˆ é™¤
-void Icplr(IFileNode * oldParent,IFileNode * newParent);//å¤åˆ¶oldParentç›®å½•ä¸‹æ‰€æœ‰è¢«é€‰ä¸­çš„æ–‡ä»¶
-void Irmlr(IFileNode * oldParent,IFileNode * rootR);//åˆ é™¤oldParentç›®å½•ä¸‹æ‰€æœ‰è¢«é€‰ä¸­çš„æ–‡ä»¶
-IBool Irename(IFileNode * oldName,char * newName);//é‡å‘½åoldNameæ–‡ä»¶ï¼Œå¹¶æ›´æ–°èŠ‚ç‚¹
-IBool Inew(IFileNode * pathNode,char* fileName); //åˆ›å»ºæ–°æ–‡ä»¶ï¼Œå¹¶æ·»åŠ åˆ°æ–‡ä»¶æ ‘
-void Imkdir(IFileNode * pathNode,char* folderName);    //åˆ›å»ºæ–‡ä»¶å¤¹ï¼Œå¹¶æ›´æ–°èŠ‚ç‚¹
-void ISearch(IFileNode * parent,char* name); //æŒ‰æ–‡ä»¶ååœ¨å½“å‰æ–‡ä»¶å¤¹æŸ¥æ‰¾æ–‡ä»¶
+void IEntree(IFileNode * root);//½«root??Â¼ÏÂµÄÎÄ¼ş¼Óµ½ÎÄ¼şÊ÷??
+void IDetree(IFileNode * root); //½«root??Â¼ÏÂµÄÎÄ¼ş´ÓÎÄ¼şÊ÷ÉÏÉ¾³ı
+void Icplr(IFileNode * oldParent,IFileNode * newParent);//¸´ÖÆoldParent??Â¼ÏÂËùÓĞ???Ñ¡ÖĞµÄÎÄ??
+void Irmlr(IFileNode * oldParent,IFileNode * rootR);//É¾³ıoldParent??Â¼ÏÂËùÓĞ???Ñ¡ÖĞµÄÎÄ??
+IBool Irename(IFileNode * oldName,char * newName);//ÖØÃüÃûoldNameÎÄ¼ş£¬²¢¸üĞÂ½Úµã
+IBool Inew(IFileNode * pathNode,char* fileName); //´´½¨ĞÂÎÄ¼ş£¬²¢Ìí¼Óµ½ÎÄ¼ş??
+IBool Imkdir(IFileNode * pathNode,char* folderName);    //´´½¨ÎÄ¼ş¼Ğ£¬²¢¸üĞÂ½Ú??
+void ISearch(IFileNode * parent,char* name); //°´ÎÄ¼şÃûÔÚµ±Ç°ÎÄ¼ş¼Ğ²éÕÒÎÄ¼ş
 
 #endif

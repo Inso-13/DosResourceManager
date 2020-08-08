@@ -18,14 +18,14 @@ IBool Inew(IFileNode * pathNode,char* fileName)
         return 0;
     return IAddFileNode(pathNode,fileName);    
 }
-IBool Irename(IFileNode * oldName,char* newName) //é‡å‘½åoldNameæ–‡ä»¶
+IBool Irename(IFileNode * oldName,char* newName) //ÖØÃüÃûoldNameÎÄ¼þ
 {
     char temp[50];
     int i;
 
     IGetAbsolutePath(IFindParent(oldName),temp);
     Icd(temp);
-    rename(oldName->file.name,newName);  //é‡å‘½å
+    rename(oldName->file.name,newName);  //ÖØÃüÃû
     strcpy(oldName->file.name,newName);
     for(i=0;i<strlen(oldName->file.name);i++)
     {
@@ -39,7 +39,7 @@ IBool Irename(IFileNode * oldName,char* newName) //é‡å‘½åoldNameæ–‡ä»¶
     }
     return 1;
 }
-void IDetree(IFileNode * root) //å°†rootç›®å½•ä¸‹çš„æ–‡ä»¶ä»Žæ–‡ä»¶æ ‘ä¸Šå‡é™¤
+void IDetree(IFileNode * root) //½«rootÄ¿Â¼ÏÂµÄÎÄ¼þ´ÓÎÄ¼þÊ÷ÉÏ¼õ³ý
 {
     if(!root) return;
     if(root->file.type[1]=='\\')
@@ -53,12 +53,14 @@ void IDetree(IFileNode * root) //å°†rootç›®å½•ä¸‹çš„æ–‡ä»¶ä»Žæ–‡ä»¶æ ‘ä¸Šå‡é™¤
     IDelFilelist(root->child);
     root->child=NULL;
 }
-void IEntree(IFileNode * root) //å°†rootç›®å½•ä¸‹çš„æ–‡ä»¶åŠ åˆ°æ–‡ä»¶æ ‘ä¸Š
+void IEntree(IFileNode * root) //½«rootÄ¿Â¼ÏÂµÄÎÄ¼þ¼Óµ½ÎÄ¼þÊ÷ÉÏ
 {
     IFileNode * childRoot;
     char temp[50];
 
     if(!root) return;
+    if(!strcmp(root->file.type,"0ds"))
+        return;
     if(root->file.type[1]=='\\')
     {
         root->file.type[0]='1';
@@ -73,7 +75,8 @@ void IEntree(IFileNode * root) //å°†rootç›®å½•ä¸‹çš„æ–‡ä»¶åŠ åˆ°æ–‡ä»¶æ ‘ä¸Š
     {
         IGetAbsolutePath(root,temp);
         childRoot=IGetFileNodeList(temp);
-        IAddChild(root,childRoot);
+        if(childRoot)
+            IAddChild(root,childRoot);
         while(childRoot&&IisFolder(childRoot))
         {
             IGetAbsolutePath(childRoot,temp);
@@ -83,7 +86,7 @@ void IEntree(IFileNode * root) //å°†rootç›®å½•ä¸‹çš„æ–‡ä»¶åŠ åˆ°æ–‡ä»¶æ ‘ä¸Š
     root->file.type[0]='1';
     }
 }
-void Icplr(IFileNode * oldParent,IFileNode * newParent)//å¤åˆ¶oldParentç›®å½•ä¸‹æ‰€æœ‰è¢«é€‰ä¸­çš„æ–‡ä»¶
+void Icplr(IFileNode * oldParent,IFileNode * newParent)//¸´ÖÆoldParentÄ¿Â¼ÏÂËùÓÐ±»Ñ¡ÖÐµÄÎÄ¼þ
 {
     IFileNode * tempNode=oldParent->child;
 
@@ -94,7 +97,7 @@ void Icplr(IFileNode * oldParent,IFileNode * newParent)//å¤åˆ¶oldParentç›®å½•ä¸
         tempNode=tempNode->next;
     }
 }
-void Irmlr(IFileNode * oldParent,IFileNode * rootR) //åˆ é™¤oldParentç›®å½•ä¸‹æ‰€æœ‰è¢«é€‰ä¸­çš„æ–‡ä»¶
+void Irmlr(IFileNode * oldParent,IFileNode * rootR) //É¾³ýoldParentÄ¿Â¼ÏÂËùÓÐ±»Ñ¡ÖÐµÄÎÄ¼þ
 {
     IFileNode * tempNode=oldParent->child;
 
@@ -106,7 +109,7 @@ void Irmlr(IFileNode * oldParent,IFileNode * rootR) //åˆ é™¤oldParentç›®å½•ä¸‹æ‰
         tempNode=tempNode->next;
     }
 }
-void ISearch(IFileNode * parent,char* name) //æŒ‰æ–‡ä»¶ååœ¨å½“å‰æ–‡ä»¶å¤¹æŸ¥æ‰¾æ–‡ä»¶
+void ISearch(IFileNode * parent,char* name) //°´ÎÄ¼þÃûÔÚµ±Ç°ÎÄ¼þ¼Ð²éÕÒÎÄ¼þ
 {
     IFileNode *tempNode=parent->child;
     while(tempNode)

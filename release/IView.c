@@ -1,4 +1,5 @@
 #include<GRAPHICS.H>
+#include<CONIO.H>
 #include<STDIO.H>
 #include<STRING.H>
 #include<STDLIB.H>
@@ -7,14 +8,80 @@
 #include"IDiry.h"
 #include"IHanZi.h"
 #include"IDraw.h"
+#include"IIcon.h"
 #include"IActive.h"
+#include"IMenu.h"
 #include"IView.h"
-
-void IPlainView()
+void IPlainLogin()
 {
-    FILE *fpHZ=NULL;
+    int i;
+    
+    setfillstyle(SOLID_FILL,248);
+    bar(0,0,1024,768);
+    setcolor(255);
+    for(i=0;i<10;i++)
+    {
+        circle(512,250,i+100);
+        circle(512,230,i+30);
+        arc(512+40,340,125,180,i+90);
+        arc(512-40,340,0,55,i+90);
+        settextstyle(3,0,3);
+    }
+}
+void ILogin(char* name,char* password,IEventStackNode* top,int id,FILE* fpHZ)
+{
+    int i;
+    IEvent tempEvent;
 
-    fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb");
+    if(fpHZ==NULL)
+    {
+        setcolor(0);
+        outtextxy(100,100,"fpHZ is NULL in ILogin");
+    }
+    setcolor(255);
+    Iouttextxy(370,450,"ÓÃ»§Ãû:",fpHZ);
+    Iouttextxy(370+16,500,"ÃÜÂë:",fpHZ);
+
+    setfillstyle(SOLID_FILL,255);
+    bar(440,450-10,660,450-10+27);
+    bar(440,500-10,660,500-10+27);
+
+    setfillstyle(SOLID_FILL,247);
+    bar(370,550,470,550+27);
+    bar(370+190,550,470+190,550+27);
+
+    setcolor(255);
+    Iouttextxy(370+2,550+9,"µÇÂ¼(¹ÜÀíÔ±)",fpHZ);
+    Iouttextxy(370+10+190,550+9,"È¡Ïû(ÓÎ¿Í)",fpHZ);
+
+    if(id==-1)
+    {
+        setcolor(144);
+        Iouttextxy(370+10+190,600+9,"ÓÃ»§Ãû»òÃÜÂë´íÎó£¬ÇëÖØÐÂÊäÈë",fpHZ);
+        strcpy(name,"\0");
+        strcpy(password,"\0");
+    }
+
+    setcolor(0);
+    outtextxy(440+2,440+9,name);
+    
+    for(i=0;i<strlen(password);i++)
+    {
+        outtextxy(440+2+8*i,490+9,"*");
+    }
+
+    ISetEvent(&tempEvent,440,450-10,660,450-10+28,2,IGetName,(IFileNode*)name,NULL,1);
+    IEventStackPush(top,tempEvent);
+    ISetEvent(&tempEvent,440,500-10,660,500-10+28,2,IGetPassword,(IFileNode*)password,NULL,1);
+    IEventStackPush(top,tempEvent);
+}
+void IPlainView(FILE* fpHZ)
+{
+    if(fpHZ==NULL)
+    {
+        setcolor(0);
+        outtextxy(100,100,"fpHZ is NULL in IPlainView");
+    }
     setlinestyle(SOLID_LINE,0,NORM_WIDTH);
     settextstyle(1,0,2);
 
@@ -45,7 +112,6 @@ void IPlainView()
     setcolor(7);
     line(240,88,240,742);
     line(0,744,1024,744);
-    fclose(fpHZ);
 }
 int IView0(IFileNode* root,IFileNodePointer * curNode,IEventStackNode* top,int beginX,int beginY)
 {
@@ -53,32 +119,46 @@ int IView0(IFileNode* root,IFileNodePointer * curNode,IEventStackNode* top,int b
     IEvent tempEvent;
 
     if(!root) return 0;         //ï¿½ï¿½ï¿½ï¿½?ï¿½ï¿½Ö¸ï¿½ï¿½
-    if(!IisFolder(root)) return 0;      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿??
+    if(!IisFolder(root)) return 0;      //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿???
     if(beginY>720) return 0;
     if(curNode->child==root)
     {
         setfillstyle(SOLID_FILL,139);
         bar(0,beginY,238,beginY+22);
     }
-    if(root->hasFolder==0&&root->hasFile==0)         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ðºï¿½ï¿½ï¿½ï¿½Ä¼ï¿??
+    if(root->hasFolder==0&&root->hasFile==0)         //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ðºï¿½ï¿½ï¿½ï¿½Ä¼ï¿???
     {
-        outtextxy(beginX+25,beginY+7,root->file.name);
+        Ifolder(beginX+11,beginY+4);
+        setcolor(0);
+        outtextxy(beginX+25+10,beginY+7,root->file.name);
         increaceY+=24;
+        ISetEvent(&tempEvent,0,beginY,238,beginY+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
+        IEventStackPush(top,tempEvent);
     }
-    else if(root->file.type[0]=='0')   //ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿??ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+    else if(root->file.type[0]=='0')   //ï¿½ï¿½ï¿½ï¿½ï¿½Î´ï¿½ï¿???ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
     {
         IPointerRight(beginX+1,beginY+8);
-        outtextxy(beginX+25,beginY+7,root->file.name);
+        if(root->file.type[1]=='d'||root->file.type[1]=='\\')
+            Idisk(beginX+11,beginY+4);
+        else
+            Ifolder(beginX+11,beginY+4);
+        setcolor(0);
+        outtextxy(beginX+25+10,beginY+7,root->file.name);
         increaceY+=24;
         ISetEvent(&tempEvent,beginX,beginY+6,beginX+16,beginY+14,2,IEntreeActive,root,(IFileNode*)curNode,6);
         IEventStackPush(top,tempEvent);
         ISetEvent(&tempEvent,0,beginY,238,beginY+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
         IEventStackPush(top,tempEvent);
     }
-    else        //ï¿½ï¿½ï¿½ï¿½Ç´ï¿??ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
+    else        //ï¿½ï¿½ï¿½ï¿½Ç´ï¿???ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
     {
         IPointerDown(beginX,beginY+9);
-        outtextxy(beginX+25,beginY+7,root->file.name);
+        if(root->file.type[1]=='d'||root->file.type[1]=='\\')
+            Idisk(beginX+11,beginY+4);
+        else
+            Ifolder(beginX+11,beginY+4);
+        setcolor(0);
+        outtextxy(beginX+25+10,beginY+7,root->file.name);
         increaceY+=24;
         ISetEvent(&tempEvent,beginX,beginY+6,beginX+16,beginY+14,2,IDetreeActive,root,(IFileNode*)curNode,6);
         IEventStackPush(top,tempEvent);
@@ -95,7 +175,7 @@ int IView0(IFileNode* root,IFileNodePointer * curNode,IEventStackNode* top,int b
     }
     return increaceY;
 }
-int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* page,char* delFlag)
+int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* page,char* delFlag,FILE* fpHZ)
 {
     static int lastpage;
     static IFileNode* lastCurNode;
@@ -103,16 +183,18 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     IFileNode* tempNode;
     IEvent tempEvent;
     char temp[50];
-    FILE* fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb");
-
+    if(fpHZ==NULL)
+    {
+        setcolor(0);
+        outtextxy(100,100,"fpHZ is NULL in IView1");
+    }
 
     setcolor(0);
     tempNode=(*curNode)->child;
     IGetAbsolutePath(tempNode,temp);
     outtextxy(192,61,temp);
-    ISetEvent(&tempEvent,884,51,1016,78,2,INOP,NULL,NULL,6);
+    ISetEvent(&tempEvent,803,51,824,78,2,INOP,NULL,NULL,6);
     IEventStackPush(top,tempEvent);
-
 
     if(IFindParent((*curNode)->child))
     {
@@ -147,18 +229,21 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     bar(853,52,1016,77);
     if(!tempNode->child)
     {
-        Iouttextxy(853,61,"ÎÞÎÄ¼þ",fpHZ);
-        outtextxy(560,240,"Nothing detected");
+        Iouttextxy(853,61,"ÎÞÄÚÈÝ",fpHZ);
+        if(!strcmp(tempNode->file.type,"0ds"))
+            Iouttextxy(560,240,"½ö¹ÜÀíÔ±¿É¼û",fpHZ);
+        else
+            Iouttextxy(530,240,"Î´´ò¿ªÎÄ¼þ¼Ð»òÎ´¼ìË÷µ½ÄÚÈÝ",fpHZ);
         return 0;
     }
     else
     {
-        Iouttextxy(853,61,"ËÑË÷µ±Ç°ÎÄ¼þ¼Ð",fpHZ);
+        Iouttextxy(853,61,"ÔÚ±¾ÎÄ¼þ¼ÐÖÐËÑË÷",fpHZ);
         ISetEvent(&tempEvent,853,52,1016,77,2,ISearchActive,(IFileNode*)(*curNode),NULL,4);
         IEventStackPush(top,tempEvent);
     }
     setcolor(50);
-    IPutsHZ16(254,94,"Ãû³Æ",fpHZ);
+    IPutsHZ16(254,94,"ÎÄ¼þÃû",fpHZ);
     IPutsHZ16(430,94,"ÐÞ¸ÄÈÕÆÚ",fpHZ);
     IPutsHZ16(686,94,"ÀàÐÍ",fpHZ);
     IPutsHZ16(830,94,"´óÐ¡",fpHZ);
@@ -199,8 +284,32 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
             setfillstyle(SOLID_FILL,139);
             bar(248,y,936,y+19);
         }
+        if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"txt"))
+            Itxt(256,y+2);
+        else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
+            Idoc(256,y+2);
+        else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
+            Ic(256,y+2);
+        else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
+            Ih(256,y+2);
+        else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
+            Iobj(256,y+2);
+        else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
+            Iexe(256,y+2);
+        else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
+            Ipic(256,y+2);
+        else if(IisFolder(tempNode))
+        {
+            if(tempNode->file.type[1]=='d')
+                Idisk(256,y+2);
+            else
+                Ifolder(256,y+2);
+        }
+        else
+            Imystery(256,y+2);
 
-        Iouttextxy(256,y+6,tempNode->file.name,fpHZ);
+        setcolor(0);
+        Iouttextxy(256+20,y+6,tempNode->file.name,fpHZ);
         sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date/512+1980,(tempNode->file.date%512)/32,tempNode->file.date%32,tempNode->file.time/2048,(tempNode->file.time%2048)/32);
         outtextxy(432,y+6,temp);
 
@@ -285,7 +394,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         rectangle(521,403,571,423);
 
         setcolor(0);
-        sprintf(temp,"%s%d%s","È·¶¨ÒªÉ¾³ýÑ¡ÖÐµÄ",numOfSelected,"¸ö¶ÔÏó£¿");
+        sprintf(temp,"%s%d%s","È·¶¨ÒªÉ¾³ýÑ¡ÖÐµÄ",numOfSelected,"¸öÏîÄ¿Âð£¿");
         Iouttextxy(433,377,temp,fpHZ);
         IPutsHZ16(530,406,"È·¶¨",fpHZ);
         IPutsHZ16(600,406,"È¡Ïû",fpHZ);
@@ -297,6 +406,5 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         ISetEvent(&tempEvent,591,403,641,423,2,INOP,NULL,NULL,4);
         IEventStackPush(top,tempEvent);
     }
-    fclose(fpHZ);
     return numOfSelected;
 }

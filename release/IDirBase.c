@@ -30,7 +30,7 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
     strcat(outPath,"\\");
     strcat(outPath,inFile->file.name);
     strcpy(name,inFile->file.name);
-    if(searchpath(outPath)||!strcmp(inPath,outPath)) //åŸä½ç½®æ‹·è´
+    if(searchpath(outPath)||!strcmp(inPath,outPath)) //Ô­Î»??¿½±´
     {
         strcpy(i,"1");
         for(j=0;j<strlen(inFile->file.name);j++)
@@ -80,27 +80,29 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
     fclose(fout);
     free(buff);
 
-    IAddFileNode(outParent,name);  //æ·»åŠ æ–°æ–‡ä»¶èŠ‚ç‚¹
+    IAddFileNode(outParent,name);  //Ìí¼ÓĞÂÎÄ¼ş½Úµã?
     return 1;
 }
 IBool Irmf(IFileNode * fileNode)
 {
     char tempStr[50];
     IGetAbsolutePath(fileNode,tempStr);
-    remove(tempStr);    //åˆ é™¤æ–‡ä»¶
-    return IDelFileNode(IFindParent(fileNode),fileNode->file.name);     //åˆ é™¤æ–‡ä»¶èŠ‚ç‚¹
+    remove(tempStr);    //É¾³ıÎÄ¼ş
+    return IDelFileNode(IFindParent(fileNode),fileNode->file.name);     //É¾³ıÎÄ¼ş½Úµã
 }
-void Imkdir(IFileNode * pathNode,char* folderName)    //åˆ›å»ºæ–‡ä»¶å¤¹ï¼Œå¹¶æ›´æ–°èŠ‚ç‚¹
+IBool Imkdir(IFileNode * pathNode,char* folderName)    //´´½¨ÎÄ¼ş¼Ğ£¬²¢¸üĞÂ½Úµã
 {
     char temp[80];
     
     IGetAbsolutePath(pathNode,temp);
     strcat(temp,"\\");
     strcat(temp,folderName);
-    mkdir(temp);    //åˆ›å»ºæ–‡ä»¶å¤¹
-    IAddFileNode(pathNode,folderName);
+    if(mkdir(temp)==-1)
+        return 0;
+    else
+        return IAddFileNode(pathNode,folderName);
 }
-IBool Irmdir(IFileNode * node,int flag)  //åˆ é™¤æ‰€æœ‰ç©ºæ–‡ä»¶å¤¹ï¼Œå¹¶æ›´æ–°èŠ‚ç‚¹
+IBool Irmdir(IFileNode * node,int flag)  //É¾³ıËùÓĞ¿ÕÎÄ¼ş¼Ğ£¬²¢¸üĞÂ½Úµã
 {
     char temp[50];
     
@@ -115,7 +117,7 @@ IBool Irmdir(IFileNode * node,int flag)  //åˆ é™¤æ‰€æœ‰ç©ºæ–‡ä»¶å¤¹ï¼Œå¹¶æ›´æ–°è
     IDelFileNode(IFindParent(node),node->file.name);
     return !rmdir(temp);
 }
-void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //å¤åˆ¶é“¾è¡¨
+void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //¸´ÖÆÁ´±í
 {
     char temp[50];
 
@@ -138,7 +140,7 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)   //å¤åˆ¶é“¾è¡¨
     IGetAbsolutePath(newChild,temp);
     IPeek(newChild,temp);
 }
-void Icpr(IFileNode * oldChild,IFileNode * newParent) //é€’å½’å¤åˆ¶æ‰€æœ‰æ–‡ä»¶å’Œæ–‡ä»¶å¤¹
+void Icpr(IFileNode * oldChild,IFileNode * newParent) //µİ¹é¸´ÖÆËùÓĞÎÄ¼şºÍÎÄ¼ş??
 {
     char temp[50];
     IGetAbsolutePath(newParent,temp);
@@ -153,7 +155,7 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent) //é€’å½’å¤åˆ¶æ‰€æœ‰æ–‡ä»¶
     else
         Icopy(oldChild,newParent);
 }   
-void IDelAll(IFileNode * oldChildChild) //åˆ é™¤é“¾è¡¨
+void IDelAll(IFileNode * oldChildChild) //É¾³ıÁ´±í
 {
     IFileNode *tempNode=oldChildChild,*nextNode=oldChildChild->next;
 
@@ -174,7 +176,7 @@ void IDelAll(IFileNode * oldChildChild) //åˆ é™¤é“¾è¡¨
         IDelAll(tempNode);
     }
 }
-void Irmr(IFileNode * oldChild)//é€’å½’åˆ é™¤æ‰€æœ‰æ–‡ä»¶å’Œæ–‡ä»¶å¤¹
+void Irmr(IFileNode * oldChild)//µİ¹éÉ¾³ıËùÓĞÎÄ¼şºÍÎÄ¼ş??
 {
     if(IisFolder(oldChild))
     {

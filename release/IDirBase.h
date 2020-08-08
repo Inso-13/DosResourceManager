@@ -3,14 +3,14 @@
 
 #include"IType.h"
 
-IBool Icopy(IFileNode * inFile,IFileNode * outParent);  //å°†inFileæ–‡ä»¶å¤åˆ¶åˆ°outParentæ–‡ä»¶å¤¹å†…
-IBool Irmf(IFileNode * fileNode);   //å½»åº•åˆ é™¤æ–‡ä»¶
-void Imkdir(IFileNode * pathNode,char* folderName);//åˆ›å»ºæ–‡ä»¶å¤¹ï¼Œå¹¶æ›´æ–°èŠ‚ç‚¹
-IBool Irmdir(IFileNode * node,int flag); //åˆ é™¤æ‰€æœ‰ç©ºæ–‡ä»¶å¤¹ï¼Œå¹¶æ›´æ–°èŠ‚ç‚¹
-void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);//å¤åˆ¶é“¾è¡¨
-void IDelAll(IFileNode * oldChildChild); //åˆ é™¤é“¾è¡¨
-void Icpr(IFileNode * oldChild,IFileNode * newParent);//é€’å½’å¤åˆ¶æ‰€æœ‰æ–‡ä»¶å’Œæ–‡ä»¶å¤¹
-void Irmr(IFileNode * oldChild);//é€’å½’åˆ é™¤æ‰€æœ‰æ–‡ä»¶å’Œæ–‡ä»¶å¤¹
-void IEntree(IFileNode * root);//å°†rootç›®å½•ä¸‹çš„æ–‡ä»¶åŠ åˆ°æ–‡ä»¶æ ‘ä¸Š
+IBool Icopy(IFileNode * inFile,IFileNode * outParent);  //½«inFileÎÄ¼ş¸´ÖÆµ½outParentÎÄ¼ş¼ĞÄÚ
+IBool Irmf(IFileNode * fileNode);   //³¹µ×É¾³ıÎÄ¼ş
+IBool Imkdir(IFileNode * pathNode,char* folderName);//´´½¨ÎÄ¼ş¼Ğ£¬²¢¸üĞÂ½Ú??
+IBool Irmdir(IFileNode * node,int flag); //É¾³ıËùÓĞ¿ÕÎÄ¼ş¼Ğ£¬²¢¸üĞÂ½Ú??
+void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);//¸´ÖÆÁ´±í
+void IDelAll(IFileNode * oldChildChild); //É¾³ıÁ´±í
+void Icpr(IFileNode * oldChild,IFileNode * newParent);//µİ¹é¸´ÖÆËùÓĞÎÄ¼şºÍÎÄ¼ş??
+void Irmr(IFileNode * oldChild);//µİ¹éÉ¾³ıËùÓĞÎÄ¼şºÍÎÄ¼ş??
+void IEntree(IFileNode * root);//½«root??Â¼ÏÂµÄÎÄ¼ş¼Óµ½ÎÄ¼şÊ÷??
 
 #endif

@@ -15,10 +15,10 @@ IFileNode * IFindNodeByPath(char * path,IFileNode * root)
         return 0;
 
     IGetAbsolutePath(root,temp);
-    if(!strcmp(temp,path))   //æ¯”è¾ƒè·¯å¾„ï¼Œä¸€è‡´åˆ™è¿”å›
+    if(!strcmp(temp,path))   //±È½Ï??¾¶£¬Ò»ÖÂÔò·µ»Ø
         return root;
     
-    tempNode=IFindNodeByPath(path,root->child); //æ·±åº¦ä¼˜å…ˆæœç´¢
+    tempNode=IFindNodeByPath(path,root->child); //Éî¶ÈÓÅÏÈËÑË÷
     if(tempNode)
         return tempNode;
 
@@ -26,7 +26,7 @@ IFileNode * IFindNodeByPath(char * path,IFileNode * root)
     if(tempNode)
         return tempNode;
     
-    return 0;   //æœªæ‰¾åˆ°ï¼Œåˆ™è¿”å›NULL
+    return 0;   //??ÕÒµ½£¬Ôò·µ»ØNULL
 }
 IFileNode * IFindNodeByName(char * name,IFileNode * root)
 {
@@ -35,10 +35,10 @@ IFileNode * IFindNodeByName(char * name,IFileNode * root)
     if(!root)
         return 0;
 
-    if(!strcmp(root->file.name,name))   //æ¯”è¾ƒæ–‡ä»¶åï¼Œä¸€è‡´åˆ™è¿”å›
+    if(!strcmp(root->file.name,name))   //±È½ÏÎÄ¼şÃû£¬Ò»ÖÂÔò·µ»Ø
         return root;
     
-    temp=IFindNodeByName(name,root->next);     //å¹¿åº¦ä¼˜å…ˆæœç´¢
+    temp=IFindNodeByName(name,root->next);     //¹ã¶ÈÓÅÏÈËÑË÷
     if(temp)
         return temp;
 
@@ -46,27 +46,27 @@ IFileNode * IFindNodeByName(char * name,IFileNode * root)
     if(temp)
         return temp;
     
-    return 0;   //æœªæ‰¾åˆ°ï¼Œåˆ™è¿”å›NULL
+    return 0;   //??ÕÒµ½£¬Ôò·µ»ØNULL
 }
 void Icd(char * path)
 {
     char temp[80]="";
 
-    if(path[1]==':'&&getdisk()!=(path[0]-'A'))  //å½“å‰ç£ç›˜ä¸ç›®æ ‡ä¸ä¸€è‡´
+    if(path[1]==':'&&getdisk()!=(path[0]-'A'))  //µ±Ç°´ÅÅÌÓëÄ¿±ê²»Ò»??
     {
-        setdisk(path[0]-'A');   //æ›´æ”¹ç£ç›˜
+        setdisk(path[0]-'A');   //¸ü¸Ä´ÅÅÌ
 #ifdef  DB
         printf("switch to disk %c\n",getdisk()+'A');
 #endif
     } 
-    if(strlen(path)<=3)     //è·¯å¾„æ ‡å‡†åŒ–
+    if(strlen(path)<=3)     //??¾¶±ê×¼»¯
     {
         strcpy(temp,path);
         strcpy(temp+1,"");
         strcat(temp,":\\.");
         chdir(temp);
     }   
-    chdir(path);    //æ›´æ”¹è·¯å¾„
+    chdir(path);    //¸ü¸Ä????
 #ifdef  DB
     getcwd(temp,80);
     puts(temp);
@@ -138,7 +138,7 @@ void IGetAbsolutePath(IFileNode * node,char* temp)
         strcat(temp,node->file.name);
     }
 }
-IFileNode * IDiskInit()
+IFileNode * IDiskInit(int id)
 {
     IFileNode * root=(IFileNode *)malloc(sizeof(IFileNode)),* rootC=(IFileNode *)malloc(sizeof(IFileNode)),*tempNode=rootC,*lastNode=rootC;
     int i,disk;
@@ -154,11 +154,12 @@ IFileNode * IDiskInit()
     rootC->pre=root;
     rootC->flags|=4;
     strcpy(temp,"C:");
-    for(i=0;i<26;i++)   //éå†26ä¸ªè‹±æ–‡å­—æ¯ï¼ŒæŸ¥æ‰¾æ‰€æœ‰ç£ç›˜
+    
+    for(i=0;i<26;i++)   //±éÀú26¸öÓ¢ÎÄ×ÖÄ¸£¬²éÕÒËùÓĞ´ÅÅÌ
     {
         setdisk(i);
         disk=getdisk();
-        if(disk==i)     //å¦‚æœç£ç›˜å­˜åœ¨ï¼Œåˆå§‹åŒ–ç£ç›˜èŠ‚ç‚¹
+        if(disk==i)     //Èç¹û´ÅÅÌ´æÔÚ£¬³õÊ¼»¯´ÅÅÌ½Úµã
         {
             if(disk<2||disk>24)
                 continue;
@@ -166,7 +167,10 @@ IFileNode * IDiskInit()
             tempNode->file.time=0;
             tempNode->file.size=0;
             tempNode->hasFolder=-1;
-            strcpy(tempNode->file.type,"0d");
+            if(disk==2&&id==0)
+                strcpy(tempNode->file.type,"0ds");
+            else
+                strcpy(tempNode->file.type,"0d");
             temp[0]=disk+'A';
             strcpy(tempNode->file.name,temp);
             tempNode=(IFileNode *)malloc(sizeof(IFileNode));
@@ -182,7 +186,7 @@ IFileNode * IDiskInit()
     printf("near:%u\n",coreleft());
 #endif
     Icd("C:");
-    return root;    //è¿”å›ç£ç›˜èŠ‚ç‚¹çš„æ ¹èŠ‚ç‚¹
+    return root;    //·µ»Ø´ÅÅÌ½ÚµãµÄ¸ù½Úµã
 }
 void IFileNodeSetNull(IFileNode * node)
 {
@@ -198,7 +202,7 @@ IFileNode * IFindParent(IFileNode * child)
 {
     IFileNode * temp=child;
     
-    while(!(temp->flags&4))    //æ‰¾åˆ°é“¾è¡¨å¤´
+    while(!(temp->flags&4))    //ÕÒµ½Á´±í??
     {
         temp=temp->pre;
     }

@@ -5,7 +5,7 @@
 #include"IMouse.h"
 
 
-void IMouseMath(int (*mouseDraw)[16])   //è®¡ç®—é¼ æ ‡çš„å½¢çŠ¶
+void IMouseMath(int (*mouseDraw)[16])   //¼ÆËãÊó±êµÄÐÎ×´
 {
     int i,j,u,k;
     int up[16][16],down[16][16];
@@ -44,16 +44,16 @@ void IMouseMath(int (*mouseDraw)[16])   //è®¡ç®—é¼ æ ‡çš„å½¢çŠ¶
     }
     mouseDraw[1][2]=4;
 }
-/*é¼ æ ‡å…‰æ ‡æ˜¾ç¤º*/
+/*Êó±ê¹â±êÏÔÊ¾*/
 void IMouseOn(int x,int y,int (*mouseDraw)[16],int(*pixelSave)[16])
 {
     int i,j;
     int color;
-    for(i=0;i<16;i++)/*ç”»é¼ æ ‡*/
+    for(i=0;i<16;i++)/*»­Êó±ê*/
     {
         for(j=0;j<16;j++)
         {
-            pixelSave[i][j]=getpixel(x+j,y+i);/*ä¿å­˜åŽŸæ¥çš„é¢œè‰²*/
+            pixelSave[i][j]=getpixel(x+j,y+i);/*±£´æÔ­À´µÄÑÕÉ«*/
             if(mouseDraw[i][j]==1)
                 putpixel(x+j,y+i,0);
             else if(mouseDraw[i][j]==2)
@@ -61,11 +61,11 @@ void IMouseOn(int x,int y,int (*mouseDraw)[16],int(*pixelSave)[16])
         }
     }
 }
-/*éšè—é¼ æ ‡*/
+/*Òþ²ØÊó±ê*/
 void IMouseOff(int x,int y,int (*mouseDraw)[16],int (*pixelSave)[16])
 {
     int i,j;
-    for(i=0;i<16;i++)/*åŽŸä½ç½®å¼‚æˆ–æ¶ˆåŽ»*/
+    for(i=0;i<16;i++)/*Ô­Î»ÖÃÒì»òÏûÈ¥*/
         for(j=0;j<16;j++)
         {
             if(mouseDraw[i][j]==3||mouseDraw[i][j]==4)
@@ -74,41 +74,39 @@ void IMouseOff(int x,int y,int (*mouseDraw)[16],int (*pixelSave)[16])
             putpixel(x+j,y+i,pixelSave[i][j]);
         }
 }
-int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[16])/*é¼ æ ‡æŒ‰é”®æƒ…å†µ*/
+int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[16])/*Êó±ê°´¼üÇé¿ö*/
 {
     int status=0,i,j,color;
     int x=*pMouseX;
-    int y=*pMouseY;/*é»˜è®¤é¼ æ ‡æ²¡æœ‰ç§»åŠ¨*/
+    int y=*pMouseY;/*Ä¬ÈÏÊó±êÃ»ÓÐÒÆ¶¯*/
     
     while(x==*pMouseX&&y==*pMouseY&&status==0)
     {
         IMouseGetXY(pMouseX,pMouseY);
-        if(*pMouseX!=x||*pMouseY!=y)    /*é¼ æ ‡ç§»åŠ¨ï¼Œstatus bit0 ç½®1*/
+        if(*pMouseX!=x||*pMouseY!=y)    /*Êó±êÒÆ¶¯£¬status bit0 ÖÃ1*/
         {
             status+=1;
             IMouseOff(x,y,mouseDraw,pixelSave);
-            IMouseOn(*pMouseX,*pMouseY,mouseDraw,pixelSave);/*æ–°ä½ç½®æ˜¾ç¤º*/
+            IMouseOn(*pMouseX,*pMouseY,mouseDraw,pixelSave);/*ÐÂÎ»ÖÃÏÔÊ¾*/
         }
-        if(ILeftPress())    /*é¼ æ ‡å·¦é”®å•å‡»ï¼Œstatus bit1 ç½®1*/
+        if(ILeftPress())    /*Êó±ê×ó¼üµ¥»÷£¬status bit1 ÖÃ1*/
         {
-            delay(18);
-            if(ILeftPress())    /*é˜²æŠ–åŠ¨*/
-                status+=2;
-            delay(82);
-            if(!ILeftPress())   /*é¼ æ ‡å·¦é”®åŒå‡»ï¼Œstatus bit4 ç½®1*/
+            status+=2;
+            delay(100);
+            if(!ILeftPress())   /*Êó±ê×ó¼üË«»÷£¬status bit4 ÖÃ1*/
             {
                 delay(100);
                 if(ILeftPress())
                     status+=8;
             }
         }
-        if(IRightPress())   /*é¼ æ ‡å³é”®å•å‡»ï¼Œstatus bit3 ç½®1*/
+        if(IRightPress())   /*Êó±êÓÒ¼üµ¥»÷£¬status bit3 ÖÃ1*/
         {
             delay(18);
-            if(IRightPress())    /*é˜²æŠ–åŠ¨*/
+            if(IRightPress())    /*·À¶¶¶¯*/
                status+=4;
         }
-        if(IMouseLeftRelease()) /*é¼ æ ‡å·¦é”®é‡Šæ”¾ï¼Œstatus bit5 ç½®1*/
+        if(IMouseLeftRelease()) /*Êó±ê×ó¼üÊÍ·Å£¬status bit5 ÖÃ1*/
             status+=16;
     }
     return status;
@@ -117,12 +115,12 @@ int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[
 /*
 **
 ***
-    ä»¥ä¸Šä»£ç æ¥è‡ªç½‘ç»œï¼Œç•¥æœ‰ä¿®æ”¹
+    ÒÔÉÏ´úÂëÀ´×ÔÍøÂç£¬ÂÔÓÐÐÞ¸Ä
 ***
 **
 */
 
-void IMouseGetXY(int *pMouseX,int *pMouseY)     //èŽ·å–é¼ æ ‡å½“å‰ä½ç½®
+void IMouseGetXY(int *pMouseX,int *pMouseY)     //»ñÈ¡Êó±êµ±Ç°Î»ÖÃ
 {
     union REGS regs; 
     regs.x.ax=3;
@@ -144,7 +142,7 @@ int IRightPress()
     int86(0x33,&regs,&regs);
     return(regs.x.bx&2);
 }
-void IMouseSetLimit(int xMax,int yMax)  //è¯·ä½¿ç”¨640*480æˆ–800*600
+void IMouseSetLimit(int xMax,int yMax)  //ÇëÊ¹ÓÃ640*480»ò800*600
 {
     union REGS regs; 
     regs.x.ax=7;

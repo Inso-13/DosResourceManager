@@ -12,4 +12,5 @@ void IDetailOption(int x,int y);
 void IPictureOption(int x,int y);
 void IExit(int x,int y);
 
+
 #endif

@@ -3,16 +3,16 @@
 
 #include"IType.h"
 
-void IFileNodeSetNull(IFileNode * node);    //åˆå§‹åŒ–æ–‡ä»¶èŠ‚ç‚¹
-IFileNode * IFindParent(IFileNode * child);     //è¿”å›æ–‡ä»¶èŠ‚ç‚¹çš„çˆ¶èŠ‚ç‚¹
-IFileNode * IDiskInit(void);    //åˆå§‹åŒ–æ–‡ä»¶æ ¹èŠ‚ç‚¹
+void IFileNodeSetNull(IFileNode * node);    //³õÊ¼»¯ÎÄ¼ş½Úµã
+IFileNode * IFindParent(IFileNode * child);     //·µ»ØÎÄ¼ş½ÚµãµÄ¸¸½Úµã
+IFileNode * IDiskInit(int id);    //³õÊ¼»¯ÎÄ¼ş¸ù½Úµã
 void IGetAbsolutePath(IFileNode * node,char* temp);
-IBool IMatch(char* src,char* pattern);      //é€šé…ç¬¦åŒ¹é…
+IBool IMatch(char* src,char* pattern);      //Í¨Åä·ûÆ¥Åä
 int IMatchi(char a,char b);
-void Icd(char *); //æ›´æ¢ç£ç›˜å¹¶è¿›å…¥ç›®å½•
-IBool IisFolder(IFileNode * node);  //æ˜¯å¦ä¸ºç›®å½•
-IFileNode * IFindNodeByPath(char * path,IFileNode * root);  //æ ¹æ®è·¯å¾„å¾—åˆ°æ–‡ä»¶èŠ‚ç‚¹
-IFileNode * IFindNodeByName(char * name,IFileNode * root);  //æ ¹æ®æ–‡ä»¶åå¾—åˆ°æ–‡ä»¶èŠ‚ç‚¹
+void Icd(char *); //¸ü»»´ÅÅÌ²¢½øÈëÄ¿Â¼
+IBool IisFolder(IFileNode * node);  //ÊÇ·ñÎªÄ¿Â¼
+IFileNode * IFindNodeByPath(char * path,IFileNode * root);  //¸ù¾İÂ·¾¶µÃµ½ÎÄ¼ş½Úµã
+IFileNode * IFindNodeByName(char * name,IFileNode * root);  //¸ù¾İÎÄ¼şÃûµÃµ½ÎÄ¼ş½Úµã
 void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change);
 void IDelPointer(IFileNodePointer* pointer);
 
