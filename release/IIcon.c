@@ -54,6 +54,7 @@ void Idoc(int x,int y)
 	setcolor(255);
 	settextstyle(1,0,0);
 	outtextxy(x-2,y+4,"W");
+    settextstyle(1,0,2);
 }
 void Ifolder(int x,int y)
 {
@@ -124,9 +125,6 @@ void Iobj(int x,int y)
 void Imystery(int x,int y)
 {
 	Igeneral(x,y);
-	setcolor(248);
-	settextstyle(0,0,1);
-	outtextxy(x+2,y+4,"?"); 
 }
 void Ipic(int x,int y)
 {

@@ -6,7 +6,7 @@
 #include <dos.h>
 #include "IHanZi.h"
 
-void IPutsHZ16(int x,int y,char *str,FILE * fp) //ä¸­æ–‡è¾“å‡º
+void IPutsHZ16(int x,int y,char *str,FILE * fp) // ÖÐÎÄÊä³ö£¬fpÎªfpHZ
 {
     unsigned ZCode,BCode;
     int i,j,k,rec;
@@ -43,7 +43,7 @@ void IPutsHZ16(int x,int y,char *str,FILE * fp) //ä¸­æ–‡è¾“å‡º
     }
     return;    
 }
-void Iouttextxy(int x,int y,char *str,FILE * fp) //è‡ªåŠ¨åˆ¤æ–­ä¸­è‹±æ–‡è¾“å‡º
+void Iouttextxy(int x,int y,char *str,FILE * fp) // ×Ô¶¯ÅÐ¶ÏÖÐÓ¢ÎÄÊä³ö
 {
     int inc=0,n,i=0;
     char temp[3]={'\0','\0','\0'};

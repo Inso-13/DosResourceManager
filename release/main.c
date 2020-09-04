@@ -22,7 +22,7 @@ void main()
     int mouseDraw[16][16],mouseSave[16][16];
     int mouseX,mouseY,id,mouseStatus,exit=0,lastMenu=0,menu=0,menuFlag=0;
     int lastMenuX,lastMenuY,i,j;
-    char activeFlag=0,temp[50],isCtrl=0,numOfSelected=0,page1=1,delFlag=0;
+    char activeFlag=0,temp[50],isCtrl=0,numOfSelected=0,page0=1,page1=1,delFlag=0;
     char name[13],password[13],nameC[13],passwordC[13];
     void *view1Image=NULL;
     FILE* fp=NULL,*fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb");
@@ -32,14 +32,22 @@ void main()
     IEventStackNode *top0,*top1;    
     //定义变量
 
-
+#ifdef DB
+    VGA_Init();
+#else
     SVGA_Init();
     Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
+#endif
+
     //变量初始化
     view1Image=malloc(imagesize(0,0,95,160));
-    // IMouseMath(mouseDraw);
+    IMouseMath(mouseDraw);
     IMouseSetLimit(1024,768);
     //界面初始化
+
+#ifdef DB
+    id=1;
+#else
     strcpy(name,"\0");
     strcpy(password,"\0");
     IPlainLogin();
@@ -95,6 +103,8 @@ void main()
             break;
         }
     }
+#endif
+
     root=IDiskInit(id);
     top0=IInitEventStack();
     top1=IInitEventStack();
@@ -102,14 +112,15 @@ void main()
     curNode->child=root;
     curNode->pre=NULL;
     curNode->next=NULL;
-    curNode->wait=15;
+    curNode->wait=30000;
     nodeX->child=NULL;
     nodeX->pre=NULL;
     nodeX->next=NULL;
 
     //登录界面
+
     IPlainView(fpHZ);
-    IView0(root,curNode,top0,4,110);
+    IView0(root,&curNode,top0,4,110,&page0,1);
     IView1(&curNode,top1,isCtrl,&page1,&delFlag,fpHZ);
     for(i=0;i<16;i++)
         for(j=0;j<16;j++)
@@ -120,7 +131,7 @@ void main()
 #ifdef DB
         setcolor(0);
         sprintf(temp,"left memory:%u Byte",coreleft());
-        outtextxy(528,752,temp);
+        outtextxy(300,400,temp);
 #endif
         mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);
         //鼠标状态查询
@@ -197,7 +208,7 @@ void main()
             setfillstyle(SOLID_FILL,255);
             bar(0,110,238,740);
             IEventStackPop(top0,1000);
-            IView0(root,curNode,top0,4,110);
+            IView0(root,&curNode,top0,4,110,&page0,1);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //更新0号窗口
@@ -215,8 +226,8 @@ void main()
         //更新1号窗口
     }
 
-    //以下释放内存
     Icd("C:\\DOSRES\\SRC");
+    //以下释放内存
     IDelPointer(curNode);
     free(view1Image);
     IDelStack(top1);

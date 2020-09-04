@@ -8,8 +8,6 @@ void IGoRight(int x,int y);
 void IGoUp(int x,int y);
 void IRefresh(int centerX,int centerY);
 void IMagnifier(int x,int y);
-void IDetailOption(int x,int y);
-void IPictureOption(int x,int y);
 void IExit(int x,int y);
 
 

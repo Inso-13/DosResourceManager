@@ -14,14 +14,14 @@ IBool IAddChild(IFileNode * parent,IFileNode * child)
 {
     IFileNode * temp=NULL;
 
-    if(!parent) return 0;   //çˆ¶èŠ‚ç‚¹ä¸ºç©ºï¼Œè¿”å›0
-    if(!strcmp(child->file.name,""))    //å­èŠ‚ç‚¹ä¸ºåƒµå°¸èŠ‚ç‚¹ï¼Œæ¸…é™¤å¹¶è¿”å›0
+    if(!parent) return 0;   //¸¸½ÚµãÎª¿Õ£¬·µ»Ø0
+    if(!strcmp(child->file.name,""))    //×Ó½ÚµãÎª½©Ê¬½Úµã£¬Çå³ı²¢·µ»Ø0
     {
         free(child);
         child=NULL;
         return 0;
     }
-    if(parent->child)   //å¦‚æœçˆ¶èŠ‚ç‚¹å·²æœ‰å­èŠ‚ç‚¹
+    if(parent->child)   //Èç¹û¸¸½ÚµãÒÑÓĞ×Ó½Úµã
     {
         temp=parent->child;
         while(temp->next)
@@ -32,19 +32,20 @@ IBool IAddChild(IFileNode * parent,IFileNode * child)
         child->pre=temp;
         child->flags&=27;       //child->isHead=0;
     }
-    else    //å¦‚æœçˆ¶èŠ‚ç‚¹æœªæœ‰å­èŠ‚ç‚¹
+    else    //Èç¹û¸¸½ÚµãÎ´ÓĞ×Ó½Úµã
     {
         parent->child=child;
         child->pre=parent;
         child->flags|=4;        //child->isHead=1;
     }
-    return 1;   //æˆåŠŸæ·»åŠ ï¼Œè¿”å›1
+    return 1;   //³É¹¦Ìí¼Ó£¬·µ»Ø1
 }
 IFileNode *IGetFileNodeList(char * path)  //48 pre node
 {
     IFileNode * childRoot=(IFileNode *)malloc(sizeof(IFileNode)), *tempNode=childRoot, *lastNode=childRoot;
     int ret,i,j=0;
     struct find_t ft;
+
 #ifdef  DB
     printf("%u\n",coreleft());
 #endif
@@ -57,7 +58,7 @@ IFileNode *IGetFileNodeList(char * path)  //48 pre node
     }
     Icd(path);
     IFileNodeSetNull(childRoot);
-    ret=_dos_findfirst("*.*",0xf7,&ft);
+    ret=_dos_findfirst("*.*",0xf7,&ft);  //"*.*"£¬0xf7ËùÓĞÎÄ¼ş½Úµã   ft´æ´¢²éÕÒ½á¹û
     
     while(1)
     {
@@ -140,9 +141,9 @@ IBool IAddFileNode(IFileNode  *parent,char* name)
     IGetAbsolutePath(parent,temp);
     Icd(temp);
     IFileNodeSetNull(child);
-    ret=_dos_findfirst(name,0xf7,&ft);  //æŸ¥æ‰¾nameæ–‡ä»¶
+    ret=_dos_findfirst(name,0xf7,&ft);  //²éÕÒnameÎÄ¼ş
 
-    if(ret) return 0;   //æŸ¥æ‰¾ä¸åˆ°ï¼Œè¿”å›0
+    if(ret) return 0;   //²éÕÒ²»µ½£¬·µ»Ø0
         
     strcpy(child->file.name,ft.name);
     child->file.date=ft.wr_date;
@@ -223,6 +224,7 @@ void IDelFilelist(IFileNode* root)
         IDelFilelist(root->next);
     }
     free(root);
+    root=NULL;
 #ifdef  DB
     printf("%u\n",coreleft());
 #endif
@@ -282,7 +284,7 @@ void IPeek(IFileNode* node,char* path)
             IFileNodeSetNull(tempNode);
             sprintf(temp,"%s\\%s",path,ft.name);
             strcpy(tempNode->file.type,"0t");
-            IPeek(tempNode,temp);    //æ·±åº¦ä¼˜å…ˆæœç´¢
+            IPeek(tempNode,temp);    //Éî¶ÈÓÅÏÈËÑË÷
             node->hasFile+=tempNode->hasFile;
             node->hasFolder+=tempNode->hasFolder;
         }

@@ -193,7 +193,6 @@ void IFileNodeSetNull(IFileNode * node)
     node->flags=0;
     node->hasFile=0;
     node->hasFolder=0;
-    node->del=0;
     node->child=NULL;
     node->next=NULL;
     node->pre=NULL;
@@ -234,4 +233,16 @@ void IDelPointer(IFileNodePointer* pointer)
         tempNode->next=NULL;
     }
     free(tempNode);
+}
+void IGetNameByPath(char* path,char* name)
+{
+    int i;
+    int n=strlen(path);
+
+    for(i=n-1;i>=0;i--)
+    {
+        if(path[i]=='\\')
+            break;
+    }
+    strcpy(name,path+i+1);
 }

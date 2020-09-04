@@ -13,7 +13,7 @@ IEventStackNode * IInitEventStack(void)
 #endif
         IQuit();
     }
-    top->next=NULL;     //åˆå§‹åŒ–æ ˆé¡¶
+    top->next=NULL;     //³õÊ¼»¯Õ»¶¥
     return top;
 }
 void IEventStackPush(IEventStackNode * top,IEvent newEvent)
@@ -28,22 +28,22 @@ void IEventStackPush(IEventStackNode * top,IEvent newEvent)
     }
     q->event = newEvent;
     q->next = top->next;
-    top->next = q;      //å…¥æ ˆ
+    top->next = q;      //ÈëÕ»
 }
 IBool IEventStackPop(IEventStackNode * top,int n)
 {
     IEventStackNode *q=NULL;
-    while(n--)      //å‡ºæ ˆnæ¬¡
+    while(n--)      //³öÕ»n´Î
     {
         q=top;
         if(!q->next)
-            return 0;       //ä¸è¶³nè¿”å›0
+            return 0;       //²»×ãn·µ»Ø0
         q = top->next;
         top->next = q->next;
         q->next = NULL;
         free(q);
     }
-    return 1;       //æ­£å¸¸è¿”å›1
+    return 1;       //Õı³£·µ»Ø1
 }
 char IEventStackActive(IEventStackNode * top,int x,int y,int type)
 {
@@ -53,17 +53,17 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type)
     {
         if(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2&&(temp->event.type&type))
         {
-            temp->event.pfun(temp->event.node0,temp->event.node1);      //æ¿€æ´»æ§½å‡½æ•°
+            temp->event.pfun(temp->event.node0,temp->event.node1);      //¼¤»î²Ûº¯Êı
             return temp->event.change;
         }
         else
             temp=temp->next;
     }
-    return 0;   //æœªæ¿€æ´»æ§½å‡½æ•°ï¼Œè¿”å›0
+    return 0;   //Î´¼¤»î²Ûº¯Êı£¬·µ»Ø0
 }
 void IDelStack(IEventStackNode * top)
 {
     while(top->next)
-        IEventStackPop(top,5);  //ä¸æ–­å‡ºæ ˆ
-    free(top);  //é‡Šæ”¾æ ˆé¡¶
+        IEventStackPop(top,5);  //²»¶Ï³öÕ»
+    free(top);  //ÊÍ·ÅÕ»¶¥
 }

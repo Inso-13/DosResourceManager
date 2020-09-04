@@ -5,7 +5,7 @@
 
 void IQuit()
 {
-    closegraph();   //Е┘ЁИ≈╜Е⌡╬Е╫╒Г∙▄И²╒
-    fcloseall();    //Е┘ЁИ≈╜Ф┴─Ф°┴Ф√┤Д╩╤
-    exit(0);    //И──Е┤╨
+    closegraph();   //╧ь╠ум╪пн╫ГцФ
+    fcloseall();    //╧ь╠укЫспнд╪Ч
+    exit(0);    //мкЁЖ
 }

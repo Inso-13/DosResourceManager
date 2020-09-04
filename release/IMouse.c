@@ -93,20 +93,20 @@ int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[
         {
             status+=2;
             delay(100);
-            if(!ILeftPress())   /*Êó±ê×ó¼üË«»÷£¬status bit4 ÖÃ1*/
+            if(!ILeftPress())   /*Êó±ê×ó¼üË«»÷£¬status bit3 ÖÃ1*/
             {
                 delay(100);
                 if(ILeftPress())
                     status+=8;
             }
         }
-        if(IRightPress())   /*Êó±êÓÒ¼üµ¥»÷£¬status bit3 ÖÃ1*/
+        if(IRightPress())   /*Êó±êÓÒ¼üµ¥»÷£¬status bit2 ÖÃ1*/
         {
             delay(18);
             if(IRightPress())    /*·À¶¶¶¯*/
                status+=4;
         }
-        if(IMouseLeftRelease()) /*Êó±ê×ó¼üÊÍ·Å£¬status bit5 ÖÃ1*/
+        if(IMouseLeftRelease()) /*Êó±ê×ó¼üÊÍ·Å£¬status bit4 ÖÃ1*/
             status+=16;
     }
     return status;

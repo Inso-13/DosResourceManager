@@ -1,5 +1,13 @@
 #include "IInit.h"
 
+
+int VGA_Init(void)
+{
+	int GraphDriver, GraphMode=DETECT;
+	initgraph(&GraphDriver, &GraphMode,"C:\\BORLANDC\\BGI");
+
+	return 0;
+}
 int SVGA_Init(void)
 {
     extern void _Cdecl SVGA_driver(void);

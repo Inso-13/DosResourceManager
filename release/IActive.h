@@ -18,5 +18,7 @@ void ISortActive(IFileNode* parent,IFileNode* pfun);
 void ISearchActive(IFileNode* cur,IFileNode* null);
 void IGetName(IFileNode* nam,IFileNode* null);
 void IGetPassword(IFileNode* pass,IFileNode* null);
+void ILastPage(IFileNode *pag,IFileNode* null);
+void INextPage(IFileNode *pag,IFileNode* null);
 
 #endif

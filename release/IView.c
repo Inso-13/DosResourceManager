@@ -105,73 +105,111 @@ void IPlainView(FILE* fpHZ)
     IPointerRight(172,62);
     IRefresh(814,64);
     IMagnifier(841,61);
-    IDetailOption(995,752);
-    IPictureOption(1009,752);
     IExit(1004,8);
 
     setcolor(7);
     line(240,88,240,742);
     line(0,744,1024,744);
 }
-int IView0(IFileNode* root,IFileNodePointer * curNode,IEventStackNode* top,int beginX,int beginY)
+int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int beginX,int beginY,char* page,char flag)
 {
     int increaceY=0,temp,n;
+    char thisPage=1;
+    char tempStr[3];
     IEvent tempEvent;
 
-    if(!root) return 0;         //ÔøΩÔøΩÔøΩÔøΩ?ÔøΩÔøΩ÷∏ÔøΩÔøΩ
-    if(!IisFolder(root)) return 0;      //ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩƒºÔøΩÔøΩÔø???
-    if(beginY>720) return 0;
-    if(curNode->child==root)
+    if(!root) return 0;         
+    if(!IisFolder(root)) return 0;  //∫œ∑®–‘ºÏ—È
+
+    // if(beginY>110+590*(*page)) return 0;
+    if(beginY<110+590*(*page-1)||beginY>110+590*(*page))
+        thisPage=0;
+
+    if(thisPage&&(*curNode)->child==root)
     {
         setfillstyle(SOLID_FILL,139);
-        bar(0,beginY,238,beginY+22);
+        bar(0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22);
     }
-    if(root->hasFolder==0&&root->hasFile==0)         //ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩƒºÔøΩÔøΩ–∫ÔøΩÔøΩÔøΩÔøΩƒºÔø???
+    if(root->hasFolder==0&&root->hasFile==0)         //ø’Œƒº˛º–
     {
-        Ifolder(beginX+11,beginY+4);
-        setcolor(0);
-        outtextxy(beginX+25+10,beginY+7,root->file.name);
+        if(thisPage)
+        {
+            Ifolder(beginX+11,beginY-(*page-1)*590+4);
+            setcolor(0);
+            outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
+            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
+            IEventStackPush(top,tempEvent);
+        }
         increaceY+=24;
-        ISetEvent(&tempEvent,0,beginY,238,beginY+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
-        IEventStackPush(top,tempEvent);
     }
-    else if(root->file.type[0]=='0')   //ÔøΩÔøΩÔøΩÔøΩÔøΩŒ¥ÔøΩÔø???ÔøΩÔøΩÔøΩƒºÔøΩÔøΩÔøΩ
+    else if(root->file.type[0]=='0')   //Œ¥¥Úø™
     {
-        IPointerRight(beginX+1,beginY+8);
-        if(root->file.type[1]=='d'||root->file.type[1]=='\\')
-            Idisk(beginX+11,beginY+4);
-        else
-            Ifolder(beginX+11,beginY+4);
-        setcolor(0);
-        outtextxy(beginX+25+10,beginY+7,root->file.name);
+        if(thisPage)
+        {
+            IPointerRight(beginX+1,beginY-(*page-1)*590+8);
+            if(root->file.type[1]=='d'||root->file.type[1]=='\\')
+                Idisk(beginX+11,beginY-(*page-1)*590+4);
+            else
+                Ifolder(beginX+11,beginY-(*page-1)*590+4);
+            setcolor(0);
+            outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
+            ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IEntreeActive,root,(IFileNode*)curNode,6);
+            IEventStackPush(top,tempEvent);
+            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
+            IEventStackPush(top,tempEvent);
+        }
         increaceY+=24;
-        ISetEvent(&tempEvent,beginX,beginY+6,beginX+16,beginY+14,2,IEntreeActive,root,(IFileNode*)curNode,6);
-        IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,0,beginY,238,beginY+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
-        IEventStackPush(top,tempEvent);
     }
-    else        //ÔøΩÔøΩÔøΩÔøΩ«¥Ôø???ÔøΩÔøΩÔøΩƒºÔøΩÔøΩÔøΩ
+    else        //¥Úø™µƒŒƒº˛º–
     {
-        IPointerDown(beginX,beginY+9);
-        if(root->file.type[1]=='d'||root->file.type[1]=='\\')
-            Idisk(beginX+11,beginY+4);
-        else
-            Ifolder(beginX+11,beginY+4);
-        setcolor(0);
-        outtextxy(beginX+25+10,beginY+7,root->file.name);
+        if(thisPage)
+        {
+            IPointerDown(beginX,beginY+9);
+            if(root->file.type[1]=='d'||root->file.type[1]=='\\')
+                Idisk(beginX+11,beginY-(*page-1)*590+4);
+            else
+                Ifolder(beginX+11,beginY-(*page-1)*590+4);
+            setcolor(0);
+            outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
+            ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IDetreeActive,root,(IFileNode*)(*curNode),6);
+            IEventStackPush(top,tempEvent);
+            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IDetreeActive,root,(IFileNode*)(*curNode),6);
+            IEventStackPush(top,tempEvent);
+        }
         increaceY+=24;
-        ISetEvent(&tempEvent,beginX,beginY+6,beginX+16,beginY+14,2,IDetreeActive,root,(IFileNode*)curNode,6);
-        IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,0,beginY,238,beginY+22,8,IDetreeActive,root,(IFileNode*)curNode,6);
-        IEventStackPush(top,tempEvent);
         if(root->child)
         {
-            increaceY+=IView0(root->child,curNode,top,beginX+8,beginY+increaceY);
+            increaceY+=IView0(root->child,curNode,top,beginX+8,beginY+increaceY,page,0);
         }
     }
     if(root->next)
     {
-        increaceY+=IView0(root->next,curNode,top,beginX,beginY+increaceY);
+        increaceY+=IView0(root->next,curNode,top,beginX,beginY+increaceY,page,0);
+    }
+
+    if(flag)
+    {
+        if(*page>1)
+        {
+            ISetEvent(&tempEvent,150,720,168,738,2,ILastPage,page,NULL,2);
+            IEventStackPush(top,tempEvent);
+            setcolor(0);
+        }
+        else
+            setcolor(LIGHTGRAY);
+        IGoLeft(150,720);
+        if(*page<=(increaceY/590))
+        {
+            ISetEvent(&tempEvent,210,720,228,738,2,INextPage,page,NULL,2);
+            IEventStackPush(top,tempEvent);
+            setcolor(0);
+        }
+        else
+            setcolor(LIGHTGRAY);
+        IGoRight(210,720);
+        sprintf(tempStr,"%d",*page);
+        setcolor(0);
+        outtextxy(182,722,tempStr);
     }
     return increaceY;
 }
@@ -183,6 +221,8 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     IFileNode* tempNode;
     IEvent tempEvent;
     char temp[50];
+
+    settextstyle(0,0,0);
     if(fpHZ==NULL)
     {
         setcolor(0);
@@ -199,13 +239,13 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     if(IFindParent((*curNode)->child))
     {
         setcolor(0);
-        ISetEvent(&tempEvent,108,57,120,76,2,IEntreeActive,IFindParent((*curNode)->child),(IFileNode*)(*curNode),6);
+        ISetEvent(&tempEvent,108,57,120,76,2,IEntreeActive,IFindParent((*curNode)->child),(IFileNode*)curNode,6);
         IEventStackPush(top,tempEvent);
     }
     else
         setcolor(LIGHTGRAY);
     IGoUp(108,57);
-    if((*curNode)->pre)
+    if((*curNode)->pre&&(*curNode)->pre->child)
     {
         setcolor(0);
         ISetEvent(&tempEvent,25,59,40,76,2,IGoLeftActive,(IFileNode*)curNode,NULL,6);
@@ -214,7 +254,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     else
         setcolor(LIGHTGRAY);
     IGoLeft(25,60);
-    if((*curNode)->next)
+    if((*curNode)->next&&(*curNode)->next->child)
     {
         setcolor(0);
         ISetEvent(&tempEvent,62,59,92,76,2,IGoRightActive,(IFileNode*)curNode,NULL,6);
@@ -266,14 +306,14 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     }
     if(lastCurNode!=(*curNode)->child)
         *page=1;
-    else if((numOfItem-1)/(43)+1<*page)
+    else if((numOfItem-1)/(30)+1<*page)
         (*page)--;
     else if(!(*page))
         *page=1;
     lastCurNode=(*curNode)->child;
 
     tempNode=(*curNode)->child->child;
-    for(i=0;i<(*page-1)*(43);i++)
+    for(i=0;i<(*page-1)*(30);i++)
         tempNode=tempNode->next;
 
     y=116;
@@ -313,7 +353,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date/512+1980,(tempNode->file.date%512)/32,tempNode->file.date%32,tempNode->file.time/2048,(tempNode->file.time%2048)/32);
         outtextxy(432,y+6,temp);
 
-        if(isCtrl)
+        if(isCtrl)  //ctrl
             ISetEvent(&tempEvent,248,y,936,y+19,2,ICtrlSelect,tempNode,NULL,4);
         else
             ISetEvent(&tempEvent,248,y,936,y+19,2,ISelect,tempNode,NULL,4);
@@ -321,7 +361,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
 
         if(IisFolder(tempNode))
         {
-            ISetEvent(&tempEvent,248,y,936,y+19,8,IEntreeActive,tempNode,(IFileNode*)(*curNode),6);
+            ISetEvent(&tempEvent,248,y,936,y+19,8,IEntreeActive,tempNode,(IFileNode*)curNode,6);
             IEventStackPush(top,tempEvent);
             if(tempNode->file.type[1]=='d')
                 Iouttextxy(688,y+6+3,"¥≈≈Ã",fpHZ);

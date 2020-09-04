@@ -118,13 +118,6 @@ void ISetCopy(IFileNode* cur,IFileNode* X)
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
     IFileNodePointer * tempNode=curNode;
 
-    while(tempNode)
-    {
-        if(tempNode->child->del==1)
-            tempNode->child->del=-1;
-        tempNode=tempNode->pre;
-    }
-    curNode->child->del=1;
     if(nodeX->child)
     {
         if(nodeX->child->flags&1)
@@ -133,19 +126,13 @@ void ISetCopy(IFileNode* cur,IFileNode* X)
     
     nodeX->child=curNode->child;
 }
+
 void ISetCut(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
     IFileNodePointer * tempNode=curNode;
 
-    while(tempNode)
-    {
-        if(tempNode->child->del==1)
-            tempNode->child->del=-1;
-        tempNode=tempNode->pre;
-    }
-    curNode->child->del=1;
     if(nodeX->child)
     {
         if(nodeX->child->flags&1)

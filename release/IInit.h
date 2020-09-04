@@ -13,6 +13,7 @@ typedef struct {
 	unsigned char B;
 } SVGA_COLOR;
 
+int VGA_Init(void);
 int SVGA_Init(void);
 void SVGA_Deinit(void);
 void Set_Pal_File(const char * path);

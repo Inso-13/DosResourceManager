@@ -15,11 +15,11 @@
 
 void IEntreeActive(IFileNode* node,IFileNode* cur)
 {
-    IFileNodePointer * curNode=(IFileNodePointer *)cur;
-    IFileNodePointer * oldCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));
-    IFileNodePointer * tempNode,*nextNode;
+    IFileNodePointer ** curNode=(IFileNodePointer **)cur;
+    IFileNodePointer * newCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));
+    IFileNodePointer * tempNode=NULL,*nextNode=NULL;
 
-    tempNode=curNode->next;
+    tempNode=(*curNode)->next;
     while(tempNode)
     {
         nextNode=tempNode->next;
@@ -28,26 +28,19 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
         tempNode=nextNode;
     }
 
-    oldCurNode->child=curNode->child;
-    oldCurNode->wait=curNode->wait;
-    oldCurNode->child->del=curNode->child->del;
-    oldCurNode->pre=curNode->pre;
-    curNode->wait=15;
-    if(curNode->pre)
-    {
-        curNode->pre->next=oldCurNode;
-    }
-    curNode->pre=oldCurNode;
-    oldCurNode->next=curNode;
+    newCurNode->child=node;
+    newCurNode->next=NULL;
+    newCurNode->wait=3;
+    newCurNode->pre=*curNode;
+    *curNode=newCurNode;
 
     IEntree(node);
     
-    curNode->child=node;
-    tempNode=curNode->pre;
+    tempNode=(*curNode)->pre;
     while(tempNode)
     {
         tempNode->wait--;
-        if(tempNode->wait<0&&!tempNode->child->del)
+        if(tempNode->wait<0)
         {
             if(tempNode->pre)
             {
@@ -66,13 +59,12 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
         else
             tempNode=tempNode->pre;
     }
-    tempNode=curNode->pre;
 }
 void IDetreeActive(IFileNode* node,IFileNode* cur)
 {
-    IFileNodePointer * oldCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
-    IFileNodePointer * tempNode,*lastNode,*nextNode;
+    IFileNodePointer * tempNode,*nextNode,*lastNode;
+    char path1[50],path2[50];
 
     tempNode=curNode->next;
     while(tempNode)
@@ -82,36 +74,35 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
         free(tempNode);
         tempNode=nextNode;
     }
-    oldCurNode->child=curNode->child;
-    oldCurNode->wait=curNode->wait;
-    oldCurNode->child->del=curNode->child->del;
-    oldCurNode->pre=curNode->pre;
-    curNode->wait=15;
-    if(curNode->pre)
-    {
-        curNode->pre->next=oldCurNode;
-    }
-    curNode->pre=oldCurNode;
-    oldCurNode->next=curNode;    
-    curNode->child=node;
 
-    node->file.type[0]='0';
     tempNode=curNode;
-    if(!tempNode->child->del)
-    {
-        tempNode->child->file.type[0]='1';
-        IDetree(node);
-    }
+    IGetAbsolutePath(node,path2);
     while(tempNode)
     {
         lastNode=tempNode->pre;
-        if(tempNode->child->del==-1&&tempNode->child->file.type[0]=='0')
+        IGetAbsolutePath(tempNode->child,path1);
+        if(!strcmp(path1,path2))
         {
-            tempNode->child->file.type[0]='1';
-            IDetree(tempNode->child);
+            if(tempNode->pre)
+            {
+                tempNode=tempNode->pre;
+                tempNode->next=tempNode->next->next;
+                free(tempNode->next);
+                tempNode->next->pre=tempNode;
+            }
+            else
+            {
+                tempNode->next->pre=NULL;
+                free(tempNode);
+                break;
+            }
         }
         tempNode=lastNode;
     }
+    if(node->file.type[1]!='\\')
+        curNode->child=IFindParent(node);
+    IDetree(node);
+    node->file.type[0]='0';
 }
 void ISelect(IFileNode* node,IFileNode* null)
 {
@@ -198,9 +189,9 @@ char* IGetString(int x,int y,int length,char* string,int flag)
             bar(x,y+7,x+length,y+24);   
         tempChar=getch();
 
-        if(tempChar=='\r')
+        if(tempChar=='\r')  //回车键
             break;
-        else if(tempChar=='\b')
+        else if(tempChar=='\b')  //退格键
         {
             if(n&&i)
             {
@@ -209,7 +200,7 @@ char* IGetString(int x,int y,int length,char* string,int flag)
                 i--;
             }
         }
-        else if(tempChar==0x1B)
+        else if(tempChar==0x1B)  //ESC键
         {
             strcpy(string,"");
             break;
@@ -217,9 +208,9 @@ char* IGetString(int x,int y,int length,char* string,int flag)
         else if(tempChar=='\0')
         {
             tempChar=getch();
-            if(tempChar=='K'&&i)  //????????
+            if(tempChar=='K'&&i)  //左方向键
                 i--;
-            else if(tempChar=='M'&&n>i)    //?????????
+            else if(tempChar=='M'&&n>i)    //右方向键
                 i++;
             else
             {
@@ -301,4 +292,14 @@ void IGetPassword(IFileNode* pass,IFileNode* null)
 {
     char* password=(char*)pass;
     IGetString(440,490,220,password,3);
+}
+void ILastPage(IFileNode *pag,IFileNode* null)
+{
+    char* page=(char*)pag;
+    *page-=1;
+}
+void INextPage(IFileNode *pag,IFileNode* null)
+{
+    char* page=(char*)pag;
+    *page+=1;
 }

@@ -64,30 +64,6 @@ void IMagnifier(int x,int y)
     line(x,y+4,x-2,y+6);
     line(x,y+5,x-2,y+7);
 }
-void IDetailOption(int x,int y)
-{
-    setcolor(0);
-    line(x,y,x+6,y);
-    line(x,y+1,x+6,y+1);
-    line(x,y+3,x+6,y+3);
-    line(x,y+5,x+6,y+5);
-    line(x,y+6,x+6,y+6);
-    putpixel(x+1,y+1,15);
-    putpixel(x+1,y+3,YELLOW);
-    putpixel(x+1,y+5,144);
-}
-void IPictureOption(int x,int y)
-{
-    setcolor(0);
-    rectangle(x,y,x+6,y+6);
-    setcolor(15);
-    line(x+1,y+1,x+5,y+1);
-    line(x+3,y+1,x+5,y+1);
-    setcolor(GREEN);
-    line(x+1,y+3,x+2,y+3);
-    line(x+1,y+4,x+5,y+4);
-    line(x+1,y+5,x+5,y+5);
-}
 void IExit(int x,int y)
 {
     setcolor(255);

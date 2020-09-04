@@ -3,31 +3,30 @@
 
 #include"IBase.h"
 
-typedef enum IBool{false,true} IBool;   //å¸ƒå°”å‹å˜é‡ï¼Œfalse=0ï¼Œtrue=1
+typedef enum IBool{false,true} IBool;   //²¼¶ûĞÍ±äÁ¿£¬false=0£¬true=1
 
 
-typedef struct IFile    //æ–‡ä»¶ç»“æ„
+typedef struct IFile    //ÎÄ¼ş½á¹¹
 {
-    char name[13];  //æ–‡ä»¶å
-    char type[4];   //æ–‡ä»¶ç±»å‹ï¼Œä¸€èˆ¬æ–‡ä»¶ä¸ºåç¼€åï¼Œç›®å½•ä¸º0ï¼ˆå…³é—­ï¼‰æˆ–1ï¼ˆæ‰“å¼€ï¼‰
-    unsigned time;      //ä¿®æ”¹æ—¶é—´
-    unsigned date;      //ä¿®æ”¹æ—¥æœŸ
-    int size;      //æ–‡ä»¶å¤§å°ï¼Œå•ä½KB
+    char name[13];  //ÎÄ¼şÃû
+    char type[4];   //ÎÄ¼şÀàĞÍ£¬Ò»°ãÎÄ¼şÎªºó×ºÃû£¬Ä¿Â¼Îª0£¨¹Ø±Õ£©»ò1£¨´ò¿ª£©
+    unsigned time;      //ĞŞ¸ÄÊ±¼ä 
+    unsigned date;      //ĞŞ¸ÄÈÕÆÚ
+    int size;      //ÎÄ¼ş´óĞ¡£¬µ¥Î»KB
 }IFile;
 
-typedef struct IFileNode    //æ–‡ä»¶èŠ‚ç‚¹
+typedef struct IFileNode    //ÎÄ¼ş½Úµã //41->48
 {
-    IFile file;                 //æ–‡ä»¶
-    char flags;                 // bit0 æ˜¯å¦ç­‰å¾…cut,bit1 æ˜¯å¦è¢«é€‰ä¸­,bit2 æ˜¯å¦ä¸ºé“¾è¡¨å¤´,bit 3 æ˜¯å¦åªè¯»,bit 4 æ˜¯å¦éšè—
-    char del;                   //ç©ºé—´å›æ”¶æ§åˆ¶
-    int hasFile;                //åŒ…å«çš„æ–‡ä»¶æ•°
-    int hasFolder;              //åŒ…å«çš„æ–‡ä»¶å¤¹æ•°
-    struct IFileNode * pre;     //å‰ä¸€ä¸ªèŠ‚ç‚¹ï¼ˆå¦‚æœæ˜¯é“¾è¡¨å¤´ï¼Œåˆ™preä¸ºçˆ¶èŠ‚ç‚¹ï¼‰
-    struct IFileNode * next;    //åä¸€ä¸ªèŠ‚ç‚¹
-    struct IFileNode * child;   //å­é“¾è¡¨å¤´
+    IFile file;                 //ÎÄ¼ş
+    char flags;                 // bit0 ÊÇ·ñµÈ´ıcut,bit1 ÊÇ·ñ±»Ñ¡ÖĞ,bit2 ÊÇ·ñÎªÁ´±íÍ·,bit 3 ÊÇ·ñÖ»¶Á,bit 4 ÊÇ·ñÒş²Ø
+    int hasFile;                //°üº¬µÄÎÄ¼şÊı
+    int hasFolder;              //°üº¬µÄÎÄ¼ş¼ĞÊı
+    struct IFileNode * pre;     //Ç°Ò»¸ö½Úµã£¨Èç¹ûÊÇÁ´±íÍ·£¬ÔòpreÎª¸¸½Úµã£©
+    struct IFileNode * next;    //ºóÒ»¸ö½Úµã
+    struct IFileNode * child;   //×ÓÁ´±íÍ·
 }IFileNode;
 
-typedef struct IFileNodePointer
+typedef struct IFileNodePointer  //                a->b->c
 {
     struct IFileNodePointer * pre;
     struct IFileNodePointer * next;
@@ -35,20 +34,26 @@ typedef struct IFileNodePointer
     int wait;
 }IFileNodePointer;
 
-typedef struct IEvent   //äº‹ä»¶
+typedef struct IPathList
+{
+    struct IPathList *next;
+    char path[60];
+}IPathList;
+
+typedef struct IEvent   //ÊÂ¼ş
 {
     int x1;
     int y1;
     int x2;
     int y2;
-    int type;               //ç‚¹å‡»ç±»å‹
-    void (*pfun)(IFileNode *,IFileNode *);     //æ§½å‡½æ•°
-    IFileNode * node0;      //æ§½å‡½æ•°çš„ç¬¬ä¸€ä¸ªå‚æ•°
-    IFileNode * node1;      //æ§½å‡½æ•°çš„ç¬¬äºŒä¸ªå‚æ•°
-    char change;            //æ”¹å˜çš„ä½ç½®
+    int type;               //µã»÷ÀàĞÍ
+    void (*pfun)(IFileNode *,IFileNode *);     //²Ûº¯Êı (void*) (int*) 1×Ö½Ú Ç¿×ª 
+    IFileNode * node0;      //²Ûº¯ÊıµÄµÚÒ»¸ö²ÎÊı
+    IFileNode * node1;      //²Ûº¯ÊıµÄµÚ¶ş¸ö²ÎÊı
+    char change;            //¸Ä±äµÄÎ»ÖÃ
 }IEvent;
 
-typedef struct IEventStackNode      //äº‹ä»¶æ ˆ
+typedef struct IEventStackNode      //ÊÂ¼şÕ»
 {
     IEvent event;
     struct IEventStackNode * next;

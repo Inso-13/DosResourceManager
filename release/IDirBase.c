@@ -30,13 +30,19 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
     strcat(outPath,"\\");
     strcat(outPath,inFile->file.name);
     strcpy(name,inFile->file.name);
-    if(searchpath(outPath)||!strcmp(inPath,outPath)) //原位??拷贝
+    if(searchpath(outPath)||!strcmp(inPath,outPath)) //原位拷贝
     {
         strcpy(i,"1");
         for(j=0;j<strlen(inFile->file.name);j++)
             if(inFile->file.name[j]=='.')
                 break;
         strcpy(ext,inFile->file.name+j);
+        if(strlen(name)>11||(j==strlen(name)&&j>7))
+        {
+            strcpy(name+4,"~");
+            strcpy(name+5,ext);
+            j=5;
+        }
         IGetAbsolutePath(outParent,outPath);
         strcat(outPath,"\\");
         do

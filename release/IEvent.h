@@ -3,10 +3,10 @@
 
 #include"IType.h"
 
-IEventStackNode * IInitEventStack(void);    //è¿”å›ä¸€ä¸ªæ–°çš„äº‹ä»¶æ ˆï¼ˆæ ˆé¡¶ï¼‰
-void IEventStackPush(IEventStackNode * top,IEvent newEvent);    //å…¥æ ˆï¼Œtopè‡ªåŠ¨æ”¹å˜
-IBool IEventStackPop(IEventStackNode * top,int n);      //å‡ºæ ˆnä¸ªäº‹ä»¶ï¼Œtopè‡ªåŠ¨æ”¹å˜
-char IEventStackActive(IEventStackNode * top,int x,int y,int type);   //æ ¹æ®äº‹ä»¶æ¿€æ´»æ§½å‡½æ•°
-void IDelStack(IEventStackNode * top);      //ææ„æ ˆ
+IEventStackNode * IInitEventStack(void);    //·µ»ØÒ»¸öĞÂµÄÊÂ¼şÕ»£¨Õ»¶¥£©
+void IEventStackPush(IEventStackNode * top,IEvent newEvent);    //ÈëÕ»£¬top×Ô¶¯¸Ä±ä
+IBool IEventStackPop(IEventStackNode * top,int n);      //³öÕ»n¸öÊÂ¼ş£¬top×Ô¶¯¸Ä±ä
+char IEventStackActive(IEventStackNode * top,int x,int y,int type);   //¸ù¾İÊÂ¼ş¼¤»î²Ûº¯Êı
+void IDelStack(IEventStackNode * top);      //Îö¹¹Õ»
 
 #endif

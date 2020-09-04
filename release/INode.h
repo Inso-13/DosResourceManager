@@ -3,13 +3,13 @@
 
 #include"IType.h"
 
-IBool IAddChild(IFileNode * parent,IFileNode * child);//æ·»åŠ å­èŠ‚ç‚¹
-IBool IAddFileNode(IFileNode  *parent,char* name);  //åœ¨parentæ–‡ä»¶å¤¹ä¸­æ·»åŠ nameæ–‡ä»¶èŠ‚ç‚¹
-IBool IDelFileNode(IFileNode  *parent,char* name);//åœ¨parentæ–‡ä»¶å¤¹ä¸­åˆ é™¤nameæ–‡ä»¶èŠ‚ç‚¹
-void IDelFilelist(IFileNode * root);    //é€’å½’åˆ é™¤æ•´ä¸ªé“¾è¡¨
-void IAddFilelist(IFileNode * root);    //é€’å½’æ·»åŠ æ•´ä¸ªæ ‘
-IFileNode * IGetFileNodeList(char * path);  //å¾—åˆ°è·¯å¾„ä¸‹çš„æ‰€æœ‰æ–‡ä»¶ï¼Œä»¥é“¾è¡¨çš„å½¢å¼è¿”å›
-void IPeek(IFileNode * oldParent,char* path);  //æŸ¥æ‰¾æ–‡ä»¶å¤¹ä¸­çš„æ–‡ä»¶æ•°å’Œå­æ–‡ä»¶å¤¹æ•°
-void IExchangeFileNode(IFileNode* node1,IFileNode* node2);
+IBool IAddChild(IFileNode * parent,IFileNode * child); //Ìí¼Ó×Ó½Úµã
+IBool IAddFileNode(IFileNode  *parent,char* name);   //ÔÚparentÎÄ¼ş¼ĞÖĞÌí¼ÓnameÎÄ¼ş½Úµã
+IBool IDelFileNode(IFileNode  *parent,char* name); //ÔÚparentÎÄ¼ş¼ĞÖĞÉ¾³ınameÎÄ¼ş½Úµã
+void IDelFilelist(IFileNode * root);    //µİ¹éÉ¾³ıÕû¸öÁ´±í
+void IAddFilelist(IFileNode * root);    //µİ¹éÌí¼ÓÕû¸öÊ÷
+IFileNode * IGetFileNodeList(char * path);  //µÃµ½Â·¾¶ÏÂµÄËùÓĞÎÄ¼ş£¬ÒÔÁ´±íµÄĞÎÊ½·µ»Ø
+void IPeek(IFileNode * oldParent,char* path);  //²éÕÒÎÄ¼ş¼ĞÖĞµÄÎÄ¼şÊıºÍ×ÓÎÄ¼ş¼ĞÊı
+void IExchangeFileNode(IFileNode* node1,IFileNode* node2); //ÅÅĞòÊ±ºòÓÃ
 
 #endif

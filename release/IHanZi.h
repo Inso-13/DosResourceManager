@@ -2,8 +2,8 @@
 #define __IHANZI_H
 
 void IPutsHZ16(int x,int y,char *str,FILE * fp);
-// 涓枃杈撳嚭锛寃id涓哄瓧闂磋窛锛宻ize涓烘斁澶у�嶆暟锛堟暣鏁帮級锛宖p涓篺pHZ
+// 中文输出，fp为fpHZ
 void Iouttextxy(int x,int y,char *str,FILE * fp);
-// 鑷姩鍒ゆ柇涓嫳鏂囪緭鍑猴紝fp涓篺pHZ
+// 自动判断中英文输出，fp为fpHZ
 
 #endif
