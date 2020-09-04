@@ -279,7 +279,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     else
     {
         Iouttextxy(853,61,"在本文件夹中搜索",fpHZ);
-        ISetEvent(&tempEvent,853,52,1016,77,2,ISearchActive,(IFileNode*)(*curNode),NULL,4);
+        ISetEvent(&tempEvent,853,52,1016,77,2,ISearchActive,(IFileNode*)(*curNode),NULL,8);
         IEventStackPush(top,tempEvent);
     }
     setcolor(50);
@@ -447,4 +447,45 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         IEventStackPush(top,tempEvent);
     }
     return numOfSelected;
+}
+void IView2(FILE* fpHZ)
+{
+    FILE* searched=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","r");
+    char tempStr[60];
+    char name[15];
+    char page;
+    int y=120,i,n,j=0;
+
+    setcolor(50);
+    IPutsHZ16(250,94,"匹配文件名",fpHZ);
+    IPutsHZ16(500,94,"绝对路径",fpHZ);
+
+    while(fgets(tempStr,60,searched))
+    {
+        if(j++>=30)
+        {
+            Iouttextxy(500,753,"只显示前30个匹配项",fpHZ);
+            break;
+        }
+
+        n=strlen(tempStr);
+        if(tempStr[n-1]=='\n')
+        {
+            tempStr[n-1]='\0';
+            n-=1;
+        }
+        for(i=n;i>=0;i--)
+            if(tempStr[i]=='\\')
+                break;
+        strcpy(name,tempStr+i+1);
+
+        setcolor(0);
+        Iouttextxy(250,y,name,fpHZ);
+        Iouttextxy(500,y,tempStr,fpHZ);
+
+        y+=20;
+    }
+    if(!j)
+        IPutsHZ16(530,240,"未检测到匹配项",fpHZ);
+    fclose(searched);
 }

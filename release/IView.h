@@ -8,5 +8,6 @@ void ILogin(char* name,char* password,IEventStackNode* top,int id,FILE* fpHZ); /
 void IPlainView(FILE* fpHZ);   //界面的不变的图形
 int IView0(IFileNode* root,IFileNodePointer** curNode,IEventStackNode* top,int beginX,int beginY,char *page,char flag);
 int IView1(IFileNodePointer** curNode,IEventStackNode* top,char isCtrl,char *page,char* delFlag,FILE* fpHZ);
+void IView2(FILE* fpHZ);
 
 #endif

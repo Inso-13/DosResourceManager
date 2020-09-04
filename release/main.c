@@ -216,11 +216,28 @@ void main()
         {
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             setfillstyle(SOLID_FILL,255);
-            bar(248,110,1022,740);
+            bar(248,90,1022,740);
             bar(192,52,800,76);
             bar(0,745,992,766);
             IEventStackPop(top1,1000);
             numOfSelected=IView1(&curNode,top1,isCtrl,&page1,&delFlag,fpHZ);
+            IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
+        }
+        if(activeFlag&8)
+        {
+            for(i=0;i<16;i++)
+                for(j=0;j<16;j++)
+                    mouseSave[i][j]=255;
+            IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
+            setcolor(7);
+            rectangle(832,51,1017,78);
+            line(851,51,851,78);
+            setfillstyle(SOLID_FILL,255);
+            bar(248,90,1022,740);
+            bar(192,52,800,76);
+            bar(0,745,992,766);
+            IEventStackPop(top1,1000);
+            IView2(fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //¸üÐÂ1ºÅ´°¿Ú

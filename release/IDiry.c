@@ -2,6 +2,7 @@
 #include<STDLIB.H>
 #include<CONIO.H>
 #include<ALLOC.H>
+#include<DOS.H>
 #include<IO.H>
 #include<STDIO.H>
 #include"INode.h"
@@ -109,19 +110,41 @@ void Irmlr(IFileNode * oldParent,IFileNode * rootR) //É¾³ýoldParentÄ¿Â¼ÏÂËùÓÐ±»Ñ
         tempNode=tempNode->next;
     }
 }
-void ISearch(IFileNode * parent,char* name) //°´ÎÄ¼þÃûÔÚµ±Ç°ÎÄ¼þ¼Ð²éÕÒÎÄ¼þ
+void ISearch(char* path,char* name,FILE* fp) //°´ÎÄ¼þÃûÔÚµ±Ç°ÎÄ¼þ¼Ð²éÕÒÎÄ¼þ
 {
-    IFileNode *tempNode=parent->child;
-    while(tempNode)
+    int ret,i;
+    struct find_t ft;
+    char temp[60];
+
+    Icd(path);
+    ret=_dos_findfirst("*.*",0xf7,&ft);
+    while(1)
     {
-        if(IMatch(tempNode->file.name,name))
+        while(!strcmp(ft.name,".")||!strcmp(ft.name,".."))
         {
-            tempNode->flags|=2;
+            ret=_dos_findnext(&ft);
+            if(ret) break;
         }
-        else
+        if(ret) break;
+
+        if(IMatch(ft.name,name))
         {
-            tempNode->flags&=29;
+            strcpy(temp,path);
+            strcat(temp,"\\");
+            strcat(temp,ft.name);
+            strcat(temp,"\n");
+            fputs(temp,fp);
         }
-        tempNode=tempNode->next;
+        if(ft.attrib&0x10)
+        {
+            strcpy(temp,path);
+            strcat(temp,"\\");
+            strcat(temp,ft.name);
+            ISearch(temp,name,fp);
+        }
+        
+        Icd(path);
+        ret=_dos_findnext(&ft);
+        if(ret) break;
     }
 }

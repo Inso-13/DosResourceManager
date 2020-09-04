@@ -102,7 +102,7 @@ IFileNode *IGetFileNodeList(char * path)  //48 pre node
         
         ret=_dos_findnext(&ft);
         if(ret) break;
-        if(j>100) break;
+        if(j>300) break;
         lastNode=tempNode;
         tempNode=(IFileNode *)malloc(sizeof(IFileNode));
 #ifdef  DB

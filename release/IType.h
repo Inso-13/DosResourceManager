@@ -1,10 +1,17 @@
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：主要定义了几个主要的结构体等数据类型，属于M(Model)层
+*/
+
+
 #if !defined(__ITYPE_H)
 #define __ITYPE_H
 
-#include"IBase.h"
+#include"IQuit.h"
 
-typedef enum IBool{false,true} IBool;   //布尔型变量，false=0，true=1
-
+typedef enum IBool{false,true} IBool;   //伪布尔型变量，false=0，true=1
 
 typedef struct IFile    //文件结构
 {
@@ -15,7 +22,7 @@ typedef struct IFile    //文件结构
     int size;      //文件大小，单位KB
 }IFile;
 
-typedef struct IFileNode    //文件节点 //41->48
+typedef struct IFileNode    //文件节点
 {
     IFile file;                 //文件
     char flags;                 // bit0 是否等待cut,bit1 是否被选中,bit2 是否为链表头,bit 3 是否只读,bit 4 是否隐藏
@@ -26,19 +33,13 @@ typedef struct IFileNode    //文件节点 //41->48
     struct IFileNode * child;   //子链表头
 }IFileNode;
 
-typedef struct IFileNodePointer  //                a->b->c
+typedef struct IFileNodePointer  //文件节点的指针链表，主要用于curNode链表
 {
-    struct IFileNodePointer * pre;
-    struct IFileNodePointer * next;
-    IFileNode * child;
-    int wait;
+    struct IFileNodePointer * pre;      //前一项
+    struct IFileNodePointer * next;     //后一项
+    IFileNode * child;                  //所指向的文件节点
+    int wait;                           //等待被删除的次数
 }IFileNodePointer;
-
-typedef struct IPathList
-{
-    struct IPathList *next;
-    char path[60];
-}IPathList;
 
 typedef struct IEvent   //事件
 {
@@ -47,7 +48,7 @@ typedef struct IEvent   //事件
     int x2;
     int y2;
     int type;               //点击类型
-    void (*pfun)(IFileNode *,IFileNode *);     //槽函数 (void*) (int*) 1字节 强转 
+    void (*pfun)(IFileNode *,IFileNode *);     //槽函数 (void*) (int*) 强转 
     IFileNode * node0;      //槽函数的第一个参数
     IFileNode * node1;      //槽函数的第二个参数
     char change;            //改变的位置
