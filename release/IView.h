@@ -18,6 +18,6 @@ int IView0(IFileNode* root,IFileNodePointer** curNode,IEventStackNode* top,int b
 int IView1(IFileNodePointer** curNode,IEventStackNode* top,char *page,char* menuFlag,FILE* fpHZ);
 void IView1DrawIcon(IFileNode* tempNode,int y);
 void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem);
-void IView2(FILE* fpHZ);
+void IView2(char* page,FILE* fpHZ);
 
 #endif

@@ -261,6 +261,10 @@ IFileNode * IFindParent(IFileNode * child)
 {
     IFileNode * temp=child;
     
+    if(temp->file.type[1]=='\\')
+        return NULL;
+    //如果child是DOS根节点, 则返回NULL
+
     while(!(temp->flags&4))    //找到链表头
     {
         temp=temp->pre;

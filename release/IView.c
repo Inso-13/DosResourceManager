@@ -433,19 +433,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char* page,char* men
         setcolor(144);
         outtextxy(320,752,"CTRL");
     }
-    if(tempNode)
-        setcolor(0);
-    else
-        setcolor(LIGHTGRAY);
-    IGoRight(992,720);
-    if(*page>1)
-        setcolor(0);
-    else
-        setcolor(LIGHTGRAY);
-    IGoLeft(928,720);
-    sprintf(temp,"%d",*page);
-    setcolor(0);
-    outtextxy(962,722,temp);
+    //状态栏
     
     if((*menuFlag)&2)
     {
@@ -535,6 +523,11 @@ void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem)
     lastCurNode=(*curNode)->child;
     //页码控制
 
+    if(*page<(numOfItem-1)/30+1)
+        setcolor(0);
+    else
+        setcolor(LIGHTGRAY);
+    IGoRight(992,720);
     if(*page>1)
         setcolor(0);
     else
@@ -547,41 +540,54 @@ void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem)
 
 /*
     函数功能：画查找后的显示界面
-    输入参数：fpHZ——汉字库
+    输入参数：page——页数, fpHZ——汉字库
     输出参数：无
     返回值：无
 */
-void IView2(FILE* fpHZ)
+void IView2(char* page,FILE* fpHZ)
 {
+
     FILE* searched=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","r");
     char tempStr[60];
     char name[15];
-    char page;
-    int y=120,i,n,j=0;
+    int y=120,i,n,j=0,numOfsearched=0;
+
 
     setcolor(50);
     IPutsHZ16(250,94,"匹配文件名",fpHZ);
     IPutsHZ16(500,94,"绝对路径",fpHZ);
 
+
     while(fgets(tempStr,60,searched))
     {
-        if(j++>=30)
+        if(++numOfsearched>=120)
         {
-            Iouttextxy(500,753,"只显示前30个匹配项",fpHZ);
+            Iouttextxy(500,753,"只显示前120个匹配项",fpHZ);
             break;
         }
-        //搜索到多于30个匹配项
-
+        //搜索到多于120个匹配项
+    }
+    if((numOfsearched-1)/30+1<*page)
+        (*page)--;
+    else if(!(*page))
+        *page=1;
+    //页码控制
+    
+    rewind(searched);
+    while(fgets(tempStr,60,searched)&&((++j)<=120))
+    {
+        if((j-1)/30+1<*page)
+            continue;
+        else if((j-1)/30+1>*page)
+            continue;
+        
         n=strlen(tempStr);
         if(tempStr[n-1]=='\n')
         {
             tempStr[n-1]='\0';
             n-=1;
         }
-        for(i=n;i>=0;i--)
-            if(tempStr[i]=='\\')
-                break;
-        strcpy(name,tempStr+i+1);
+        IGetNameByPath(tempStr,name);
 
         setcolor(0);
         Iouttextxy(250,y,name,fpHZ);
@@ -592,6 +598,23 @@ void IView2(FILE* fpHZ)
     if(!j)
         IPutsHZ16(530,240,"未检测到匹配项",fpHZ);
     //未搜索到文件
+    else
+    {
+        if(*page>1)
+            setcolor(0);
+        else
+            setcolor(LIGHTGRAY);
+        IGoLeft(928,720);
+        if(*page<(j-2)/30+1)
+            setcolor(0);
+        else
+            setcolor(LIGHTGRAY);
+        IGoRight(992,720);
+        sprintf(tempStr,"%d",*page);
+        setcolor(0);
+        outtextxy(962,722,tempStr);
+    }
+    //搜索到文件
 
     fclose(searched);
 }

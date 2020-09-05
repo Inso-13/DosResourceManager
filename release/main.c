@@ -13,7 +13,7 @@ void main()
     int mouseDraw[16][16],mouseSave[16][16],mouseX,mouseY,mouseStatus;  //鼠标相关变量
     int lastMenuX,lastMenuY,lastMenu=0,menu=0;  //菜单相关变量
     int id,exit=0,i,j;  //其他整型变量
-    char activeFlag=0,numOfSelected=0,page0=1,page1=1,menuFlag=0;   //标志变量
+    char activeFlag=0,numOfSelected=0,page0=1,page1=1,page2=1,menuFlag=0,searching=0;   //标志变量
     char name[13],password[13],nameC[13],passwordC[13],temp[50];    //辅助字符串
     void *view1Image=NULL;  //图形缓冲区
     FILE* fp=NULL,*fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb");    //文件指针
@@ -156,13 +156,29 @@ void main()
 
         if((mouseStatus&2)&&mouseX>992&&mouseX<1001&&mouseY>720&&mouseY<731)
         {
-            page1++;
-            activeFlag|=4;
+            if(!searching)
+            {
+                page1++;
+                activeFlag|=4;
+            }
+            else
+            {
+                page2++;
+                activeFlag|=8;
+            }
         }
         else if((mouseStatus&2)&&mouseX>928&&mouseX<586*1.6&&mouseY>720&&mouseY<731)
         {
-            page1--;
-            activeFlag|=4;
+            if(!searching)
+            {
+                page1--;
+                activeFlag|=4;
+            }
+            else
+            {
+                page2--;
+                activeFlag|=8;
+            }
         }
         //1号窗口的翻页
 
@@ -206,6 +222,8 @@ void main()
         //更新0号窗口
         if((activeFlag&4)||(menuFlag&2))
         {
+            searching=0;
+            page2=1;
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             setfillstyle(SOLID_FILL,255);
             bar(248,90,1022,740);
@@ -218,6 +236,7 @@ void main()
         //更新1号窗口
         if(activeFlag&8)
         {
+            searching=1;
             for(i=0;i<16;i++)
                 for(j=0;j<16;j++)
                     mouseSave[i][j]=255;
@@ -230,7 +249,7 @@ void main()
             bar(192,52,800,76);
             bar(0,745,992,766);
             IEventStackPop(top1,1000);
-            IView2(fpHZ);
+            IView2(&page2,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //激活2号窗口

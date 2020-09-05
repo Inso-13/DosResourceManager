@@ -47,6 +47,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
     newCurNode->next=NULL;
     newCurNode->wait=3;
     newCurNode->pre=*curNode;
+    (*curNode)->next=newCurNode;
     *curNode=newCurNode;
     //新节点初始化
 
@@ -90,6 +91,8 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * tempNode,*nextNode,*lastNode;
     char path1[50],path2[50];
+
+    if(node->file.type[1]=='\\') return;
 
     tempNode=curNode->next;
     while(tempNode)

@@ -149,7 +149,6 @@ void ISetCopy(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
-    IFileNodePointer * tempNode=curNode;
 
     if(nodeX->child)
     {
@@ -171,7 +170,6 @@ void ISetCut(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
-    IFileNodePointer * tempNode=curNode;
 
     if(nodeX->child)
     {
