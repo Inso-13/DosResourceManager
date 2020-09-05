@@ -117,6 +117,14 @@ void main()
 
     while(!exit)
     {   
+        if(coreleft()<1000)
+        {
+            setcolor(144);
+            Iouttextxy(500,300,"内存不足，将在3秒后退出",fpHZ);
+            delay(3000);
+            IQuit();
+        }
+
 #ifdef DB
         setcolor(0);
         sprintf(temp,"left memory:%u Byte",coreleft());
