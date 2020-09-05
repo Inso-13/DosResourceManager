@@ -1,7 +1,7 @@
 /*
-    版本号：0.5.02
+    版本号：0.5.1
     作者：黄子昊
-    生成日期：2020-9-4
+    生成日期：2020-9-5
     说明：仿Windows资源管理器,仍在测试中
 */
 
@@ -32,7 +32,7 @@ void main()
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
 
-    IMouseMath(mouseDraw);
+    // IMouseMath(mouseDraw);
     IMouseSetLimit(1024,768);
     //鼠标初始化
 

@@ -2,7 +2,7 @@
     版本号：1.0
     作者：黄子昊
     生成日期：2020-9-4
-    说明：登录界面、视图函数等
+    说明：视图函数等
 */
 
 
@@ -11,8 +11,6 @@
 
 #include"IType.h"
 
-void IPlainLogin(void);
-void ILogin(char* name,char* password,IEventStackNode* top,int id,FILE* fpHZ);
 void IPlainView(FILE* fpHZ);
 int IView0(IFileNode* root,IFileNodePointer** curNode,IEventStackNode* top,int beginX,int beginY,char *page,char flag);
 int IView1(IFileNodePointer** curNode,IEventStackNode* top,char *page,char* menuFlag,FILE* fpHZ);

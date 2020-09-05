@@ -27,6 +27,7 @@
 #include"IView.h"
 #include"IMenu.h"
 #include"IActive.h"
+#include"ILogin.h"
 // #define DB
 
 #endif
