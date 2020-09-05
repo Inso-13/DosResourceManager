@@ -1,3 +1,11 @@
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：登录界面、视图函数等
+*/
+
+
 #include<GRAPHICS.H>
 #include<CONIO.H>
 #include<STDIO.H>
@@ -12,6 +20,13 @@
 #include"IActive.h"
 #include"IMenu.h"
 #include"IView.h"
+
+/*
+    函数功能：画登录界面的背景
+    输入参数：无
+    输出参数：无
+    返回值：无
+*/
 void IPlainLogin()
 {
     int i;
@@ -28,6 +43,13 @@ void IPlainLogin()
         settextstyle(3,0,3);
     }
 }
+
+/*
+    函数功能：登录界面功能函数
+    输入参数：无
+    输出参数：无
+    返回值：无
+*/
 void ILogin(char* name,char* password,IEventStackNode* top,int id,FILE* fpHZ)
 {
     int i;
@@ -61,20 +83,27 @@ void ILogin(char* name,char* password,IEventStackNode* top,int id,FILE* fpHZ)
         strcpy(name,"\0");
         strcpy(password,"\0");
     }
+    //登录失败
 
     setcolor(0);
     outtextxy(440+2,440+9,name);
     
     for(i=0;i<strlen(password);i++)
-    {
         outtextxy(440+2+8*i,490+9,"*");
-    }
 
     ISetEvent(&tempEvent,440,450-10,660,450-10+28,2,IGetName,(IFileNode*)name,NULL,1);
     IEventStackPush(top,tempEvent);
     ISetEvent(&tempEvent,440,500-10,660,500-10+28,2,IGetPassword,(IFileNode*)password,NULL,1);
     IEventStackPush(top,tempEvent);
+    //设置用户名、密码的激活函数
 }
+
+/*
+    函数功能：画界面背景
+    输入参数：无
+    输出参数：无
+    返回值：无
+*/
 void IPlainView(FILE* fpHZ)
 {
     if(fpHZ==NULL)
@@ -90,7 +119,7 @@ void IPlainView(FILE* fpHZ)
     setfillstyle(SOLID_FILL,84);
     bar(0,0,1024,22);
     setcolor(0);
-    Iouttextxy(10,5,"DOS资源管理器",fpHZ);
+    Iouttextxy(10,5,"仿Windows资源管理器",fpHZ);
 
     setcolor(7);
     line(0,44,1024,44);
@@ -111,6 +140,13 @@ void IPlainView(FILE* fpHZ)
     line(240,88,240,742);
     line(0,744,1024,744);
 }
+
+/*
+    函数功能：左侧窗口
+    输入参数：root——文件根节点, curNode——当前目录二级指针, top——事件栈, (beginX,beginY)——开始画的位置, page——页码, flag——标志位
+    输出参数：无
+    返回值：纵坐标的偏移量
+*/
 int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int beginX,int beginY,char* page,char flag)
 {
     int increaceY=0,temp,n;
@@ -121,7 +157,6 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int 
     if(!root) return 0;         
     if(!IisFolder(root)) return 0;  //合法性检验
 
-    // if(beginY>110+590*(*page)) return 0;
     if(beginY<110+590*(*page-1)||beginY>110+590*(*page))
         thisPage=0;
 
@@ -191,7 +226,7 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int 
     {
         if(*page>1)
         {
-            ISetEvent(&tempEvent,150,720,168,738,2,ILastPage,page,NULL,2);
+            ISetEvent(&tempEvent,150,720,168,738,2,ILastPage,(IFileNode*)page,NULL,2);
             IEventStackPush(top,tempEvent);
             setcolor(0);
         }
@@ -200,7 +235,7 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int 
         IGoLeft(150,720);
         if(*page<=(increaceY/590))
         {
-            ISetEvent(&tempEvent,210,720,228,738,2,INextPage,page,NULL,2);
+            ISetEvent(&tempEvent,210,720,228,738,2,INextPage,(IFileNode*)page,NULL,2);
             IEventStackPush(top,tempEvent);
             setcolor(0);
         }
@@ -211,12 +246,19 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int 
         setcolor(0);
         outtextxy(182,722,tempStr);
     }
+    //只画一次左右箭头
     return increaceY;
 }
-int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* page,char* delFlag,FILE* fpHZ)
+
+/*
+    函数功能：右侧窗口
+    输入参数：curNode——当前目录二级指针, top——事件栈, (beginX,beginY)——开始画的位置, page——页码, flag——标志位
+    输出参数：无
+    返回值：纵坐标的偏移量
+*/
+int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char* page,char* menuFlag,FILE* fpHZ)
 {
-    static int lastpage;
-    static IFileNode* lastCurNode;
+
     int i,y,numOfItem=0,numOfSelected=0;
     IFileNode* tempNode;
     IEvent tempEvent;
@@ -228,13 +270,16 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         setcolor(0);
         outtextxy(100,100,"fpHZ is NULL in IView1");
     }
-
     setcolor(0);
+
     tempNode=(*curNode)->child;
     IGetAbsolutePath(tempNode,temp);
     outtextxy(192,61,temp);
+    //路径栏的显示
+
     ISetEvent(&tempEvent,803,51,824,78,2,INOP,NULL,NULL,6);
     IEventStackPush(top,tempEvent);
+    //刷新功能
 
     if(IFindParent((*curNode)->child))
     {
@@ -245,6 +290,8 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     else
         setcolor(LIGHTGRAY);
     IGoUp(108,57);
+    //返回上一级功能
+
     if((*curNode)->pre&&(*curNode)->pre->child)
     {
         setcolor(0);
@@ -254,6 +301,8 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     else
         setcolor(LIGHTGRAY);
     IGoLeft(25,60);
+    //返回上一目录功能
+
     if((*curNode)->next&&(*curNode)->next->child)
     {
         setcolor(0);
@@ -263,8 +312,9 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     else
         setcolor(LIGHTGRAY);
     IGoRight(62,60);
+    //返回下一目录功能
+        
     setcolor(0);
-
     setfillstyle(SOLID_FILL,255);
     bar(853,52,1016,77);
     if(!tempNode->child)
@@ -282,19 +332,20 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         ISetEvent(&tempEvent,853,52,1016,77,2,ISearchActive,(IFileNode*)(*curNode),NULL,8);
         IEventStackPush(top,tempEvent);
     }
+    //搜索栏显示
+    
     setcolor(50);
     IPutsHZ16(254,94,"文件名",fpHZ);
     IPutsHZ16(430,94,"修改日期",fpHZ);
     IPutsHZ16(686,94,"类型",fpHZ);
     IPutsHZ16(830,94,"大小",fpHZ);
-
     setcolor(247);
     line(424,88,424,112);
     line(680,88,680,112);
     line(824,88,824,112);
     line(936,88,936,112);
     setcolor(0);
-
+    //文件详细信息的表头
 
     tempNode=(*curNode)->child->child;
     while(tempNode)
@@ -304,60 +355,41 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
             numOfSelected++;
         tempNode=tempNode->next;
     }
-    if(lastCurNode!=(*curNode)->child)
-        *page=1;
-    else if((numOfItem-1)/(30)+1<*page)
-        (*page)--;
-    else if(!(*page))
-        *page=1;
-    lastCurNode=(*curNode)->child;
+    //统计总文件数和被选中的文件数
 
     tempNode=(*curNode)->child->child;
     for(i=0;i<(*page-1)*(30);i++)
         tempNode=tempNode->next;
+    //跳转至当前页
+
+    IView1PageControl(curNode,page,numOfItem);
+    //页码控制
 
     y=116;
-    while(tempNode)
+    while(tempNode)     //对每一个当前页码的文件
     {
-        if(tempNode->flags&2)
-        {
-            setfillstyle(SOLID_FILL,139);
-            bar(248,y,936,y+19);
-        }
-        if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"txt"))
-            Itxt(256,y+2);
-        else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
-            Idoc(256,y+2);
-        else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
-            Ic(256,y+2);
-        else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
-            Ih(256,y+2);
-        else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
-            Iobj(256,y+2);
-        else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
-            Iexe(256,y+2);
-        else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
-            Ipic(256,y+2);
-        else if(IisFolder(tempNode))
-        {
-            if(tempNode->file.type[1]=='d')
-                Idisk(256,y+2);
-            else
-                Ifolder(256,y+2);
-        }
-        else
-            Imystery(256,y+2);
+        IView1DrawIcon(tempNode,y);
+        //根据文件类型，画图标
 
         setcolor(0);
         Iouttextxy(256+20,y+6,tempNode->file.name,fpHZ);
         sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date/512+1980,(tempNode->file.date%512)/32,tempNode->file.date%32,tempNode->file.time/2048,(tempNode->file.time%2048)/32);
         outtextxy(432,y+6,temp);
+        if(!IisFolder(tempNode))
+        {
+            settextjustify(2,2);
+            sprintf(temp,"%d KB",tempNode->file.size);
+            outtextxy(928,y+6,temp);
+            settextjustify(0,2);
+        }
+        //文件详细信息
 
-        if(isCtrl)  //ctrl
+        if((*menuFlag)&4)
             ISetEvent(&tempEvent,248,y,936,y+19,2,ICtrlSelect,tempNode,NULL,4);
         else
             ISetEvent(&tempEvent,248,y,936,y+19,2,ISelect,tempNode,NULL,4);
         IEventStackPush(top,tempEvent);
+        //根据是否Ctrl,设置选择类型
 
         if(IisFolder(tempNode))
         {
@@ -382,17 +414,13 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
                 IEventStackPush(top,tempEvent);
             }
         }
-        if(!IisFolder(tempNode))
-        {
-            settextjustify(2,2);
-            sprintf(temp,"%d KB",tempNode->file.size);
-            outtextxy(928,y+6,temp);
-            settextjustify(0,2);
-        }
+        //文件打开方式
+
         if(y>662) break;
         y+=20;
         tempNode=tempNode->next;
     }
+
     sprintf(temp,"%d个项目",numOfItem);
     Iouttextxy(16,752+3,temp,fpHZ);
     if(numOfSelected)
@@ -400,7 +428,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         sprintf(temp,"选中%d个项目",numOfSelected);
         Iouttextxy(160,752+3,temp,fpHZ);
     }
-    if(isCtrl)
+    if((*menuFlag)&4)
     {
         setcolor(144);
         outtextxy(320,752,"CTRL");
@@ -419,11 +447,9 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
     setcolor(0);
     outtextxy(962,722,temp);
     
-    lastpage=*page;
-
-    if(*delFlag)
+    if((*menuFlag)&2)
     {
-        *delFlag=0;
+        (*menuFlag)&=5;
         setcolor(84);
         rectangle(412,334,662,434);
         setfillstyle(SOLID_FILL,84);
@@ -446,8 +472,85 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char isCtrl,char* pa
         ISetEvent(&tempEvent,591,403,641,423,2,INOP,NULL,NULL,4);
         IEventStackPush(top,tempEvent);
     }
+    //删除确认
+
     return numOfSelected;
 }
+
+/*
+    函数功能：根据文件类型，画图标
+    输入参数：tempNode——文件节点, y——纵向位置
+    输出参数：无
+    返回值：无
+*/
+void IView1DrawIcon(IFileNode* tempNode,int y)
+{
+    if(tempNode->flags&2)
+    {
+        setfillstyle(SOLID_FILL,139);
+        bar(248,y,936,y+19);
+    }
+    if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"txt"))
+        Itxt(256,y+2);
+    else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
+        Idoc(256,y+2);
+    else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
+        Ic(256,y+2);
+    else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
+        Ih(256,y+2);
+    else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
+        Iobj(256,y+2);
+    else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
+        Iexe(256,y+2);
+    else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
+        Ipic(256,y+2);
+    else if(IisFolder(tempNode))
+    {
+        if(tempNode->file.type[1]=='d')
+            Idisk(256,y+2);
+        else
+            Ifolder(256,y+2);
+    }
+    else
+        Imystery(256,y+2);
+}
+
+/*
+    函数功能：根据文件类型，画图标
+    输入参数：curNode——当前目录二级指针, page——页码, numOfItem——项目总数
+    输出参数：无
+    返回值：无
+*/
+void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem)
+{
+    static IFileNode* lastCurNode;
+    char temp[3];
+    
+    if(lastCurNode!=(*curNode)->child)
+        *page=1;
+    else if((numOfItem-1)/30+1<*page)
+        (*page)--;
+    else if(!(*page))
+        *page=1;
+    lastCurNode=(*curNode)->child;
+    //页码控制
+
+    if(*page>1)
+        setcolor(0);
+    else
+        setcolor(LIGHTGRAY);
+    IGoLeft(928,720);
+    sprintf(temp,"%d",*page);
+    setcolor(0);
+    outtextxy(962,722,temp);
+}
+
+/*
+    函数功能：画查找后的显示界面
+    输入参数：fpHZ——汉字库
+    输出参数：无
+    返回值：无
+*/
 void IView2(FILE* fpHZ)
 {
     FILE* searched=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","r");
@@ -467,6 +570,7 @@ void IView2(FILE* fpHZ)
             Iouttextxy(500,753,"只显示前30个匹配项",fpHZ);
             break;
         }
+        //搜索到多于30个匹配项
 
         n=strlen(tempStr);
         if(tempStr[n-1]=='\n')
@@ -487,5 +591,7 @@ void IView2(FILE* fpHZ)
     }
     if(!j)
         IPutsHZ16(530,240,"未检测到匹配项",fpHZ);
+    //未搜索到文件
+
     fclose(searched);
 }

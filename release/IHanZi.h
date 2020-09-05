@@ -1,9 +1,15 @@
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：汉字输出相关的函数
+*/
+
+
 #ifndef __IHANZI_H
 #define __IHANZI_H
 
 void IPutsHZ16(int x,int y,char *str,FILE * fp);
-// 中文输出，fp为fpHZ
 void Iouttextxy(int x,int y,char *str,FILE * fp);
-// 自动判断中英文输出，fp为fpHZ
 
 #endif

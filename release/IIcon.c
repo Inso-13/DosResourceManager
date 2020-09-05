@@ -1,6 +1,20 @@
+/*
+    版本号：1.0
+    作者：郭一菲
+    生成日期：2020-9-4
+    说明：与文件/文件夹图标相关的函数
+*/
+
+
 #include<GRAPHICS.H>
 #include"IIcon.h"
 
+/*
+    函数功能：磁盘图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Idisk(int x,int y)
 {
    int i;
@@ -23,6 +37,13 @@ void Idisk(int x,int y)
    floodfill(x+3,y+10,247);
    putpixel(x+5,y+11,140);
 }
+
+/*
+    函数功能：通用图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Igeneral(int x,int y)
 {
 	setcolor(247);
@@ -33,6 +54,13 @@ void Igeneral(int x,int y)
 	line(x,y+14,x,y);	
 	line(x+7,y,x+10,y+3);
 }
+
+/*
+    函数功能：文本文件图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Itxt(int x,int y)
 {
 	int i;
@@ -46,6 +74,13 @@ void Itxt(int x,int y)
 		line(x+2,y+2*i,x+8,y+2*i);
 	}
 }
+
+/*
+    函数功能：word图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Idoc(int x,int y)
 {
 	Igeneral(x,y);
@@ -56,6 +91,13 @@ void Idoc(int x,int y)
 	outtextxy(x-2,y+4,"W");
     settextstyle(1,0,2);
 }
+
+/*
+    函数功能：文件夹图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Ifolder(int x,int y)
 {
 	setfillstyle(1,202);
@@ -71,6 +113,12 @@ void Ifolder(int x,int y)
 	floodfill(x+2,y+13,206);	
 }
 
+/*
+    函数功能：可执行文件图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Iexe(int x,int y)
 {
 	setfillstyle(1,11);
@@ -85,6 +133,12 @@ void Iexe(int x,int y)
 	line(x+11,y+9,x+13,y+9);
 }
 
+/*
+    函数功能：c源码文件图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Ic(int x,int y)
 {
 	setcolor(247);
@@ -95,6 +149,12 @@ void Ic(int x,int y)
 	arc(x+9,y+11,60,300,2);
 }
 
+/*
+    函数功能：h源码文件图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Ih(int x,int y)
 {
 	setcolor(247);
@@ -106,6 +166,13 @@ void Ih(int x,int y)
 	line(x+8,y+11,x+8,y+13);
 	arc(x+7,y+11,0,180,1);
 }
+
+/*
+    函数功能：目标文件图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Iobj(int x,int y)
 {
 	int i=0;
@@ -122,10 +189,21 @@ void Iobj(int x,int y)
 	setfillstyle(SOLID_FILL,255);
 	bar3d(x+3,y+11,x+6,y+7,2,1);
 }
-void Imystery(int x,int y)
-{
-	Igeneral(x,y);
-}
+
+/*
+    函数功能：未知文件图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
+void Imystery(int x,int y){Igeneral(x,y);}
+
+/*
+    函数功能：图形文件图标
+    输入参数：(x,y)——图形左上角位置
+    输出参数：无
+    返回值：无
+*/
 void Ipic(int x,int y)
 {
 	setfillstyle(SOLID_FILL,23);

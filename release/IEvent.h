@@ -1,12 +1,20 @@
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：与事件相关的函数
+*/
+
+
 #ifndef __IEVENT_H
 #define __IEVENT_H
 
 #include"IType.h"
 
-IEventStackNode * IInitEventStack(void);    //返回一个新的事件栈（栈顶）
-void IEventStackPush(IEventStackNode * top,IEvent newEvent);    //入栈，top自动改变
-IBool IEventStackPop(IEventStackNode * top,int n);      //出栈n个事件，top自动改变
-char IEventStackActive(IEventStackNode * top,int x,int y,int type);   //根据事件激活槽函数
-void IDelStack(IEventStackNode * top);      //析构栈
+IEventStackNode * IInitEventStack(void);
+void IEventStackPush(IEventStackNode * top,IEvent newEvent);
+IBool IEventStackPop(IEventStackNode * top,int n);
+char IEventStackActive(IEventStackNode * top,int x,int y,int type);
+void IDelStack(IEventStackNode * top);
 
 #endif

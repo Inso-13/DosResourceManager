@@ -1,8 +1,22 @@
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：与事件相关的函数
+*/
+
+
 #include<CONIO.H>
 #include<STDIO.H>
 #include<ALLOC.H>
 #include"IEvent.h"
 
+/*
+    函数功能：在堆中生成新的事件栈
+    输入参数：无
+    输出参数：无
+    返回值：返回全新的事件栈
+*/
 IEventStackNode * IInitEventStack(void)
 {
     IEventStackNode * top=(IEventStackNode *)malloc(sizeof(IEventStackNode));
@@ -16,9 +30,17 @@ IEventStackNode * IInitEventStack(void)
     top->next=NULL;     //初始化栈顶
     return top;
 }
+
+/*
+    函数功能：事件入栈，top自动改变
+    输入参数：top——事件栈顶, newEvent——需要入栈的事件
+    输出参数：无
+    返回值：无
+*/
 void IEventStackPush(IEventStackNode * top,IEvent newEvent)
 {
     IEventStackNode * q=(IEventStackNode *)malloc(sizeof(IEventStackNode));
+
     if(q==NULL)
     {
 #ifdef  DB
@@ -28,8 +50,15 @@ void IEventStackPush(IEventStackNode * top,IEvent newEvent)
     }
     q->event = newEvent;
     q->next = top->next;
-    top->next = q;      //入栈
+    top->next = q;  //入栈
 }
+
+/*
+    函数功能：事件出栈，top自动改变
+    输入参数：top——事件栈顶, n——需要出栈的次数
+    输出参数：无
+    返回值：正常返回1，事件栈高度不足n则返回0
+*/
 IBool IEventStackPop(IEventStackNode * top,int n)
 {
     IEventStackNode *q=NULL;
@@ -45,6 +74,13 @@ IBool IEventStackPop(IEventStackNode * top,int n)
     }
     return 1;       //正常返回1
 }
+
+/*
+    函数功能：根据事件激活槽函数
+    输入参数：top——事件栈顶, (x,y)——点击坐标, type点击类型
+    输出参数：无
+    返回值：返回change(需要更新的view)
+*/
 char IEventStackActive(IEventStackNode * top,int x,int y,int type)
 {
     IEventStackNode * temp=top->next;
@@ -61,9 +97,19 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type)
     }
     return 0;   //未激活槽函数，返回0
 }
+
+/*
+    函数功能：析构栈
+    输入参数：top——事件栈顶
+    输出参数：无
+    返回值：无
+*/
 void IDelStack(IEventStackNode * top)
 {
     while(top->next)
-        IEventStackPop(top,5);  //不断出栈
-    free(top);  //释放栈顶
+        IEventStackPop(top,5);  
+    //不断出栈
+
+    free(top);
+    //释放栈顶
 }

@@ -1,3 +1,11 @@
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：主要定义了一些常用的函数
+*/
+
+
 #include<STRING.H>
 #include<DIR.H>
 #include<CONIO.H>
@@ -6,6 +14,12 @@
 #include"IType.h"
 #include"IUtility.h"
 
+/*
+    函数功能：根据路径找到节点
+    输入参数：path——路径, root——起始根节点
+    输出参数：无
+    返回值：若找到，返回该节点；否则返回NULL
+*/
 IFileNode * IFindNodeByPath(char * path,IFileNode * root)
 {
     IFileNode * tempNode;
@@ -15,7 +29,7 @@ IFileNode * IFindNodeByPath(char * path,IFileNode * root)
         return 0;
 
     IGetAbsolutePath(root,temp);
-    if(!strcmp(temp,path))   //比较??径，一致则返回
+    if(!strcmp(temp,path))   //比较路径，一致则返回
         return root;
     
     tempNode=IFindNodeByPath(path,root->child); //深度优先搜索
@@ -26,8 +40,15 @@ IFileNode * IFindNodeByPath(char * path,IFileNode * root)
     if(tempNode)
         return tempNode;
     
-    return 0;   //??找到，则返回NULL
+    return 0;   //未找到，则返回NULL
 }
+
+/*
+    函数功能：根据文件名找到节点
+    输入参数：name——文件名, root——起始根节点
+    输出参数：无
+    返回值：若找到，返回该节点；否则返回NULL
+*/
 IFileNode * IFindNodeByName(char * name,IFileNode * root)
 {
     IFileNode * temp;
@@ -46,36 +67,50 @@ IFileNode * IFindNodeByName(char * name,IFileNode * root)
     if(temp)
         return temp;
     
-    return 0;   //??找到，则返回NULL
+    return 0;   //未找到，则返回NULL
 }
+
+/*
+    函数功能：更换磁盘并进入目录
+    输入参数：path——绝对路
+    输出参数：无
+    返回值：无
+*/
 void Icd(char * path)
 {
     char temp[80]="";
 
-    if(path[1]==':'&&getdisk()!=(path[0]-'A'))  //当前磁盘与目标不一??
+    if(path[1]==':'&&getdisk()!=(path[0]-'A'))  //当前磁盘与目标不一致
     {
         setdisk(path[0]-'A');   //更改磁盘
-#ifdef  DB
-        printf("switch to disk %c\n",getdisk()+'A');
-#endif
     } 
-    if(strlen(path)<=3)     //??径标准化
+    if(strlen(path)<=3)     //路径标准化
     {
         strcpy(temp,path);
         strcpy(temp+1,"");
         strcat(temp,":\\.");
         chdir(temp);
     }   
-    chdir(path);    //更改????
-#ifdef  DB
-    getcwd(temp,80);
-    puts(temp);
-#endif
+    chdir(path);    //更改目录
 }
+
+/*
+    函数功能：判断节点是否为目录
+    输入参数：node——待判断的节点
+    输出参数：无
+    返回值：是目录则返回1，不是目录则返回0
+*/
 IBool IisFolder(IFileNode * node)
 {
     return (node->file.type[0]=='0')||(node->file.type[0]=='1');
 }
+
+/*
+    函数功能：通配符匹配
+    输入参数：s——待匹配的字符串, p——通配符
+    输出参数：无
+    返回值：匹配则返回1，否则返回0
+*/
 IBool IMatch(char* s,char* p)
 {
     IBool flag;
@@ -116,6 +151,13 @@ IBool IMatch(char* s,char* p)
     else
         return 1;
 }
+
+/*
+    函数功能：通配符匹配不区分大小写辅助函数
+    输入参数：(a,b)——待匹配的两个字符
+    输出参数：无
+    返回值：匹配则返回1，否则返回0
+*/
 int IMatchi(char a,char b)
 {
     if(a>='a'&&a<='z')
@@ -138,6 +180,13 @@ void IGetAbsolutePath(IFileNode * node,char* temp)
         strcat(temp,node->file.name);
     }
 }
+
+/*
+    函数功能：初始化文件根节点
+    输入参数：id——用户身份
+    输出参数：无
+    返回值：跟文件节点
+*/
 IFileNode * IDiskInit(int id)
 {
     IFileNode * root=(IFileNode *)malloc(sizeof(IFileNode)),* rootC=(IFileNode *)malloc(sizeof(IFileNode)),*tempNode=rootC,*lastNode=rootC;
@@ -182,12 +231,16 @@ IFileNode * IDiskInit(int id)
     }
     lastNode->pre->next=NULL;
     free(lastNode);
-#ifdef DB
-    printf("near:%u\n",coreleft());
-#endif
     Icd("C:");
     return root;    //返回磁盘节点的根节点
 }
+
+/*
+    函数功能：初始化文件节点
+    输入参数：node——文件节点
+    输出参数：无
+    返回值：无
+*/
 void IFileNodeSetNull(IFileNode * node)
 {
     node->flags=0;
@@ -197,16 +250,30 @@ void IFileNodeSetNull(IFileNode * node)
     node->next=NULL;
     node->pre=NULL;
 }
+
+/*
+    函数功能：返回文件节点的父节点
+    输入参数：child——子节点
+    输出参数：无
+    返回值：父节点
+*/
 IFileNode * IFindParent(IFileNode * child)
 {
     IFileNode * temp=child;
     
-    while(!(temp->flags&4))    //找到链表??
+    while(!(temp->flags&4))    //找到链表头
     {
         temp=temp->pre;
     }
     return temp->pre;
 }
+
+/*
+    函数功能：设置(初始化)事件
+    输入参数：event——待初始化的事件, 其他——事件的属性
+    输出参数：无
+    返回值：无
+*/
 void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change)
 {
     event->x1=x1;
@@ -219,6 +286,13 @@ void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(I
     event->node1=node1;
     event->change=change;
 }
+
+/*
+    函数功能：析构curNode链表
+    输入参数：pointer——curNode节点
+    输出参数：无
+    返回值：无
+*/
 void IDelPointer(IFileNodePointer* pointer)
 {
     IFileNodePointer* tempNode=pointer;
@@ -226,6 +300,8 @@ void IDelPointer(IFileNodePointer* pointer)
     {
         tempNode=tempNode->next;
     }
+    //找到链表尾
+
     while(tempNode->pre)
     {
         tempNode=tempNode->pre;
@@ -234,6 +310,13 @@ void IDelPointer(IFileNodePointer* pointer)
     }
     free(tempNode);
 }
+
+/*
+    函数功能：根据文件路径得到文件名
+    输入参数：path——文件路径
+    输出参数：name——文件名
+    返回值：无
+*/
 void IGetNameByPath(char* path,char* name)
 {
     int i;

@@ -1,3 +1,11 @@
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：与文件节点操作相关的部分函数，比较底层
+*/
+
+
 #include<string.h>
 #include<stdlib.h>
 #include<DOS.H>
@@ -8,20 +16,28 @@
 #include"IUtility.h"
 #include"INode.h"
 
-// #define DB
-
+/*
+    函数功能：添加子节点
+    输入参数：parent——父节点, child——子节点
+    输出参数：无
+    返回值：成功则返回1, 失败则返回0
+*/
 IBool IAddChild(IFileNode * parent,IFileNode * child)
 {
     IFileNode * temp=NULL;
 
-    if(!parent) return 0;   //父节点为空，返回0
-    if(!strcmp(child->file.name,""))    //子节点为僵尸节点，清除并返回0
+    if(!parent) return 0;
+    //父节点为空，返回0
+    
+    if(!strcmp(child->file.name,""))
     {
         free(child);
         child=NULL;
         return 0;
     }
-    if(parent->child)   //如果父节点已有子节点
+    //子节点为僵尸节点，清除并返回0
+    
+    if(parent->child)
     {
         temp=parent->child;
         while(temp->next)
@@ -32,33 +48,39 @@ IBool IAddChild(IFileNode * parent,IFileNode * child)
         child->pre=temp;
         child->flags&=27;       //child->isHead=0;
     }
-    else    //如果父节点未有子节点
+    //如果父节点已有子节点
+    else
     {
         parent->child=child;
         child->pre=parent;
         child->flags|=4;        //child->isHead=1;
     }
-    return 1;   //成功添加，返回1
+    //如果父节点未有子节点
+    return 1;   
+    //成功添加，返回1
 }
-IFileNode *IGetFileNodeList(char * path)  //48 pre node
+
+/*
+    函数功能：得到路径下的所有文件，以链表的形式返回
+    输入参数：path——绝对路径
+    输出参数：无
+    返回值：路径下的文件链表
+*/
+IFileNode *IGetFileNodeList(char * path)
 {
     IFileNode * childRoot=(IFileNode *)malloc(sizeof(IFileNode)), *tempNode=childRoot, *lastNode=childRoot;
     int ret,i,j=0;
     struct find_t ft;
 
-#ifdef  DB
-    printf("%u\n",coreleft());
-#endif
+
     if(childRoot==NULL)
     {
-#ifdef  DB
-        printf("not enough memory\n");
-#endif
         IQuit();
     }
     Icd(path);
     IFileNodeSetNull(childRoot);
-    ret=_dos_findfirst("*.*",0xf7,&ft);  //"*.*"，0xf7所有文件节点   ft存储查找结果
+    ret=_dos_findfirst("*.*",0xf7,&ft);  
+    //"*.*"，0xf7所有文件节点   ft存储查找结果
     
     while(1)
     {
@@ -68,6 +90,7 @@ IFileNode *IGetFileNodeList(char * path)  //48 pre node
             ret=_dos_findnext(&ft);
             if(ret) break;
         }
+        //跳过无用节点
         if(ret)
         {
             free(childRoot);
@@ -99,20 +122,20 @@ IFileNode *IGetFileNodeList(char * path)  //48 pre node
         }
         tempNode->file.date=ft.wr_date;
         tempNode->file.time=ft.wr_time;
-        
+        //初始化新节点
+
         ret=_dos_findnext(&ft);
+        //查找下一个节点
+
         if(ret) break;
         if(j>300) break;
+        //如果该路径下节点数大于300, 则不再继续查找
+
         lastNode=tempNode;
         tempNode=(IFileNode *)malloc(sizeof(IFileNode));
-#ifdef  DB
-        printf("%u\n",coreleft());
-#endif
+
         if(tempNode==NULL)
         {
-#ifdef  DB
-            printf("not enough memory\n");
-#endif
             IQuit();
         }
         lastNode->next=tempNode;
@@ -121,29 +144,31 @@ IFileNode *IGetFileNodeList(char * path)  //48 pre node
     }
     return childRoot;
 }
+
+/*
+    函数功能：在parent文件夹中添加name文件节点
+    输入参数：parent——父节点, name——子节点文件名
+    输出参数：无
+    返回值：成功则返回1, 失败则返回0
+*/
 IBool IAddFileNode(IFileNode  *parent,char* name)
 {
     IFileNode * child=(IFileNode *)malloc(sizeof(IFileNode));
     int ret,i;
     struct find_t ft;
     char temp[50];
-#ifdef  DB
-    printf("%u\n",coreleft());
-#endif
+
     if(child==NULL)
-    {
-#ifdef  DB
-        printf("not enough memory\n");
-        printf("%u",coreleft());
-#endif
         IQuit();
-    }
+    
     IGetAbsolutePath(parent,temp);
     Icd(temp);
     IFileNodeSetNull(child);
-    ret=_dos_findfirst(name,0xf7,&ft);  //查找name文件
+    ret=_dos_findfirst(name,0xf7,&ft);  
+    //查找name文件
 
-    if(ret) return 0;   //查找不到，返回0
+    if(ret) return 0;   
+    //查找不到，返回0
         
     strcpy(child->file.name,ft.name);
     child->file.date=ft.wr_date;
@@ -151,11 +176,8 @@ IBool IAddFileNode(IFileNode  *parent,char* name)
     child->file.size=(ft.size/512+1)/2;
     
     if(ft.attrib&0x10)
-    {
         strcpy(child->file.type,"0");
-        strcat(temp,"\\");
-        strcat(temp,name);
-    }
+    
     else
     {
         for(i=0;i<strlen(child->file.name);i++)
@@ -169,33 +191,32 @@ IBool IAddFileNode(IFileNode  *parent,char* name)
                 strcpy(child->file.type,"NOT");
         }
     }
+    //初始化该节点
 
     return IAddChild(parent,child);
 }
-IBool IDelFileNode(IFileNode  *parent,char* name)
+
+/*
+    函数功能：在parent文件夹中删除name文件节点
+    输入参数：parent——父节点, name——子节点文件名
+    输出参数：无
+    返回值：成功则返回1, 失败则返回0
+*/
+IBool IDelFileNode(IFileNode *parent,char* name)
 {
     IFileNode * child=parent->child;
     int ret,i;
     char temp[50];
 
-    if(child==NULL)
-    {
-#ifdef  DB
-        printf("nothing to del\n");
-#endif
-    }
     IGetAbsolutePath(parent,temp);
     Icd(temp);
 
-   while(strcmp(child->file.name,name)&&child!=NULL)
+    while(strcmp(child->file.name,name)&&child!=NULL)
        child=child->next;
+    
     if(child==NULL)
-    {
-#ifdef  DB
-        printf("nothing to del\n");
-#endif
         return 0;
-    }
+
     if(child->flags&4)
     {
         child->pre->child=child->next;
@@ -205,33 +226,48 @@ IBool IDelFileNode(IFileNode  *parent,char* name)
             child->next->flags|=4;
         }
     }
+    //如果是链表头
     else
     {
         child->pre->next=child->next;
         if(child->next) child->next->pre=child->pre;
     }
+    //如果不是链表头
+
     free(child);
     return 1;
 }
+
+/*
+    函数功能：递归删除整个链表
+    输入参数：root要删除的文件书根节点
+    输出参数：无
+    返回值：无
+*/
 void IDelFilelist(IFileNode* root)
 {
     if(root->child)
     {
         IDelFilelist(root->child);
     }
+    //深度优先
     if(root->next)
     {
         IDelFilelist(root->next);
     }
     free(root);
     root=NULL;
-#ifdef  DB
-    printf("%u\n",coreleft());
-#endif
 }
-void IAddFilelist(IFileNode * root)
+
+/*
+    函数功能：递归添加整个树
+    输入参数：root要增枝的文件书根节点
+    输出参数：无
+    返回值：无
+*/
+void IAddFilelist(IFileNode* root)
 {
-    IFileNode * childRoot;
+    IFileNode* childRoot;
     char temp[50];
 
     if(!root->child&&IisFolder(root))
@@ -239,32 +275,33 @@ void IAddFilelist(IFileNode * root)
         IGetAbsolutePath(root,temp);
         childRoot=IGetFileNodeList(temp);
         IAddChild(root,childRoot);
-#ifdef  DB
-        printf("%s is entreed\n",root->file.name);
-#endif    
     }
+    
     if(root->child)
         IAddFilelist(root->child);
+    //深度优先
+
     if(root->next)
         IAddFilelist(root->next);
 }
+
+/*
+    函数功能：查找文件夹中的文件数和子文件夹数
+    输入参数：node——目标节点, path——绝对路径
+    输出参数：无
+    返回值：无
+*/
 void IPeek(IFileNode* node,char* path)
 {
     int ret;
     struct find_t ft;
     char temp[50];
     IFileNode * tempNode=(IFileNode *)malloc(sizeof(IFileNode));
-#ifdef  DB
-    printf("%u\n",coreleft());
-#endif
+
     if(!IisFolder(node)) return;
     if(tempNode==NULL)
-    {
-#ifdef  DB
-        printf("not enough memory\n");
-#endif
         IQuit();  
-    }
+
     node->hasFile=0;
     node->hasFolder=0;
     Icd(path);
@@ -284,7 +321,9 @@ void IPeek(IFileNode* node,char* path)
             IFileNodeSetNull(tempNode);
             sprintf(temp,"%s\\%s",path,ft.name);
             strcpy(tempNode->file.type,"0t");
-            IPeek(tempNode,temp);    //深度优先搜索
+            IPeek(tempNode,temp);    
+            //深度优先搜索
+
             node->hasFile+=tempNode->hasFile;
             node->hasFolder+=tempNode->hasFolder;
         }
@@ -297,10 +336,14 @@ void IPeek(IFileNode* node,char* path)
     }
     Icd(path);
     free(tempNode);
-#ifdef  DB
-    printf("%u\n",coreleft());
-#endif
 }
+
+/*
+    函数功能：排序时,用于交换两个兄弟节点在链表中的顺序
+    输入参数：(node1,node2)——两个需要交换的节点
+    输出参数：无
+    返回值：无
+*/
 void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
 {
     if(node1->flags&4)
@@ -319,6 +362,7 @@ void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
         node2->next=node1;
         node1->pre=node2;
     }
+    //如果node1是链表头
     else
     {
         if(node2->next)
@@ -333,4 +377,5 @@ void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
         node2->next=node1;
         node1->pre=node2;
     }
+    //如果node1不是链表头
 }

@@ -10,15 +10,15 @@
 #include<STRING.H>
 #include<STDLIB.H>
 #include<BIOS.H>
+#include<DOS.H>
+#include<GRAPHICS.H>
 #include<CONIO.H>
 #include"IEvent.h"
-#include"IView.h"
 #include"IUtility.h"
 #include"IDiry.h"
 #include"ISort.h"
 #include"IInit.h"
 #include"IHanZi.h"
-#include"ISort.h"
 #include"IActive.h"
 
 /*
@@ -385,7 +385,7 @@ void ItxtActive(IFileNode* txt,IFileNode* null)
 
     strcpy(temp,"BC ");
     IGetAbsolutePath(txt,temp+3);
-    SVGA_Deinit();
+    closegraph();
     //关闭svga模式
 
     system(temp);
@@ -400,8 +400,8 @@ void ItxtActive(IFileNode* txt,IFileNode* null)
 */
 void ISortMenuActive(IFileNode* flag,IFileNode* null)
 {
-    int *n=(int*) flag;
-    *n=1;
+    char *n=(char*) flag;
+    *n|=1;
     //将打开标志置为1
 }
 

@@ -11,6 +11,12 @@
 #include <stdlib.h>
 #include "IQuit.h"
 
+/*
+    函数功能：退出程序
+    输入参数：无
+    输出参数：无
+    返回值：无
+*/
 void IQuit()
 {
     closegraph();   //关闭图形界面

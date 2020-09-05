@@ -1,13 +1,39 @@
-#include "IInit.h"
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：与SVGA图形界面初始化相关的函数
+
+	***
+	注：本文件代码来源于往届学长，略有修改
+	***
+*/
 
 
-int VGA_Init(void)
+#include<GRAPHICS.H>
+#include<DOS.H>
+#include<STDLIB.H>
+#include<STDIO.H>
+#include"IInit.h"
+
+/*
+    函数功能：VGA图形界面的初始化
+    输入参数：无
+    输出参数：无
+    返回值：无
+*/
+void VGA_Init(void)
 {
 	int GraphDriver, GraphMode=DETECT;
 	initgraph(&GraphDriver, &GraphMode,"C:\\BORLANDC\\BGI");
-
-	return 0;
 }
+
+/*
+    函数功能：SVGA图形界面的初始化
+    输入参数：无
+    输出参数：无
+    返回值：成功则返回0, 失败则返回-1
+*/
 int SVGA_Init(void)
 {
     extern void _Cdecl SVGA_driver(void);
@@ -22,18 +48,15 @@ int SVGA_Init(void)
 		return -1;
     }
 	initgraph(&GraphDriver, &GraphMode, "");
-
     return 0;
 }
 
-void SVGA_Deinit(void)
-{
-    closegraph();
-}
-
-
-//pattle
-
+/*
+    函数功能：SVGA图形界面的初始化相关函数
+    输入参数：col——SVGA颜色
+    输出参数：无
+    返回值：无
+*/
 static void Set_Pal(const SVGA_COLOR * col)
 {
 	int i = 0;
@@ -46,6 +69,12 @@ static void Set_Pal(const SVGA_COLOR * col)
 	}
 }
 
+/*
+    函数功能：SVGA图形界面的初始化相关函数
+    输入参数：path——SVGA颜色板路径
+    输出参数：无
+    返回值：无
+*/
 void Set_Pal_File(const char * path)
 {
 	SVGA_COLOR     col[256];
