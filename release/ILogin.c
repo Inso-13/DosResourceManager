@@ -7,19 +7,13 @@
 
 
 #include<GRAPHICS.H>
-#include<CONIO.H>
 #include<STDIO.H>
 #include<STRING.H>
 #include<STDLIB.H>
 #include"IEvent.h"
-#include"IUtility.h"
-#include"IDiry.h"
-#include"IHanZi.h"
-#include"IDraw.h"
-#include"IIcon.h"
 #include"IActive.h"
-#include"IMenu.h"
-#include"IView.h"
+#include"IUtility.h"
+#include"IHanZi.h"
 
 /*
     函数功能：画登录界面的背景

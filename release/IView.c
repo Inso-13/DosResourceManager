@@ -129,9 +129,9 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int 
                 Ifolder(beginX+11,beginY-(*page-1)*590+4);
             setcolor(0);
             outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
-            ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IDetreeActive,root,(IFileNode*)(*curNode),6);
+            ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IDetreeActive,root,(IFileNode*)curNode,6);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IDetreeActive,root,(IFileNode*)(*curNode),6);
+            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IDetreeActive,root,(IFileNode*)curNode,6);
             IEventStackPush(top,tempEvent);
         }
         increaceY+=24;

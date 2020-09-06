@@ -62,10 +62,19 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
         {
             if(tempNode->pre)
             {
-                tempNode=tempNode->pre;
-                tempNode->next=tempNode->next->next;
-                free(tempNode->next);
-                tempNode->next->pre=tempNode;
+                if(tempNode->next)
+                {
+                    tempNode=tempNode->pre;
+                    tempNode->next=tempNode->next->next;
+                    free(tempNode->next->pre);
+                    tempNode->next->pre=tempNode;
+                }
+                else
+                {
+                    tempNode=tempNode->pre;
+                    free(tempNode->next);
+                    tempNode->next=NULL;
+                }
             }
             else
             {
@@ -88,13 +97,13 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 */
 void IDetreeActive(IFileNode* node,IFileNode* cur)
 {
-    IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    IFileNodePointer ** curNode=(IFileNodePointer *)cur;
     IFileNodePointer * tempNode,*nextNode,*lastNode;
     char path1[50],path2[50];
 
     if(node->file.type[1]=='\\') return;
 
-    tempNode=curNode->next;
+    tempNode=(*curNode)->next;
     while(tempNode)
     {
         nextNode=tempNode->next;
@@ -104,7 +113,7 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
     }
     //假如curNode链表有后一项，递归删除后面的所有节点
 
-    tempNode=curNode;
+    tempNode=(*curNode);
     IGetAbsolutePath(node,path2);
     while(tempNode)
     {
@@ -114,10 +123,20 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
         {
             if(tempNode->pre)
             {
-                tempNode=tempNode->pre;
-                tempNode->next=tempNode->next->next;
-                free(tempNode->next);
-                tempNode->next->pre=tempNode;
+                if(tempNode->next)
+                {
+                    tempNode=tempNode->pre;
+                    tempNode->next=tempNode->next->next;
+                    free(tempNode->next->pre);
+                    tempNode->next->pre=tempNode;
+                }
+                else
+                {
+                    tempNode=tempNode->pre;
+                    free(tempNode->next);
+                    tempNode->next=NULL;
+                    (*curNode)=tempNode;
+                }
             }
             else
             {
@@ -131,7 +150,7 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
     //如果curNode链表中有node节点，将该节点从链表中除去
 
     if(node->file.type[1]!='\\')
-        curNode->child=IFindParent(node);
+        (*curNode)->child=IFindParent(node);
     //更改curNode节点
 
     IDetree(node);

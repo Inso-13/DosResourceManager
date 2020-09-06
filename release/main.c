@@ -32,12 +32,12 @@ void main()
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
 
-    // IMouseMath(mouseDraw);
-    IMouseSetLimit(1024,768);
+    IMouseMath(mouseDraw);
+    IMouseSetLimit(1023,767);
     //鼠标初始化
 
 #ifdef DB
-    id=1;
+    id=0;
 #else
     strcpy(name,"\0");
     strcpy(password,"\0");
@@ -194,7 +194,7 @@ void main()
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenuX=mouseX;
             lastMenuY=mouseY;
-            getimage((mouseX>944)?944:mouseX,(mouseY>608)?608:mouseY,((mouseX>944)?944:mouseX)+95,((mouseY>608)?608:mouseY)+160,view1Image);
+            getimage((mouseX>928)?928:mouseX,(mouseY>607)?607:mouseY,((mouseX>928)?928:mouseX)+95,((mouseY>607)?607:mouseY)+160,view1Image);
             IMenu(mouseX,mouseY,numOfSelected,top1,curNode,nodeX,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             if(!(menuFlag&1))
@@ -213,7 +213,7 @@ void main()
         {
 
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
-            putimage((lastMenuX>944)?944:lastMenuX,(lastMenuY>608)?608:lastMenuY,view1Image,COPY_PUT);
+            putimage((lastMenuX>928)?928:lastMenuX,(lastMenuY>607)?607:lastMenuY,view1Image,COPY_PUT);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenu=0;
         }   //关闭菜单窗口

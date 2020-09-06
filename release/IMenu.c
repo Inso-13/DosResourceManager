@@ -35,8 +35,8 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     int (*lambda[8])(IFileNode*,IFileNode*)={ISortDateUp,ISortDateDown,ISortSizeUp,ISortSizeDown,ISortNameUp,ISortNameDown,ISortTypeUp,ISortTypeDown};  
     //排序函数指针数组
 
-    if(mouseX>944) mouseX=944;
-    if(mouseY>608) mouseY=608;
+    if(mouseX>928) mouseX=928;
+    if(mouseY>607) mouseY=607;
     IDrawMenu(mouseX,mouseY,numOfSelected,curNode,nodeX,*menuFlag,fpHZ);
     //画菜单
 

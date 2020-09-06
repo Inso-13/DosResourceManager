@@ -24,7 +24,7 @@
 */
 void VGA_Init(void)
 {
-	int GraphDriver, GraphMode=DETECT;
+	int GraphDriver=VGA, GraphMode=DETECT;
 	initgraph(&GraphDriver, &GraphMode,"C:\\BORLANDC\\BGI");
 }
 
