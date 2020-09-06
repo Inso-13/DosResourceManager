@@ -48,6 +48,7 @@ void Irename(IFileNode * oldName,char* newName)
 {
     char temp[50];
     int i;
+    struct find_t ft;
 
     IGetAbsolutePath(IFindParent(oldName),temp);
     Icd(temp);
@@ -63,7 +64,11 @@ void Irename(IFileNode * oldName,char* newName)
             break;
         }
         if(i==strlen(oldName->file.name)-1)
-            strcpy(oldName->file.type,"NOT");
+        {
+            _dos_findfirst(newName,0xf7,&ft);
+            if(!(ft.attrib&0x10))
+                strcpy(oldName->file.type,"NOT");
+        }
     }
     //调整文件的类型
 }

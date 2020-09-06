@@ -9,8 +9,6 @@
 #if !defined(__ITYPE_H)
 #define __ITYPE_H
 
-#include"IQuit.h"
-
 typedef enum IBool{false,true} IBool;   //伪布尔型变量，false=0，true=1
 
 typedef struct IFile    //文件结构

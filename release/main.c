@@ -109,7 +109,7 @@ void main()
 
     IPlainView(fpHZ);
     IView0(root,&curNode,top0,4,110,&page0,1);
-    IView1(&curNode,top1,&page1,&menuFlag,fpHZ);
+    IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
     for(i=0;i<16;i++)
         for(j=0;j<16;j++)
             mouseSave[i][j]=getpixel(mouseX+j,mouseY+i);
@@ -238,7 +238,7 @@ void main()
             bar(192,52,800,76);
             bar(0,745,992,766);
             IEventStackPop(top1,1000);
-            numOfSelected=IView1(&curNode,top1,&page1,&menuFlag,fpHZ);
+            numOfSelected=IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //¸üÐÂ1ºÅ´°¿Ú

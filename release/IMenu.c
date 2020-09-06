@@ -158,6 +158,7 @@ void ISetCopy(IFileNode* cur,IFileNode* X)
     //如果之前有被复制的文件节点，则覆盖之
     
     nodeX->child=curNode->child;
+    nodeX->child->flags&=30;
 }
 
 /*
@@ -204,13 +205,17 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
 
 /*
     函数功能：激活删除函数
-    输入参数：cur——当前节点, null——用于占位
-    输出参数：无
+    输入参数：cur——当前节点
+    输出参数：X——辅助节点指针，用于保存被复制/剪切的节点
     返回值：无
 */
-void ISetDelete(IFileNode* cur,IFileNode* null)
+void ISetDelete(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    IFileNodePointer * nodeX=(IFileNodePointer *)X;
+
+    nodeX->child=NULL;
+    //辅助节点置零
 
     Irmlr(curNode->child);
     //激活删除函数
@@ -242,14 +247,14 @@ void ISetRename(IFileNode* cur,IFileNode* null)
     int i=0;
     char temp[20];
 
-    strcpy(temp,"\0");
     while(!(tempNode->flags&2))
     {
         i++;
         tempNode=tempNode->next;
     }
     //找到被选中的文件节点
-
+    
+    strcpy(temp,tempNode->file.name);
     IGetString(254,110+20*i,150,temp,0);
     //获取新文件名
 

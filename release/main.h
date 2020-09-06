@@ -28,6 +28,6 @@
 #include"IMenu.h"
 #include"IActive.h"
 #include"ILogin.h"
-#define DB
+// #define DB
 
 #endif

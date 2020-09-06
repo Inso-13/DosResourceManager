@@ -257,13 +257,13 @@ char* IGetString(int x,int y,int length,char* string,int flag)
     }
     else
     {
-        string[0]='\0';
         rectangle(x-1,y+6,x+length+1,y+25);
         setfillstyle(SOLID_FILL,255);
         bar(x,y+7,x+length,y+24);   
     }
     //≥ı ºªØ ‰»ÎøÚ
-
+    
+    setcolor(144);
     if(flag!=3)
         outtextxy(x+2,y+9,string);
     else

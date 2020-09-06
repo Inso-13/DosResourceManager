@@ -175,11 +175,11 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int 
 
 /*
     函数功能：右侧窗口
-    输入参数：curNode——当前目录二级指针, top——事件栈, (beginX,beginY)——开始画的位置, page——页码, flag——标志位
+    输入参数：curNode——当前目录二级指针, nodeX——辅助节点指针，用于保存被复制/剪切的节点,top——事件栈, (beginX,beginY)——开始画的位置, page——页码, flag——标志位
     输出参数：无
     返回值：纵坐标的偏移量
 */
-int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char* page,char* menuFlag,FILE* fpHZ)
+int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,char* page,char* menuFlag,FILE* fpHZ)
 {
 
     int i,y,numOfItem=0,numOfSelected=0;
@@ -378,7 +378,7 @@ int IView1(IFileNodePointer ** curNode,IEventStackNode* top,char* page,char* men
 
         ISetEvent(&tempEvent,0,0,1024,768,2,INOP,NULL,NULL,0);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,521,403,571,423,2,ISetDelete,(IFileNode*)(*curNode),NULL,6);
+        ISetEvent(&tempEvent,521,403,571,423,2,ISetDelete,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
         IEventStackPush(top,tempEvent);
         ISetEvent(&tempEvent,591,403,641,423,2,INOP,NULL,NULL,4);
         IEventStackPush(top,tempEvent);
