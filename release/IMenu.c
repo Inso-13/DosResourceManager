@@ -282,7 +282,7 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
     }
     //找到被选中的文件节点
 
-    IGetString(254,110+20*i,150,temp,4);
+    IGetString(254,110+20*i,150,temp,0);
     //获取新文件名
 
     if(temp[0])
@@ -315,7 +315,7 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
     }
     //找到被选中的文件节点
 
-    IGetString(254,110+20*i,150,temp,4);
+    IGetString(254,110+20*i,150,temp,0);
     //获取新文件名
 
     if(temp[0])

@@ -32,7 +32,7 @@ void main()
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
 
-	IMouseMath(mouseDraw);
+    // IMouseMath(mouseDraw);
     IMouseSetLimit(1023,767);
     //鼠标初始化
 
