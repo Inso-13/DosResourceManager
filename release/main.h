@@ -18,6 +18,7 @@
 #include<BIOS.H>
 #include<GRAPHICS.H>
 #include"IType.h"
+#include"IQuit.h"
 #include"IMouse.h"
 #include"IInit.h"
 #include"IEvent.h"
