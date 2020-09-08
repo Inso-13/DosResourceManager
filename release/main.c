@@ -23,7 +23,7 @@ void main()
     IEventStackNode *top0=IInitEventStack(),*top1=IInitEventStack();    //事件栈顶
     //定义变量
 
-#ifdef DB
+#ifdef VGADB
     VGA_Init();
 #else
     SVGA_Init();
@@ -37,7 +37,7 @@ void main()
     //鼠标初始化
 
 #ifdef DB
-    id=0;
+    id=1;
 #else
     strcpy(name,"\0");
     strcpy(password,"\0");
@@ -127,11 +127,18 @@ void main()
             IQuit();
         }
 
-#ifdef DB
+#ifdef VGADB
         setcolor(0);
         sprintf(temp,"left memory:%u Byte",coreleft());
         outtextxy(300,400,temp);
 #endif
+
+#ifdef DB
+        setcolor(0);
+        sprintf(temp,"left memory:%u Byte",coreleft());
+        outtextxy(300,753,temp);
+#endif
+
         mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);
         //鼠标状态查询
         activeFlag=IEventStackActive(top0,mouseX,mouseY,mouseStatus);

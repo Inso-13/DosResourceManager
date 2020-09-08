@@ -333,3 +333,21 @@ void IGetNameByPath(char* path,char* name)
     }
     strcpy(name,path+i+1);
 }
+
+/*
+    函数功能：判断path2是否为path1的子路径
+    输入参数：path1——父路径, path2——子路径
+    输出参数：无
+    返回值：若path2是否为path1的子路径, 返回1; 否则返回0
+*/
+int IisChild(char* path1,char* path2)
+{
+    int n=strlen(path2),i;
+
+    for(i=0;i<n;i++)
+    {
+        if(path1[i]!=path2[i])
+            return 0;
+    }
+    return 1;
+}

@@ -24,5 +24,6 @@ IFileNode * IFindNodeByName(char * name,IFileNode * root);
 void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change);
 void IDelPointer(IFileNodePointer* pointer);
 void IGetNameByPath(char* path,char* name);
+int IisChild(char* path1,char* path2);
 
 #endif

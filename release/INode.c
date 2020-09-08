@@ -14,6 +14,7 @@
 #include<ALLOC.H>
 #include<STDIO.H>
 #include"IUtility.h"
+#include"IQuit.h"
 #include"INode.h"
 
 /*

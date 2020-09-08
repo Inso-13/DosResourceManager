@@ -87,9 +87,10 @@ void Idoc(int x,int y)
 	setfillstyle(1,11);
 	bar(x-3,y+3,x+6,y+12);
 	setcolor(255);
-	settextstyle(1,0,0);
-	outtextxy(x-2,y+4,"W");
-    settextstyle(1,0,2);
+	line(x-2,y+4,x,y+8);
+	line(x,y+8,x+2,y+4);
+	line(x+2,y+4,x+4,y+8);
+	line(x+4,y+8,x+6,y+4);
 }
 
 /*

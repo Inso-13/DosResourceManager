@@ -30,6 +30,7 @@
 #include"IActive.h"
 #include"ILogin.h"
 #include"ISound.h"
-// #define DB
+#define DB
+// #define VGADB
 
 #endif

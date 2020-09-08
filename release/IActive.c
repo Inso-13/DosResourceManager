@@ -20,7 +20,7 @@
 #include"IInit.h"
 #include"IHanZi.h"
 #include"IActive.h"
-
+#include"IDebug.h"
 /*
     函数功能：激活IEntree函数，更改当前节点
     输入参数：node——需要IEntree的节点
@@ -101,6 +101,7 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
     IFileNodePointer * tempNode,*nextNode,*lastNode;
     char path1[50],path2[50];
 
+    IDebug(1);
     if(node->file.type[1]=='\\') return;
 
     tempNode=(*curNode)->next;
@@ -119,7 +120,7 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
     {
         lastNode=tempNode->pre;
         IGetAbsolutePath(tempNode->child,path1);
-        if(!strcmp(path1,path2))
+        if(!strcmp(path1,path2)||IisChild(path1,path2))
         {
             if(tempNode->pre)
             {
