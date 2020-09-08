@@ -91,7 +91,13 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type)
         if(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2&&(temp->event.type&type))
         {
             temp->event.pfun(temp->event.node0,temp->event.node1);      //¼¤»î²Ûº¯Êı
-            return temp->event.change;
+            if(temp->event.change<0)
+            {
+                temp=temp->next;
+                continue;
+            }
+            else
+                return temp->event.change;
         }
         else
             temp=temp->next;

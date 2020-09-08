@@ -90,6 +90,23 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 }
 
 /*
+    函数功能：根据情况将nodeX置为NULL
+    输入参数：node——需要IDetree的节点
+    输出参数：X——辅助文件节点
+    返回值：无
+*/
+void ISetXNull(IFileNode* node,IFileNode* X)
+{
+    IFileNodePointer * nodeX=(IFileNodePointer *)X;
+    char path1[50],path2[50];
+
+    IGetAbsolutePath(node,path1);   
+    IGetAbsolutePath(nodeX->child,path2);   
+    if(!strcmp(path1,path2)||IisChild(path2,path1))
+        nodeX->child=NULL;
+}
+
+/*
     函数功能：激活IDetree函数，更改当前节点
     输入参数：node——需要IDetree的节点
     输出参数：cur——当前节点
@@ -101,7 +118,6 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
     IFileNodePointer * tempNode,*nextNode,*lastNode;
     char path1[50],path2[50];
 
-    IDebug(1);
     if(node->file.type[1]=='\\') return;
 
     tempNode=(*curNode)->next;

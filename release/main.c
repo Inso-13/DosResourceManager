@@ -1,5 +1,5 @@
 /*
-    版本号：0.5.8
+    版本号：0.5.9
     作者：黄子昊
     生成日期：2020-9-8
     说明：仿Windows资源管理器,仍在测试中
@@ -31,8 +31,9 @@ void main()
 #endif
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
-
+#ifdef DB
 	IMouseMath(mouseDraw);
+#endif
     IMouseSetLimit(1023,767);
     //鼠标初始化
 
@@ -109,7 +110,7 @@ void main()
     //文件节点初始化
 
     IPlainView(fpHZ);
-    IView0(root,&curNode,top0,4,110,&page0,1);
+    IView0(root,&curNode,nodeX,top0,4,110,&page0,1);
     IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
     for(i=0;i<16;i++)
         for(j=0;j<16;j++)
@@ -233,7 +234,7 @@ void main()
             setfillstyle(SOLID_FILL,255);
             bar(0,110,238,740);
             IEventStackPop(top0,1000);
-            IView0(root,&curNode,top0,4,110,&page0,1);
+            IView0(root,&curNode,nodeX,top0,4,110,&page0,1);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //更新0号窗口

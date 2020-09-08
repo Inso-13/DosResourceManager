@@ -67,11 +67,11 @@ void IPlainView(FILE* fpHZ)
 
 /*
     函数功能：左侧窗口
-    输入参数：root——文件根节点, curNode——当前目录二级指针, top——事件栈, (beginX,beginY)——开始画的位置, page——页码, flag——标志位
+    输入参数：root——文件根节点, curNode——当前目录二级指针, nodeX——辅助文件节点, top——事件栈, (beginX,beginY)——开始画的位置, page——页码, flag——标志位
     输出参数：无
     返回值：纵坐标的偏移量
 */
-int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int beginX,int beginY,char* page,char flag)
+int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,int beginX,int beginY,char* page,char flag)
 {
     int increaceY=0,temp,n;
     char thisPage=1;
@@ -132,18 +132,22 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IEventStackNode* top,int 
             outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
             ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IDetreeActive,root,(IFileNode*)curNode,6);
             IEventStackPush(top,tempEvent);
+            ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,ISetXNull,root,(IFileNode*)nodeX,-1);
+            IEventStackPush(top,tempEvent);
             ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IDetreeActive,root,(IFileNode*)curNode,6);
+            IEventStackPush(top,tempEvent);
+            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,ISetXNull,root,(IFileNode*)nodeX,-1);
             IEventStackPush(top,tempEvent);
         }
         increaceY+=24;
         if(root->child)
         {
-            increaceY+=IView0(root->child,curNode,top,beginX+8,beginY+increaceY,page,0);
+            increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,0);
         }
     }
     if(root->next)
     {
-        increaceY+=IView0(root->next,curNode,top,beginX,beginY+increaceY,page,0);
+        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,page,0);
     }
 
     if(flag)

@@ -28,5 +28,6 @@ void IGetName(IFileNode* nam,IFileNode* null);
 void IGetPassword(IFileNode* pass,IFileNode* null);
 void ILastPage(IFileNode *pag,IFileNode* null);
 void INextPage(IFileNode *pag,IFileNode* null);
+void ISetXNull(IFileNode* node,IFileNode* X);
 
 #endif
