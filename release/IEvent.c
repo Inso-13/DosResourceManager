@@ -9,6 +9,7 @@
 #include<CONIO.H>
 #include<STDIO.H>
 #include<ALLOC.H>
+#include"IQuit.h"
 #include"IEvent.h"
 
 /*

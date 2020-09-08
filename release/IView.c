@@ -250,6 +250,8 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
             Iouttextxy(530,240,"未打开文件夹或未检索到内容",fpHZ);
         return 0;
     }
+    else if(tempNode->file.type[1]=='\\')
+        Iouttextxy(853,61,"根目录无法搜索文件",fpHZ);
     else
     {
         Iouttextxy(853,61,"在本文件夹中搜索",fpHZ);
