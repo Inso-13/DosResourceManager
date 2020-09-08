@@ -97,7 +97,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 */
 void IDetreeActive(IFileNode* node,IFileNode* cur)
 {
-    IFileNodePointer ** curNode=(IFileNodePointer *)cur;
+    IFileNodePointer ** curNode=(IFileNodePointer **)cur;
     IFileNodePointer * tempNode,*nextNode,*lastNode;
     char path1[50],path2[50];
 
@@ -237,19 +237,20 @@ void IGoRightActive(IFileNode* cur,IFileNode* null)
     输入参数：x——输入框位置的横坐标, y——输入框位置的纵坐标, length——输入框的长度. flag——输入框的类型
     输出参数：string——获取的字符串
     返回值：获取的字符串的首地址
+    注：flag=0 重命名;flag=1 搜素框; flag=2 输入用户名;flag=3 输入密码;flag=4 新文件/新文件夹
 */
 char* IGetString(int x,int y,int length,char* string,int flag)
 {
     char* org=string;       //记录下string的初始位置
     char tempChar='\0';     //用于接收输入的字符
     char temp[20];          //辅助字符串
-    int n=strlen(string),i=n,t=0,j;
+    int n,i,t=0,j;
 
     fflush(stdin);
     //刷新键盘缓冲区
 
     setcolor(0);
-    if(flag)
+    if(flag>=1&&flag<=3)
     {
         rectangle(x-1,y,x+length+1,y+27);
         setfillstyle(SOLID_FILL,255);
@@ -257,12 +258,16 @@ char* IGetString(int x,int y,int length,char* string,int flag)
     }
     else
     {
+        if(flag==4)
+            strcpy(string,"");
         rectangle(x-1,y+6,x+length+1,y+25);
         setfillstyle(SOLID_FILL,255);
         bar(x,y+7,x+length,y+24);   
     }
     //初始化输入框
-    
+    n=strlen(string);
+    i=n;
+
     setcolor(144);
     if(flag!=3)
         outtextxy(x+2,y+9,string);
@@ -286,7 +291,7 @@ char* IGetString(int x,int y,int length,char* string,int flag)
         }
         //变量t用于计时，实现闪烁光标的效果
 
-        if(flag)
+        if(flag>=1&&flag<=3)
             bar(x,y+1,x+length,y+26);
         else
             bar(x,y+7,x+length,y+24);
@@ -334,7 +339,7 @@ char* IGetString(int x,int y,int length,char* string,int flag)
         //合法字符检验
 
         setcolor(144);
-        if(flag)
+        if(flag>=1&&flag<=3)
             bar(x,y+1,x+length,y+26);
         else
             bar(x,y+7,x+length,y+24);   
@@ -382,16 +387,16 @@ void ISearchActive(IFileNode* cur,IFileNode* null)
 */
 void IexeActive(IFileNode* exe,IFileNode* null)
 {
-    char temp[50];
+    // char temp[50];
 
-    setfillstyle(SOLID_FILL,0);
-    bar(0,0,1024,768);
-    //营造dos终端环境
+    // setfillstyle(SOLID_FILL,0);
+    // bar(0,0,1024,768);
+    // //营造dos终端环境
 
-    IGetAbsolutePath(exe,temp);
-    //得到可执行文件的绝对路径
+    // IGetAbsolutePath(exe,temp);
+    // //得到可执行文件的绝对路径
 
-    system(temp);
+    // system(temp);
     //系统调用，运行exe文件
 }
 
@@ -403,14 +408,14 @@ void IexeActive(IFileNode* exe,IFileNode* null)
 */
 void ItxtActive(IFileNode* txt,IFileNode* null)
 {
-    char temp[50];
+    // char temp[50];
 
-    strcpy(temp,"BC ");
-    IGetAbsolutePath(txt,temp+3);
-    closegraph();
-    //关闭svga模式
+    // strcpy(temp,"BC ");
+    // IGetAbsolutePath(txt,temp+3);
+    // closegraph();
+    // //关闭svga模式
 
-    system(temp);
+    // system(temp);
     //系统调用，借用BC编辑器打开文本文件
 }
 

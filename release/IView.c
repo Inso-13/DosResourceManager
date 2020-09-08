@@ -1,7 +1,7 @@
 /*
     版本号：1.0
     作者：黄子昊
-    生成日期：2020-9-4
+    生成日期：2020-9-8
     说明：视图函数等
 */
 
@@ -19,6 +19,7 @@
 #include"IIcon.h"
 #include"IActive.h"
 #include"IMenu.h"
+#include"ISound.h"
 #include"IView.h"
 
 /*
@@ -280,13 +281,13 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     }
     //统计总文件数和被选中的文件数
 
+    IView1PageControl(curNode,page,numOfItem);
+    //页码控制
+    
     tempNode=(*curNode)->child->child;
     for(i=0;i<(*page-1)*(30);i++)
         tempNode=tempNode->next;
     //跳转至当前页
-
-    IView1PageControl(curNode,page,numOfItem);
-    //页码控制
 
     y=116;
     while(tempNode)     //对每一个当前页码的文件
@@ -375,6 +376,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         Iouttextxy(433,377,temp,fpHZ);
         IPutsHZ16(530,406,"确定",fpHZ);
         IPutsHZ16(600,406,"取消",fpHZ);
+        IWarningBeep();
 
         ISetEvent(&tempEvent,0,0,1024,768,2,INOP,NULL,NULL,0);
         IEventStackPush(top,tempEvent);

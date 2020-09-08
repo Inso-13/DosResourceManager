@@ -1,7 +1,7 @@
 /*
-    版本号：0.5.4
+    版本号：0.5.7
     作者：黄子昊
-    生成日期：2020-9-6
+    生成日期：2020-9-8
     说明：仿Windows资源管理器,仍在测试中
 */
 
@@ -32,7 +32,7 @@ void main()
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
 
-    // IMouseMath(mouseDraw);
+	IMouseMath(mouseDraw);
     IMouseSetLimit(1023,767);
     //鼠标初始化
 
@@ -87,6 +87,7 @@ void main()
             if(id==1)
                 break;
             id=-1;
+            IWarningBeep();
         }
         else if((mouseStatus&2)&&mouseX>370+190&&mouseX<470+190&&mouseY>550&&mouseY<550+27)
         {
@@ -121,6 +122,7 @@ void main()
         {
             setcolor(144);
             Iouttextxy(500,300,"内存不足，将在3秒后退出",fpHZ);
+            IWarningBeep();
             delay(3000);
             IQuit();
         }

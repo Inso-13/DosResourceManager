@@ -1,7 +1,7 @@
 /*
-    版本号：0.5.02
+    版本号：0.5.7
     作者：黄子昊
-    生成日期：2020-9-4
+    生成日期：2020-9-8
     说明：仿Windows资源管理器,仍在测试中
 */
 
@@ -18,6 +18,7 @@
 #include<BIOS.H>
 #include<GRAPHICS.H>
 #include"IType.h"
+#include"IQuit.h"
 #include"IMouse.h"
 #include"IInit.h"
 #include"IEvent.h"
@@ -28,6 +29,7 @@
 #include"IMenu.h"
 #include"IActive.h"
 #include"ILogin.h"
+#include"ISound.h"
 // #define DB
 
 #endif

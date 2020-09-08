@@ -15,6 +15,7 @@
 #include<GRAPHICS.H>
 #include"IEvent.h"
 #include"IUtility.h"
+#include"ISound.h"
 #include"IHanZi.h"
 #include"IDiry.h"
 #include"ISort.h"
@@ -282,7 +283,7 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
     }
     //找到被选中的文件节点
 
-    IGetString(254,110+20*i,150,temp,0);
+    IGetString(254,110+20*i,150,temp,4);
     //获取新文件名
 
     if(temp[0])
@@ -290,6 +291,7 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
         {
             setcolor(249);
             outtextxy(400,752,"Failed");
+            IWarningBeep();
             delay(1500);
         }
         //如果创建文件失败
@@ -315,7 +317,7 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
     }
     //找到被选中的文件节点
 
-    IGetString(254,110+20*i,150,temp,0);
+    IGetString(254,110+20*i,150,temp,4);
     //获取新文件名
 
     if(temp[0])
@@ -323,6 +325,7 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
         {
             setcolor(249);
             outtextxy(400,752,"Failed");
+            IWarningBeep();
             delay(1500);
         }
         //如果创建文件夹失败
