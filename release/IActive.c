@@ -100,6 +100,9 @@ void ISetXNull(IFileNode* node,IFileNode* X)
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
     char path1[50],path2[50];
 
+    if(node->file.type[1]=='d')
+        return;
+        
     IGetAbsolutePath(node,path1);   
     IGetAbsolutePath(nodeX->child,path2);   
     if(!strcmp(path1,path2)||IisChild(path2,path1))
