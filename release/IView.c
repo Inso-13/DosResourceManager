@@ -346,7 +346,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         }
         //文件打开方式
 
-        if(y>662) break;
+        if(y>682) break;
         y+=20;
         tempNode=tempNode->next;
     }

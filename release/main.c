@@ -1,5 +1,5 @@
 /*
-    版本号：0.5.9
+    版本号：0.5.10
     作者：黄子昊
     生成日期：2020-9-8
     说明：仿Windows资源管理器,仍在测试中
@@ -137,7 +137,7 @@ void main()
 #ifdef DB
         setcolor(0);
         sprintf(temp,"left memory:%u Byte",coreleft());
-        outtextxy(300,753,temp);
+        outtextxy(500,753,temp);
 #endif
 
         mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);
