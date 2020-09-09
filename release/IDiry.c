@@ -139,7 +139,8 @@ void IEntree(IFileNode * root)
     while(childRoot&&IisFolder(childRoot))
     {
         IGetAbsolutePath(childRoot,temp);
-        IPeek(childRoot,temp);
+        if(IPeek(childRoot,temp))
+            childRoot->flags|=8;
         childRoot=childRoot->next;
     }
     //更新子节点

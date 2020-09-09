@@ -198,8 +198,7 @@ IFileNode * IDiskInit(int id)
     root->child=rootC;
     strcpy(root->file.type,"1\\");
     strcpy(root->file.name,"DOS");
-    root->hasFolder=-1;
-    root->flags=4;
+    root->flags=12;
     rootC->pre=root;
     rootC->flags|=4;
     strcpy(temp,"C:");
@@ -215,7 +214,7 @@ IFileNode * IDiskInit(int id)
             tempNode->file.date=33;
             tempNode->file.time=0;
             tempNode->file.size=0;
-            tempNode->hasFolder=-1;
+            tempNode->flags|=8;
             if(disk==2&&id==0)
                 strcpy(tempNode->file.type,"0ds");
             else
@@ -244,8 +243,6 @@ IFileNode * IDiskInit(int id)
 void IFileNodeSetNull(IFileNode * node)
 {
     node->flags=0;
-    node->hasFile=0;
-    node->hasFolder=0;
     node->child=NULL;
     node->next=NULL;
     node->pre=NULL;

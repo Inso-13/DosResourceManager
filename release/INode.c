@@ -287,24 +287,19 @@ void IAddFilelist(IFileNode* root)
 }
 
 /*
-    函数功能：查找文件夹中的文件数和子文件夹数
+    函数功能：查看文件夹内是否有子文件夹
     输入参数：node——目标节点, path——绝对路径
     输出参数：无
-    返回值：无
+    返回值：若有子文件夹，返回1; 否则返回0
 */
-void IPeek(IFileNode* node,char* path)
+int IPeek(IFileNode* node,char* path)
 {
     int ret;
     struct find_t ft;
     char temp[50];
-    IFileNode * tempNode=(IFileNode *)malloc(sizeof(IFileNode));
 
-    if(!IisFolder(node)) return;
-    if(tempNode==NULL)
-        IQuit();  
+    if(!IisFolder(node)) return 0;
 
-    node->hasFile=0;
-    node->hasFolder=0;
     Icd(path);
     ret=_dos_findfirst("*.*",0xf7,&ft);
 
@@ -317,26 +312,12 @@ void IPeek(IFileNode* node,char* path)
         }
         if(ret) break;
         if(ft.attrib&0x10)
-        {
-            node->hasFolder++;
-            IFileNodeSetNull(tempNode);
-            sprintf(temp,"%s\\%s",path,ft.name);
-            strcpy(tempNode->file.type,"0t");
-            IPeek(tempNode,temp);    
-            //深度优先搜索
+            return 1;
 
-            node->hasFile+=tempNode->hasFile;
-            node->hasFolder+=tempNode->hasFolder;
-        }
-        else
-        {
-            node->hasFile++;
-        }
         ret=_dos_findnext(&ft);
         if(ret) break;
     }
-    Icd(path);
-    free(tempNode);
+    return 0;
 }
 
 /*

@@ -17,7 +17,7 @@ IBool IDelFileNode(IFileNode  *parent,char* name);
 void IDelFilelist(IFileNode * root);
 void IAddFilelist(IFileNode * root);
 IFileNode * IGetFileNodeList(char * path);
-void IPeek(IFileNode * oldParent,char* path);
+int IPeek(IFileNode * oldParent,char* path);
 void IExchangeFileNode(IFileNode* node1,IFileNode* node2);
 
 #endif

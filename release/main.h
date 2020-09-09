@@ -1,7 +1,7 @@
 /*
-    版本号：0.5.10
+    版本号：0.6.0
     作者：黄子昊
-    生成日期：2020-9-8
+    生成日期：2020-9-9
     说明：仿Windows资源管理器,仍在测试中
 */
 
@@ -30,6 +30,7 @@
 #include"IActive.h"
 #include"ILogin.h"
 #include"ISound.h"
+
 #define DB
 // #define VGADB
 

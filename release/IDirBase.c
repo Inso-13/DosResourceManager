@@ -211,7 +211,9 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
     //递归复制兄弟节点
 
     IGetAbsolutePath(newChild,temp);
-    IPeek(newChild,temp);
+    
+    if(IPeek(newChild,temp))
+        newChild->flags|=8;
     //更新文件节点的属性
 }
 

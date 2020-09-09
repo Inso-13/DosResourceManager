@@ -45,7 +45,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 
     newCurNode->child=node;
     newCurNode->next=NULL;
-    newCurNode->wait=3;
+    newCurNode->wait=10;
     newCurNode->pre=*curNode;
     (*curNode)->next=newCurNode;
     *curNode=newCurNode;

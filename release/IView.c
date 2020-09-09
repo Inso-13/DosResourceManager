@@ -79,7 +79,6 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
     IEvent tempEvent;
 
     if(!root) return 0;         
-    if(!IisFolder(root)) return 0;  //合法性检验
 
     if(beginY<110+590*(*page-1)||beginY>110+590*(*page))
         thisPage=0;
@@ -89,60 +88,64 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
         setfillstyle(SOLID_FILL,139);
         bar(0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22);
     }
-    if(root->hasFolder==0&&root->hasFile==0)         //空文件夹
+
+    if(IisFolder(root))
     {
-        if(thisPage)
+        if(!(root->flags&8))         //空文件夹
         {
-            Ifolder(beginX+11,beginY-(*page-1)*590+4);
-            setcolor(0);
-            outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
-            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
-            IEventStackPush(top,tempEvent);
-        }
-        increaceY+=24;
-    }
-    else if(root->file.type[0]=='0')   //未打开
-    {
-        if(thisPage)
-        {
-            IPointerRight(beginX+1,beginY-(*page-1)*590+8);
-            if(root->file.type[1]=='d'||root->file.type[1]=='\\')
-                Idisk(beginX+11,beginY-(*page-1)*590+4);
-            else
+            if(thisPage)
+            {
                 Ifolder(beginX+11,beginY-(*page-1)*590+4);
-            setcolor(0);
-            outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
-            ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IEntreeActive,root,(IFileNode*)curNode,6);
-            IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
-            IEventStackPush(top,tempEvent);
+                setcolor(0);
+                outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
+                ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
+                IEventStackPush(top,tempEvent);
+            }
+            increaceY+=24;
         }
-        increaceY+=24;
-    }
-    else        //打开的文件夹
-    {
-        if(thisPage)
+        else if(root->file.type[0]=='0')   //未打开
         {
-            IPointerDown(beginX,beginY+9);
-            if(root->file.type[1]=='d'||root->file.type[1]=='\\')
-                Idisk(beginX+11,beginY-(*page-1)*590+4);
-            else
-                Ifolder(beginX+11,beginY-(*page-1)*590+4);
-            setcolor(0);
-            outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
-            ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IDetreeActive,root,(IFileNode*)curNode,6);
-            IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,ISetXNull,root,(IFileNode*)nodeX,-1);
-            IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IDetreeActive,root,(IFileNode*)curNode,6);
-            IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,ISetXNull,root,(IFileNode*)nodeX,-1);
-            IEventStackPush(top,tempEvent);
+            if(thisPage)
+            {
+                IPointerRight(beginX+1,beginY-(*page-1)*590+8);
+                if(root->file.type[1]=='d'||root->file.type[1]=='\\')
+                    Idisk(beginX+11,beginY-(*page-1)*590+4);
+                else
+                    Ifolder(beginX+11,beginY-(*page-1)*590+4);
+                setcolor(0);
+                outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
+                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IEntreeActive,root,(IFileNode*)curNode,6);
+                IEventStackPush(top,tempEvent);
+                ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IEntreeActive,root,(IFileNode*)curNode,6);
+                IEventStackPush(top,tempEvent);
+            }
+            increaceY+=24;
         }
-        increaceY+=24;
-        if(root->child)
+        else        //打开的文件夹
         {
-            increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,0);
+            if(thisPage)
+            {
+                IPointerDown(beginX,beginY+9);
+                if(root->file.type[1]=='d'||root->file.type[1]=='\\')
+                    Idisk(beginX+11,beginY-(*page-1)*590+4);
+                else
+                    Ifolder(beginX+11,beginY-(*page-1)*590+4);
+                setcolor(0);
+                outtextxy(beginX+25+10,beginY-(*page-1)*590+7,root->file.name);
+                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,IDetreeActive,root,(IFileNode*)curNode,6);
+                IEventStackPush(top,tempEvent);
+                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*590+6,beginX+16,beginY-(*page-1)*590+14,2,ISetXNull,root,(IFileNode*)nodeX,-1);
+                IEventStackPush(top,tempEvent);
+                ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,IDetreeActive,root,(IFileNode*)curNode,6);
+                IEventStackPush(top,tempEvent);
+                ISetEvent(&tempEvent,0,beginY-(*page-1)*590,238,beginY-(*page-1)*590+22,8,ISetXNull,root,(IFileNode*)nodeX,-1);
+                IEventStackPush(top,tempEvent);
+            }
+            increaceY+=24;
+            if(root->child)
+            {
+                increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,0);
+            }
         }
     }
     if(root->next)
