@@ -120,12 +120,14 @@ void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer * curNode,IFileNod
             setcolor(15);
         IPutsHZ16(x+3,y+20*5+3,str[0][5],fpHZ);
         IPutsHZ16(x+3,y+20*6+3,str[0][6],fpHZ);
+        
+        if(!numOfSelected)
+            setcolor(247);
+        else
+            setcolor(15);
         for(i=0;i<3;i++)
-        {
-            if(!numOfSelected)
-                setcolor(247);
             IPutsHZ16(x+3,y+20*i+3,str[0][i],fpHZ);    
-        }
+
         if((!numOfSelected||curNode->child==nodeX->child)&&nodeX->child&&curNode->child->file.type[1]!='\\')
             setcolor(15);
         else

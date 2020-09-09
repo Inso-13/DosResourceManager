@@ -124,12 +124,6 @@ void main()
             IQuit();
         }
 
-#ifdef VGADB
-        setcolor(0);
-        sprintf(temp,"left memory:%u Byte",coreleft());
-        outtextxy(300,400,temp);
-#endif
-
 #ifdef DB
         setcolor(0);
         sprintf(temp,"left memory:%u Byte",coreleft());
