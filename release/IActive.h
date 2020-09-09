@@ -11,6 +11,7 @@
 
 #include"IType.h"
 
+void IAfterEntree(IFileNode* cur,IFileNode* X);
 void IEntreeActive(IFileNode* node,IFileNode* cur);
 void IDetreeActive(IFileNode* node,IFileNode* cur);
 void ISelect(IFileNode* node,IFileNode* null);

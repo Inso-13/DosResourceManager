@@ -23,12 +23,8 @@ void main()
     IEventStackNode *top0=IInitEventStack(),*top1=IInitEventStack();    //事件栈顶
     //定义变量
 
-#ifdef VGADB
-    VGA_Init();
-#else
     SVGA_Init();
     Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
-#endif
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
 #ifdef DB
@@ -163,7 +159,7 @@ void main()
             if(bioskey(2)&4)
             {
                 if(menuFlag&4)
-                    menuFlag&=3;
+                    menuFlag&=11;
                 else
                     menuFlag|=4;
 

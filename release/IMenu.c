@@ -25,7 +25,7 @@
 
 /*
     函数功能：在View1中激活一级菜单
-    输入参数：(mouseX,mouseY)——鼠标的位置, numOfSelected——当前路径中被选中的文件数, top——View1的事件栈, curNode——当前节点,nodeX——辅助节点指针, menuFlag——菜单的标志(bit0 是否为二层菜单,bit1 是否有删除确认窗口), fpHZ——汉字库文件
+    输入参数：(mouseX,mouseY)——鼠标的位置, numOfSelected——当前路径中被选中的文件数, top——View1的事件栈, curNode——当前节点,nodeX——辅助节点指针, menuFlag——菜单的标志(bit0 是否为二层菜单,bit1 是否有删除确认窗口,bit2 是否按下Ctrl, bit3 是否是最后一页), fpHZ——汉字库文件
     输出参数：无
     返回值：无
 */
@@ -45,10 +45,13 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     {
         if(curNode->child->file.type[1]=='\\')
             return;
-        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*5,mouseX+80,mouseY+19+20*5,2,ISetNewFile,(IFileNode*)curNode,(IFileNode*)nodeX,4);
-        IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*6,mouseX+80,mouseY+19+20*6,2,ISetNewFolder,(IFileNode*)curNode,(IFileNode*)nodeX,6);
-        IEventStackPush(top,tempEvent);
+        if((*menuFlag)&8)
+        {
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*5,mouseX+80,mouseY+19+20*5,2,ISetNewFile,(IFileNode*)curNode,NULL,4);
+            IEventStackPush(top,tempEvent);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*6,mouseX+80,mouseY+19+20*6,2,ISetNewFolder,(IFileNode*)curNode,NULL,6);
+            IEventStackPush(top,tempEvent);
+        }
         ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*7,mouseX+80,mouseY+19+20*7,2,ISortMenuActive,(IFileNode*)menuFlag,NULL,4);
         IEventStackPush(top,tempEvent);
         if(numOfSelected)
@@ -79,14 +82,14 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
             ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*i,mouseX+80,mouseY+19+20*i,2,ISortActive,(IFileNode*)curNode,(IFileNode*)lambda[i],4);
             IEventStackPush(top,tempEvent);
         }
-        (*menuFlag)&=6;
+        (*menuFlag)&=14;
     }
     //如果是二级排序菜单
 }
 
 /*
     函数功能：在View1中画菜单
-    输入参数：(x,y)——画菜单的左上角, numOfSelected——当前路径中被选中的文件数, curNode——当前节点,nodeX——辅助节点指针, menuFlag——菜单的标志(bit0 是否为二层菜单,bit1 是否有删除确认窗口, bit2 是否按下Ctrl), fpHZ——汉字库文件
+    输入参数：(x,y)——画菜单的左上角, numOfSelected——当前路径中被选中的文件数, curNode——当前节点,nodeX——辅助节点指针, menuFlag——菜单的标志(bit0 是否为二层菜单,bit1 是否有删除确认窗口, bit2 是否按下Ctrl, bit3是否是最后一页), fpHZ——汉字库文件
     输出参数：无
     返回值：无
 */
@@ -110,9 +113,13 @@ void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer * curNode,IFileNod
     { 
         if(curNode->child->file.type[1]=='\\')
             setcolor(247);
+        Iouttextxy(x+3,y+20*7+6,str[0][7],fpHZ);
+        if(curNode->child->file.type[1]=='\\'||!(menuFlag&8))
+            setcolor(247);
+        else
+            setcolor(15);
         IPutsHZ16(x+3,y+20*5+3,str[0][5],fpHZ);
         IPutsHZ16(x+3,y+20*6+3,str[0][6],fpHZ);
-        Iouttextxy(x+3,y+20*7+6,str[0][7],fpHZ);
         for(i=0;i<3;i++)
         {
             if(!numOfSelected)
@@ -253,6 +260,7 @@ void ISetRename(IFileNode* cur,IFileNode* null)
         i++;
         tempNode=tempNode->next;
     }
+    i=i%30;
     //找到被选中的文件节点
     
     strcpy(temp,tempNode->file.name);
@@ -281,6 +289,8 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
         i++;
         tempNode=tempNode->next;
     }
+    i=i%30;
+    if(!i) i=30;
     //找到被选中的文件节点
 
     IGetString(254,110+20*i,150,temp,4);
@@ -315,6 +325,8 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
         i++;
         tempNode=tempNode->next;
     }
+    i=i%30;
+    if(!i) i=30;
     //找到被选中的文件节点
 
     IGetString(254,110+20*i,150,temp,4);

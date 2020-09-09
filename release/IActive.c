@@ -21,6 +21,46 @@
 #include"IHanZi.h"
 #include"IActive.h"
 #include"IDebug.h"
+
+
+
+void IAfterEntree(IFileNode* cur,IFileNode* X)
+{
+    IFileNodePointer ** curNode=(IFileNodePointer **)cur;
+    IFileNodePointer * nodeX=(IFileNodePointer *)X;
+    IFileNodePointer * tempNode=(*curNode)->pre,*lastNode=tempNode->pre;
+    char path1[50],path2[50],path[50];
+
+    IGetAbsolutePath((*curNode)->child,path1);
+    if(nodeX&&nodeX->child)
+        IGetAbsolutePath(nodeX->child,path2);
+    else
+        strcpy(path2,"");
+
+    while(tempNode)
+    {
+        lastNode=tempNode->pre;
+        IGetAbsolutePath(tempNode->child,path);
+        if(strcmp(path,"DOS")&&strcmp(path,path1)&&strcmp(path,path2)&&!IisChild(path1,path)&&!IisChild(path2,path))
+        {
+            IDetree(tempNode->child);
+            if(tempNode->pre)
+            {
+                tempNode=tempNode->pre;
+                tempNode->next=tempNode->next->next;
+                free(tempNode->next->pre);
+                tempNode->next->pre=tempNode;
+            }
+            else
+            {
+                tempNode->next->pre=NULL;
+                free(tempNode);
+            }
+        }
+        tempNode=lastNode;
+    }
+}
+
 /*
     函数功能：激活IEntree函数，更改当前节点
     输入参数：node——需要IEntree的节点
