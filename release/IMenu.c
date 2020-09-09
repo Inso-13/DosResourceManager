@@ -291,8 +291,15 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
         i++;
         tempNode=tempNode->next;
     }
-    i=i%30;
-    if(!i) i=30;
+    if(!i)
+    {
+        setfillstyle(SOLID_FILL,255);
+        bar(500,200,1000,300);
+    }
+    else if(!(i%30)) 
+        i=30;
+    else
+        i=i%30;
     //找到被选中的文件节点
 
     IGetString(254,110+20*i,150,temp,4);
@@ -327,8 +334,15 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
         i++;
         tempNode=tempNode->next;
     }
-    i=i%30;
-    if(!i) i=30;
+    if(!i)
+    {
+        setfillstyle(SOLID_FILL,255);
+        bar(500,200,1000,300);
+    }
+    else if(!(i%30)) 
+        i=30;
+    else
+        i=i%30;
     //找到被选中的文件节点
 
     IGetString(254,110+20*i,150,temp,4);
