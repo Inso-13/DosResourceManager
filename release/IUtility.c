@@ -169,6 +169,13 @@ int IMatchi(char a,char b)
     else
         return 0;
 }
+
+/*
+    函数功能：根据节点得到绝对路径
+    输入参数：node——文件节点
+    输出参数：temp——文件的绝对路径
+    返回值：无
+*/
 void IGetAbsolutePath(IFileNode * node,char* temp)
 {
     if(node->file.name[1]==':'||!strcmp(node->file.name,"DOS"))
@@ -185,7 +192,7 @@ void IGetAbsolutePath(IFileNode * node,char* temp)
     函数功能：初始化文件根节点
     输入参数：id——用户身份
     输出参数：无
-    返回值：跟文件节点
+    返回值：根文件节点
 */
 IFileNode * IDiskInit(int id)
 {

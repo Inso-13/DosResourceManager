@@ -23,7 +23,12 @@
 #include"IDebug.h"
 
 
-
+/*
+    函数功能：在激活IEntree函数后，回收垃圾内存
+    输入参数：X——辅助文件节点
+    输出参数：cur——当前节点
+    返回值：无
+*/
 void IAfterEntree(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer ** curNode=(IFileNodePointer **)cur;

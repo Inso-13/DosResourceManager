@@ -1,3 +1,11 @@
+/*
+    版本号：1.0
+    作者：黄子昊
+    生成日期：2020-9-4
+    说明：Diry以DirBase为基础，提供了基本可以被前端直接使用的文件操作函数
+*/
+
+
 #ifndef __IDIRECTORY_H
 #define __IDIRECTORY_H
 
