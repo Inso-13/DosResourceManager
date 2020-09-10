@@ -323,7 +323,12 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         if(!IisFolder(tempNode))
         {
             settextjustify(2,2);
-            sprintf(temp,"%d KB",tempNode->file.size);
+            if(tempNode->file.size<0)
+                sprintf(temp,">32 MB",tempNode->file.size);
+            else if(tempNode->file.size==0)
+                sprintf(temp,"<1 KB",tempNode->file.size);
+            else
+                sprintf(temp,"%d KB",tempNode->file.size);
             outtextxy(928,y+6,temp);
             settextjustify(0,2);
         }

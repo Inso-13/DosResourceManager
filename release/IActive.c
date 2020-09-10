@@ -75,7 +75,7 @@ void IAfterEntree(IFileNode* cur,IFileNode* X)
 void IEntreeActive(IFileNode* node,IFileNode* cur)
 {
     IFileNodePointer ** curNode=(IFileNodePointer **)cur;
-    IFileNodePointer * newCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));     //新节点
+	IFileNodePointer * newCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));     //新节点
     IFileNodePointer * tempNode=NULL,*nextNode=NULL;
 
     tempNode=(*curNode)->next;

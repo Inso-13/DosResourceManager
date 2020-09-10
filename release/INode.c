@@ -129,8 +129,8 @@ IFileNode *IGetFileNodeList(char * path)
         //查找下一个节点
 
         if(ret) break;
-        if(j>300) break;
-        //如果该路径下节点数大于300, 则不再继续查找
+        if(j>120) break;
+        //如果该路径下节点数大于120, 则不再继续查找
 
         lastNode=tempNode;
         tempNode=(IFileNode *)malloc(sizeof(IFileNode));
