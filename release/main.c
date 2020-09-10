@@ -14,9 +14,9 @@ void main()
     int lastMenuX,lastMenuY,lastMenu=0,menu=0;  //菜单相关变量
     int id,exit=0,i,j;  //其他整型变量
     char activeFlag=0,numOfSelected=0,page0=1,page1=1,page2=1,menuFlag=0,searching=0;   //标志变量
-    char name[13],password[13],nameC[13],passwordC[13],temp[50];    //辅助字符串
+    char name[13],password[13],temp[50];    //辅助字符串
     void *view1Image=NULL;  //图形缓冲区
-    FILE* fp=NULL,*fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb");    //文件指针
+    FILE *fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb");    //文件指针
     IFileNode *root=NULL;        //文件根节点
     IFileNodePointer *curNode=(IFileNodePointer*)malloc(sizeof(IFileNodePointer));  //当前节点指针
     IFileNodePointer *nodeX=(IFileNodePointer*)malloc(sizeof(IFileNodePointer));    //辅助节点指针
@@ -27,9 +27,9 @@ void main()
     Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
-#ifdef DB
+// #ifdef DB
 	IMouseMath(mouseDraw);
-#endif
+// #endif
     IMouseSetLimit(1023,767);
     //鼠标初始化
 
@@ -54,37 +54,11 @@ void main()
         }
         if(kbhit()&&getch()==13||(mouseStatus&2)&&mouseX>370&&mouseX<470&&mouseY>550&&mouseY<577)
         {
-            fp=fopen("C:\\DOSRES\\ETC\\ADMIN.TXT","rb");
-            if(fp==NULL)
-            {
-                setcolor(0);
-                outtextxy(100,100,"fp is NULL in main");
-            }
-            while(fgets(temp,50,fp))
-            {
-                for(i=0;i<strlen(temp);i++)
-                {
-                    if(temp[i]==':')
-                        break;
-                }
-                strcpy(passwordC,temp+i+1);
-                strcpy(temp+i,"\0");
-                strcpy(nameC,temp);
-                if(passwordC[strlen(passwordC)-1]=='\n')
-                    passwordC[strlen(passwordC)-2]='\0';
-                if(!strcmp(nameC,name)&&!strcmp(passwordC,password))
-                {
-                    id=1;
-                    break;
-                }
-            }
-            fclose(fp);
-            fp=NULL;
-
+            ILoginConfirm(&id,name,password);
             if(id==1)
                 break;
             id=-1;
-            IWarningBeep();
+            IWarningBeep();   
         }
         else if((mouseStatus&2)&&mouseX>370+190&&mouseX<470+190&&mouseY>550&&mouseY<550+27)
         {

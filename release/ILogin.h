@@ -13,5 +13,6 @@
 
 void IPlainLogin(void);
 void ILogin(char* name,char* password,IEventStackNode* top,int id,FILE* fpHZ);
+void ILoginConfirm(int* id,char* name,char* password);
 
 #endif

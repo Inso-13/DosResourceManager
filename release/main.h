@@ -30,6 +30,7 @@
 #include"IActive.h"
 #include"ILogin.h"
 #include"ISound.h"
+#include"ISecret.h"
 
 // #define DB
 
