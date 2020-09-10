@@ -79,7 +79,14 @@ int ISortDateDown(IFileNode* node1,IFileNode* node2)
 */
 int ISortSizeUp(IFileNode* node1,IFileNode* node2)
 {
-    return node1->file.size-node2->file.size;
+    if(node1->file.size>0&&node2->file.size>0)
+        return node1->file.size-node2->file.size;
+    else if(node1->file.size<0&&node1->file.size<0)
+        return 0;
+    else if(node1->file.size<0)
+        return 1;
+    else 
+        return -1;
 }
 
 /*
@@ -90,7 +97,14 @@ int ISortSizeUp(IFileNode* node1,IFileNode* node2)
 */
 int ISortSizeDown(IFileNode* node1,IFileNode* node2)
 {
-    return node2->file.size-node1->file.size;
+    if(node1->file.size>0&&node2->file.size>0)
+        return node2->file.size-node1->file.size;
+    else if(node1->file.size<0&&node1->file.size<0)
+        return 0;
+    else if(node1->file.size<0)
+        return -1;
+    else 
+        return 1;
 }
 
 /*
