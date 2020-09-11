@@ -90,7 +90,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 
     newCurNode->child=node;
     newCurNode->next=NULL;
-    newCurNode->wait=10;
+    newCurNode->wait=3;
     newCurNode->pre=*curNode;
     (*curNode)->next=newCurNode;
     *curNode=newCurNode;
@@ -185,7 +185,7 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
     {
         lastNode=tempNode->pre;
         IGetAbsolutePath(tempNode->child,path1);
-        if(!strcmp(path1,path2)||IisChild(path1,path2))
+        if(IisChild(path1,path2))
         {
             if(tempNode->pre)
             {

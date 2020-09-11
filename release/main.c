@@ -1,8 +1,8 @@
 /*
-    版本号：0.6.2
+    版本号：0.6.3
     作者：黄子昊
     生成日期：2020-9-10
-    说明：仿Windows资源管理器,仍在测试中, 有未知问题
+    说明：仿Windows资源管理器,仍在测试中
 */
 
 
@@ -27,9 +27,9 @@ void main()
     Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
-// #ifdef DB
+#ifdef DB
 	IMouseMath(mouseDraw);
-// #endif
+#endif
     IMouseSetLimit(1023,767);
     //鼠标初始化
 

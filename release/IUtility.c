@@ -353,5 +353,7 @@ int IisChild(char* path1,char* path2)
         if(path1[i]!=path2[i])
             return 0;
     }
+    if(n==strlen(path1))
+        return 0;
     return 1;
 }

@@ -1,5 +1,5 @@
 /*
-    版本号：0.6.2
+    版本号：0.6.3
     作者：黄子昊
     生成日期：2020-9-10
     说明：仿Windows资源管理器,仍在测试中
@@ -32,6 +32,6 @@
 #include"ISound.h"
 #include"ISecret.h"
 
-// #define DB
+#define DB
 
 #endif
