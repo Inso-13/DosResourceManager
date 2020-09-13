@@ -24,9 +24,9 @@
     输出参数：无
     返回值：复制成功返回1，失败则返回0
 */
-IBool Inew(IFileNode * pathNode,char* fileName)
+int Inew(IFileNode * pathNode,char* fileName)
 {
-    char temp[50];  //辅助字符串
+    char temp[150];  //辅助字符串
 
     IGetAbsolutePath(pathNode,temp);
     Icd(temp);
@@ -46,7 +46,7 @@ IBool Inew(IFileNode * pathNode,char* fileName)
 */
 void Irename(IFileNode * oldName,char* newName)
 {
-    char temp[50];
+    char temp[150];
     int i;
     struct find_t ft;
 
@@ -110,7 +110,7 @@ void IDetree(IFileNode * root)
 void IEntree(IFileNode * root)
 {
     IFileNode * childRoot;
-    char temp[50];
+    char temp[150];
 
     if(!root) return;
     //若root==NULL，直接返回
@@ -136,11 +136,14 @@ void IEntree(IFileNode * root)
         IAddChild(root,childRoot);
     //将root目录下的文件加到文件树上
 
-    while(childRoot&&IisFolder(childRoot))
+    while(childRoot)
     {
-        IGetAbsolutePath(childRoot,temp);
-        if(IPeek(childRoot,temp))
-            childRoot->flags|=8;
+        if(IisFolder(childRoot))
+        {
+            IGetAbsolutePath(childRoot,temp);
+            if(IPeek(childRoot,temp))
+                childRoot->flags|=8;
+        }
         childRoot=childRoot->next;
     }
     //更新子节点
@@ -196,7 +199,7 @@ void ISearch(char* path,char* pattern,FILE* fp)
 {
     int ret,i;
     struct find_t ft;
-    char temp[60];  //辅助字符串
+    char temp[150];  //辅助字符串
 
     Icd(path);
     ret=_dos_findfirst("*.*",0xf7,&ft);

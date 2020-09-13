@@ -103,8 +103,6 @@ void Ifolder(int x,int y)
 {
 	setfillstyle(1,202);
 	bar(x,y,x+8,y+11);
-	setcolor(198);
-	rectangle(x,y,x+8,y+11);
 	setcolor(206);
 	line(x,y,x+3,y+3);
 	line(x+3,y+3,x+3,y+15);

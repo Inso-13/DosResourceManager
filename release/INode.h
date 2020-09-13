@@ -11,9 +11,9 @@
 
 #include"IType.h"
 
-IBool IAddChild(IFileNode * parent,IFileNode * child);
-IBool IAddFileNode(IFileNode  *parent,char* name);
-IBool IDelFileNode(IFileNode  *parent,char* name);
+int IAddChild(IFileNode * parent,IFileNode * child);
+int IAddFileNode(IFileNode  *parent,char* name);
+int IDelFileNode(IFileNode  *parent,char* name);
 void IDelFilelist(IFileNode * root);
 void IAddFilelist(IFileNode * root);
 IFileNode * IGetFileNodeList(char * path);

@@ -23,6 +23,7 @@
 #include"IDebug.h"
 
 
+
 /*
     函数功能：在激活IEntree函数后，回收垃圾内存
     输入参数：X——辅助文件节点
@@ -31,10 +32,11 @@
 */
 void IAfterEntree(IFileNode* cur,IFileNode* X)
 {
+#ifdef LM
     IFileNodePointer ** curNode=(IFileNodePointer **)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
     IFileNodePointer * tempNode=(*curNode)->pre,*lastNode=tempNode->pre;
-    char path1[50],path2[50],path[50];
+    char path1[150],path2[150],path[150];
 
     IGetAbsolutePath((*curNode)->child,path1);
     if(nodeX&&nodeX->child)
@@ -64,6 +66,7 @@ void IAfterEntree(IFileNode* cur,IFileNode* X)
         }
         tempNode=lastNode;
     }
+#endif
 }
 
 /*
@@ -90,7 +93,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 
     newCurNode->child=node;
     newCurNode->next=NULL;
-    newCurNode->wait=3;
+    newCurNode->wait=10;
     newCurNode->pre=*curNode;
     (*curNode)->next=newCurNode;
     *curNode=newCurNode;
@@ -143,7 +146,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 void ISetXNull(IFileNode* node,IFileNode* X)
 {
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
-    char path1[50],path2[50];
+    char path1[150],path2[150];
 
     if(node->file.type[1]=='d'||node->file.type[1]=='\\')
         return;
@@ -165,7 +168,7 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
 {
     IFileNodePointer ** curNode=(IFileNodePointer **)cur;
     IFileNodePointer * tempNode,*nextNode,*lastNode;
-    char path1[50],path2[50];
+    char path1[150],path2[150];
 
     if(node->file.type[1]=='\\') return;
 
@@ -431,18 +434,23 @@ void ISearchActive(IFileNode* cur,IFileNode* null)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     FILE* fp=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+"); //覆盖的方式打开用于记录的文件
-    char temp[20],path[60];     //辅助字符串
+    char temp[20],path[150];     //辅助字符串
 
     IGetAbsolutePath(curNode->child,path);  //获得需要查找的路径
     strcpy(temp,"\0");
     IGetString(851,51,166,temp,1);  
     //得到查找的pattern
 
+    setcolor(144);
+    outtextxy(900,753,"Searching...");
+
     if(temp[0])
         ISearch(path,temp,fp);
     //激活查找函数
-
     fclose(fp);
+
+    setfillstyle(SOLID_FILL,255);
+    bar(900,753,950,765);
 }
 
 /*
@@ -453,17 +461,13 @@ void ISearchActive(IFileNode* cur,IFileNode* null)
 */
 void IexeActive(IFileNode* exe,IFileNode* null)
 {
-    // char temp[50];
+    char temp[150];
 
-    // setfillstyle(SOLID_FILL,0);
-    // bar(0,0,1024,768);
-    // //营造dos终端环境
+    strcpy(temp,"start ");
+    IGetAbsolutePath(exe,temp+6);
 
-    // IGetAbsolutePath(exe,temp);
-    // //得到可执行文件的绝对路径
-
-    // system(temp);
-    //系统调用，运行exe文件
+    system(temp);
+    //系统调用，借用编辑器打开文本文件
 }
 
 /*
@@ -474,14 +478,12 @@ void IexeActive(IFileNode* exe,IFileNode* null)
 */
 void ItxtActive(IFileNode* txt,IFileNode* null)
 {
-    // char temp[50];
+    char temp[150];
 
-    // strcpy(temp,"BC ");
-    // IGetAbsolutePath(txt,temp+3);
-    // closegraph();
-    // //关闭svga模式
+    strcpy(temp,"start ");
+    IGetAbsolutePath(txt,temp+6);
 
-    // system(temp);
+    system(temp);
     //系统调用，借用BC编辑器打开文本文件
 }
 

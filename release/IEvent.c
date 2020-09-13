@@ -60,7 +60,7 @@ void IEventStackPush(IEventStackNode * top,IEvent newEvent)
     输出参数：无
     返回值：正常返回1，事件栈高度不足n则返回0
 */
-IBool IEventStackPop(IEventStackNode * top,int n)
+int IEventStackPop(IEventStackNode * top,int n)
 {
     IEventStackNode *q=NULL;
     while(n--)      //出栈n次

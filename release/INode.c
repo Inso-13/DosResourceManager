@@ -23,7 +23,7 @@
     输出参数：无
     返回值：成功则返回1, 失败则返回0
 */
-IBool IAddChild(IFileNode * parent,IFileNode * child)
+int IAddChild(IFileNode * parent,IFileNode * child)
 {
     IFileNode * temp=NULL;
 
@@ -152,12 +152,12 @@ IFileNode *IGetFileNodeList(char * path)
     输出参数：无
     返回值：成功则返回1, 失败则返回0
 */
-IBool IAddFileNode(IFileNode  *parent,char* name)
+int IAddFileNode(IFileNode  *parent,char* name)
 {
     IFileNode * child=(IFileNode *)malloc(sizeof(IFileNode));
     int ret,i;
     struct find_t ft;
-    char temp[50];
+    char temp[150];
 
     if(child==NULL)
         IQuit();
@@ -203,11 +203,11 @@ IBool IAddFileNode(IFileNode  *parent,char* name)
     输出参数：无
     返回值：成功则返回1, 失败则返回0
 */
-IBool IDelFileNode(IFileNode *parent,char* name)
+int IDelFileNode(IFileNode *parent,char* name)
 {
     IFileNode * child=parent->child;
     int ret,i;
-    char temp[50];
+    char temp[150];
 
     IGetAbsolutePath(parent,temp);
     Icd(temp);
@@ -269,7 +269,7 @@ void IDelFilelist(IFileNode* root)
 void IAddFilelist(IFileNode* root)
 {
     IFileNode* childRoot;
-    char temp[50];
+    char temp[150];
 
     if(!root->child&&IisFolder(root))
     {
@@ -296,7 +296,7 @@ int IPeek(IFileNode* node,char* path)
 {
     int ret;
     struct find_t ft;
-    char temp[50];
+    char temp[150];
 
     if(!IisFolder(node)) return 0;
 

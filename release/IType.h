@@ -9,7 +9,8 @@
 #if !defined(__ITYPE_H)
 #define __ITYPE_H
 
-typedef enum IBool{false,true} IBool;   //伪布尔型变量，false=0，true=1
+// #define LM
+#define DB
 
 typedef struct IFile    //文件结构
 {

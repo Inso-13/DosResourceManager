@@ -8,6 +8,12 @@
 #include<STRING.H>
 #include"ISecret.h"
 
+/*
+    函数功能：将明文密码加密
+    输入参数：plain——明文密码
+    输出参数：cipher——密文密码
+    返回值：无
+*/
 void IEncrypt(char* plain,char* cipher)
 {
     int i,n;

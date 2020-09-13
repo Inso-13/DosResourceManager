@@ -23,7 +23,7 @@
 IFileNode * IFindNodeByPath(char * path,IFileNode * root)
 {
     IFileNode * tempNode;
-    char temp[50];
+    char temp[150];
 
     if(!root)
         return 0;
@@ -78,7 +78,7 @@ IFileNode * IFindNodeByName(char * name,IFileNode * root)
 */
 void Icd(char * path)
 {
-    char temp[80]="";
+    char temp[150]="";
 
     if(path[1]==':'&&getdisk()!=(path[0]-'A'))  //当前磁盘与目标不一致
     {
@@ -100,7 +100,7 @@ void Icd(char * path)
     输出参数：无
     返回值：是目录则返回1，不是目录则返回0
 */
-IBool IisFolder(IFileNode * node)
+int IisFolder(IFileNode * node)
 {
     return (node->file.type[0]=='0')||(node->file.type[0]=='1');
 }
@@ -111,9 +111,9 @@ IBool IisFolder(IFileNode * node)
     输出参数：无
     返回值：匹配则返回1，否则返回0
 */
-IBool IMatch(char* s,char* p)
+int IMatch(char* s,char* p)
 {
-    IBool flag;
+    int flag;
     char* src=s,*pattern=p;
 
     while(*src)
@@ -220,7 +220,7 @@ IFileNode * IDiskInit(int id)
                 continue;
             tempNode->file.date=33;
             tempNode->file.time=0;
-            tempNode->file.size=0;
+            tempNode->file.size=-1;
             tempNode->flags|=8;
             if(disk==2&&id==0)
                 strcpy(tempNode->file.type,"0ds");

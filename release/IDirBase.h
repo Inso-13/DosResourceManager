@@ -11,10 +11,10 @@
 
 #include"IType.h"
 
-IBool Icopy(IFileNode * inFile,IFileNode * outParent);
-IBool Irmf(IFileNode * fileNode);
-IBool Imkdir(IFileNode * pathNode,char* folderName);
-IBool Irmdir(IFileNode * node,int flag);
+int Icopy(IFileNode * inFile,IFileNode * outParent);
+int Irmf(IFileNode * fileNode);
+int Imkdir(IFileNode * pathNode,char* folderName);
+int Irmdir(IFileNode * node,int flag);
 void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);
 void IDelAll(IFileNode * oldChildChild);
 void Icpr(IFileNode * oldChild,IFileNode * newParent);

@@ -71,7 +71,7 @@ void IPlainView(FILE* fpHZ)
     输出参数：无
     返回值：纵坐标的偏移量
 */
-int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,int beginX,int beginY,char* page,char flag)
+int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,int beginX,int beginY,char* page,char flag,FILE* fp)
 {
     int increaceY=0,temp,n;
     char thisPage=1;
@@ -97,7 +97,7 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
             {
                 Ifolder(beginX+11,beginY-(*page-1)*600+4);
                 setcolor(0);
-                outtextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name);
+                Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fp);
                 ISetEvent(&tempEvent,0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22,8,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
                 IEventStackPush(top,tempEvent);
                 ISetEvent(&tempEvent,0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22,8,IEntreeActive,root,(IFileNode*)curNode,-1);
@@ -115,7 +115,7 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
                 else
                     Ifolder(beginX+11,beginY-(*page-1)*600+4);
                 setcolor(0);
-                outtextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name);
+                Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fp);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,2,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
                 IEventStackPush(top,tempEvent);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,2,IEntreeActive,root,(IFileNode*)curNode,-1);
@@ -137,7 +137,7 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
                 else
                     Ifolder(beginX+11,beginY-(*page-1)*600+4);
                 setcolor(0);
-                outtextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name);
+                Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fp);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,2,IDetreeActive,root,(IFileNode*)curNode,6);
                 IEventStackPush(top,tempEvent);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,2,ISetXNull,root,(IFileNode*)nodeX,-1);
@@ -150,13 +150,13 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
             increaceY+=24;
             if(root->child)
             {
-                increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,0);
+                increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,0,fp);
             }
         }
     }
     if(root->next)
     {
-        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,page,0);
+        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,page,0,fp);
     }
 
     if(flag)
@@ -199,7 +199,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     int i,y,numOfItem=0,numOfSelected=0;
     IFileNode* tempNode;
     IEvent tempEvent;
-    char temp[50];
+    char temp[150];
 
     settextstyle(0,0,0);
     if(fpHZ==NULL)
@@ -501,7 +501,7 @@ void IView2(char* page,FILE* fpHZ)
 {
 
     FILE* searched=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","r");
-    char tempStr[60];
+    char tempStr[150];
     char name[15];
     int y=120,i,n,j=0,numOfsearched=0;
 

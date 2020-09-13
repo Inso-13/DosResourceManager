@@ -102,7 +102,7 @@ void ILogin(char* name,char* password,IEventStackNode* top,int id,FILE* fpHZ)
 void ILoginConfirm(int* id,char* name,char* password)
 {
     FILE* fp=NULL;
-    char nameC[13],passwordC[13],passwordP[13],temp[50];
+    char nameC[13],passwordC[13],passwordP[13],temp[150];
     int i;
 
     fp=fopen("C:\\DOSRES\\ETC\\ADMIN.TXT","rb");

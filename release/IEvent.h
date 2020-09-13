@@ -13,7 +13,7 @@
 
 IEventStackNode * IInitEventStack(void);
 void IEventStackPush(IEventStackNode * top,IEvent newEvent);
-IBool IEventStackPop(IEventStackNode * top,int n);
+int IEventStackPop(IEventStackNode * top,int n);
 char IEventStackActive(IEventStackNode * top,int x,int y,int type);
 void IDelStack(IEventStackNode * top);
 

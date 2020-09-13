@@ -26,10 +26,10 @@
     输出参数：无
     返回值：复制成功返回1，失败则返回0
 */
-IBool Icopy(IFileNode * inFile,IFileNode * outParent)
+int Icopy(IFileNode * inFile,IFileNode * outParent)
 {
     FILE * fin,*fout;
-    char * buff,inPath[50],outPath[50],temp[50],i[2],name[18],ext[5];
+    char * buff,inPath[150],outPath[150],temp[150],i[2],name[18],ext[5];
     int ret,j;
 
     IGetAbsolutePath(inFile,inPath);
@@ -118,9 +118,9 @@ IBool Icopy(IFileNode * inFile,IFileNode * outParent)
     输出参数：无
     返回值：删除成功返回1，失败则返回0
 */
-IBool Irmf(IFileNode * fileNode)
+int Irmf(IFileNode * fileNode)
 {
-    char tempStr[50];   //辅助字符串
+    char tempStr[150];   //辅助字符串
 
     IGetAbsolutePath(fileNode,tempStr);
     remove(tempStr);    
@@ -135,9 +135,9 @@ IBool Irmf(IFileNode * fileNode)
     输出参数：无
     返回值：创建文件夹成功返回1，失败则返回0
 */
-IBool Imkdir(IFileNode * pathNode,char* folderName)    
+int Imkdir(IFileNode * pathNode,char* folderName)    
 {
-    char temp[80];     //辅助字符串
+    char temp[150];     //辅助字符串
     
     IGetAbsolutePath(pathNode,temp);
     strcat(temp,"\\");
@@ -157,9 +157,9 @@ IBool Imkdir(IFileNode * pathNode,char* folderName)
     输出参数：无
     返回值：删除文件夹成功返回1，失败则返回0
 */
-IBool Irmdir(IFileNode * node,int flag)
+int Irmdir(IFileNode * node,int flag)
 {
-    char temp[50];      //辅助字符串
+    char temp[150];      //辅助字符串
     
     if(node->child) 
         return Irmdir(node->child,0);
@@ -187,34 +187,27 @@ IBool Irmdir(IFileNode * node,int flag)
 */
 void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
 {
-    char temp[50];      //辅助字符串
-
-    if(IisFolder(oldChildChild))
+    while(oldChildChild)
     {
-        if(!oldChildChild->child)
-            IAddFilelist(oldChildChild);
-        Imkdir(newChild,oldChildChild->file.name);
-        if(oldChildChild->child)
-            ICopyAll(oldChildChild->child,newChild->child);
-    }
-    //如果是文件夹，递归复制
-    else
-    {
-        Icopy(oldChildChild,newChild);
-    }
-    //如果是文件，则简单复制
-
-    if(oldChildChild->next)
-    {
-        ICopyAll(oldChildChild->next,newChild);
+        if(IisFolder(oldChildChild))
+        {
+            if(!oldChildChild->child)
+                IAddFilelist(oldChildChild);
+            Imkdir(newChild,oldChildChild->file.name);
+            if(oldChildChild->child)
+            {
+                ICopyAll(oldChildChild->child,IFindNodeByName(oldChildChild->file.name,newChild));
+            }
+        }
+        //如果是文件夹，递归复制
+        else
+        {
+            Icopy(oldChildChild,newChild);  
+        }
+        //如果是文件，则简单复制
+        oldChildChild=oldChildChild->next;  
     }
     //递归复制兄弟节点
-
-    IGetAbsolutePath(newChild,temp);
-    
-    if(IPeek(newChild,temp))
-        newChild->flags|=8;
-    //更新文件节点的属性
 }
 
 /*
@@ -225,7 +218,7 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
 */
 void Icpr(IFileNode * oldChild,IFileNode * newParent)
 {
-    char temp[50];      //辅助字符串
+    char temp[150];      //辅助字符串
 
     IGetAbsolutePath(newParent,temp);
     strcat(temp,"\\");

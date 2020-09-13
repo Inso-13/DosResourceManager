@@ -14,7 +14,7 @@ void main()
     int lastMenuX,lastMenuY,lastMenu=0,menu=0;  //菜单相关变量
     int id,exit=0,i,j;  //其他整型变量
     char activeFlag=0,numOfSelected=0,page0=1,page1=1,page2=1,menuFlag=0,searching=0;   //标志变量
-    char name[13],password[13],temp[50];    //辅助字符串
+    char name[13],password[13],temp[150];    //辅助字符串
     void *view1Image=NULL;  //图形缓冲区
     FILE *fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb");    //文件指针
     IFileNode *root=NULL;        //文件根节点
@@ -27,9 +27,7 @@ void main()
     Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
-#ifdef DB
 	IMouseMath(mouseDraw);
-#endif
     IMouseSetLimit(1023,767);
     //鼠标初始化
 
@@ -80,7 +78,7 @@ void main()
     //文件节点初始化
 
     IPlainView(fpHZ);
-    IView0(root,&curNode,nodeX,top0,4,110,&page0,1);
+    IView0(root,&curNode,nodeX,top0,4,110,&page0,1,fpHZ);
     IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
     for(i=0;i<16;i++)
         for(j=0;j<16;j++)
@@ -198,7 +196,7 @@ void main()
             setfillstyle(SOLID_FILL,255);
             bar(0,110,238,740);
             IEventStackPop(top0,1000);
-            IView0(root,&curNode,nodeX,top0,4,110,&page0,1);
+            IView0(root,&curNode,nodeX,top0,4,110,&page0,1,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //更新0号窗口

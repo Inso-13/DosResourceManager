@@ -205,12 +205,18 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
 
+    setcolor(144);
+    outtextxy(900,753,"Pasting...");
+
     Icplr(nodeX->child,curNode->child);
     //复制文件节点
 
     if(nodeX->child->flags&1)
         Irmlr(nodeX->child);
     //如果是剪切，则删除源文件节点
+    
+    setfillstyle(SOLID_FILL,255);
+    bar(900,753,950,765);
 }
 
 /*

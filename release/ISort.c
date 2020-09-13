@@ -5,8 +5,8 @@
     说明：主要定义排序函数
 */
 
-
 #include<STRING.H>
+#include"IUtility.h"
 #include"INode.h"
 #include"ISort.h"
 
@@ -79,14 +79,26 @@ int ISortDateDown(IFileNode* node1,IFileNode* node2)
 */
 int ISortSizeUp(IFileNode* node1,IFileNode* node2)
 {
-    if(node1->file.size>0&&node2->file.size>0)
-        return node1->file.size-node2->file.size;
-    else if(node1->file.size<0&&node1->file.size<0)
-        return 0;
-    else if(node1->file.size<0)
+    if(IisFolder(node1))
+    {
+        if(IisFolder(node2))
+            return 0;
+        else 
+            return -1;
+    }
+    else if(IisFolder(node2))
         return 1;
-    else 
+    else if(node1->file.size<0)
+    {
+        if(node2->file.size<0)
+            return 0;
+        else 
+            return 1;
+    }
+    else if(node2->file.size<0)
         return -1;
+    else
+        return node1->file.size-node2->file.size;
 }
 
 /*
@@ -97,14 +109,26 @@ int ISortSizeUp(IFileNode* node1,IFileNode* node2)
 */
 int ISortSizeDown(IFileNode* node1,IFileNode* node2)
 {
-    if(node1->file.size>0&&node2->file.size>0)
-        return node2->file.size-node1->file.size;
-    else if(node1->file.size<0&&node1->file.size<0)
-        return 0;
-    else if(node1->file.size<0)
+    if(IisFolder(node1))
+    {
+        if(IisFolder(node2))
+            return 0;
+        else 
+            return 1;
+    }
+    else if(IisFolder(node2))
         return -1;
-    else 
+    else if(node1->file.size<0)
+    {
+        if(node2->file.size<0)
+            return 0;
+        else 
+            return -1;
+    }
+    else if(node2->file.size<0)
         return 1;
+    else
+        return node2->file.size-node1->file.size;
 }
 
 /*
