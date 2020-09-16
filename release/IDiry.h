@@ -11,7 +11,7 @@
 
 #include"IType.h"
 
-void IEntree(IFileNode * root);
+void IEntree(IFileNode * root,char flag);
 void IDetree(IFileNode * root);
 void Icplr(IFileNode * oldParent,IFileNode * newParent);
 void Irmlr(IFileNode * oldParent);

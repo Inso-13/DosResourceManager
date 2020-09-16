@@ -204,6 +204,28 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
+    IFileNode* tempNode=NULL;
+    char temp1[150],temp2[150];
+
+    IGetAbsolutePath(curNode->child,temp1);
+    IGetAbsolutePath(nodeX->child,temp2);
+    
+    while(tempNode)
+    {
+        if(tempNode->flags&2 && IisFolder(tempNode))
+        {
+            if(IisChild(temp1,temp2))
+            {
+                setcolor(249);
+                outtextxy(400+DF,752+DF,"Failed");
+                IWarningBeep();
+                delay(1500);
+                return;
+            }
+            break;
+        }
+        tempNode=tempNode->next;
+    }
 
     setcolor(144);
     outtextxy(900+DF,753+DF,"Pasting...");

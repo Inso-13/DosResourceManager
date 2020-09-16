@@ -13,7 +13,9 @@
 #include<DIR.H>
 #include<IO.H>
 #include<ALLOC.H>
+#include<GRAPHICS.H>
 #include"IUtility.h"
+#include"ISound.h"
 #include"INode.h"
 #include"IDirBase.h"
 
@@ -181,7 +183,7 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
         if(IisFolder(oldChildChild))
         {
             if(!oldChildChild->child)
-                IEntree(oldChildChild);
+                IEntree(oldChildChild,0);
             Imkdir(newChild,oldChildChild->file.name);
             if(oldChildChild->child)
             {
@@ -209,16 +211,27 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
 void Icpr(IFileNode * oldChild,IFileNode * newParent)
 {
     char temp[150];      //辅助字符串
-
-    IGetAbsolutePath(newParent,temp);
-    strcat(temp,"\\");
+    IFileNode *tempNode=NULL;
 
     if(IisFolder(oldChild))
     {
-        Imkdir(newParent,oldChild->file.name);
-        IEntree(oldChild);
+        IGetAbsolutePath(newParent,temp);
+        strcat(temp,"\\");
         strcat(temp,oldChild->file.name);
-        ICopyAll(oldChild->child,IFindNodeByPath(temp,newParent));
+
+        if(searchpath(temp))
+        {
+            setcolor(249);
+            outtextxy(400+DF,752+DF,"Failed");
+            IWarningBeep();
+            delay(1500);
+            return;
+        }
+        Imkdir(newParent,oldChild->file.name);
+        IEntree(oldChild,0);
+        tempNode=IFindNodeByPath(temp,newParent);
+        tempNode->flags|=16;
+        ICopyAll(oldChild->child,tempNode);
         IDetree(oldChild);
     }
     //如果是文件夹
@@ -243,7 +256,7 @@ void IDelAll(IFileNode * oldChildChild)
         if(IisFolder(oldChildChild))
         {
             if(!oldChildChild->child)
-                IEntree(oldChildChild);
+                IEntree(oldChildChild,0);
             IDelAll(oldChildChild->child);
             Irmdir(oldChildChild);
         }
@@ -265,7 +278,7 @@ void Irmr(IFileNode * oldChild)
 {
     if(IisFolder(oldChild))
     {
-        IEntree(oldChild);
+        IEntree(oldChild,0);
         if(oldChild->child)
             IDelAll(oldChild->child);
     }

@@ -107,7 +107,7 @@ void IDetree(IFileNode * root)
     输出参数：无
     返回值：无
 */
-void IEntree(IFileNode * root)
+void IEntree(IFileNode * root,char flag)
 {
     IFileNode * childRoot;
     char temp[150];
@@ -122,7 +122,15 @@ void IEntree(IFileNode * root)
     //若root是被保护的磁盘，直接返回
 
     if(root->file.type[0]=='1'||root->child)
-        IDetree(root);
+    {
+        if(flag)
+        {
+            IDetree(root);
+            root->flags&=15;
+        }
+        else 
+            return;
+    }
     //若root已被打开，重新打开
     
     root->file.type[0]='1';

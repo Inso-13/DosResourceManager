@@ -19,7 +19,7 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);
 void IDelAll(IFileNode * oldChildChild);
 void Icpr(IFileNode * oldChild,IFileNode * newParent);
 void Irmr(IFileNode * oldChild);
-void IEntree(IFileNode * root);
+void IEntree(IFileNode * root,char flag);
 void IDetree(IFileNode * root);
 
 #endif

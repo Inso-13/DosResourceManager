@@ -19,6 +19,7 @@
 #include"ISort.h"
 #include"IInit.h"
 #include"IHanZi.h"
+#include"IQuit.h"
 #include"IActive.h"
 #include"IDebug.h"
 
@@ -81,6 +82,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 	IFileNodePointer * newCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));     //新节点
     IFileNodePointer * tempNode=NULL,*nextNode=NULL;
 
+    IDebugN(5);
     tempNode=(*curNode)->next;
     while(tempNode)
     {
@@ -99,7 +101,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
     *curNode=newCurNode;
     //新节点初始化
 
-    IEntree(node);
+    IEntree(node,node->flags&16);
     //激活IEntree函数
 
     tempNode=(*curNode)->pre;
@@ -148,7 +150,7 @@ void ISetXNull(IFileNode* node,IFileNode* X)
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
     char path1[150],path2[150];
 
-    if(node->file.type[1]=='d'||node->file.type[1]=='\\')
+    if(node->file.type[1]=='\\')
         return;
 
     IGetAbsolutePath(node,path1);
@@ -463,11 +465,11 @@ void IexeActive(IFileNode* exe,IFileNode* null)
 {
     char temp[150];
 
-    strcpy(temp,"start ");
-    IGetAbsolutePath(exe,temp+6);
+    IGetAbsolutePath(exe,temp);
 
     system(temp);
     //系统调用，借用编辑器打开文本文件
+    IQuit();
 }
 
 /*
@@ -480,8 +482,7 @@ void ItxtActive(IFileNode* txt,IFileNode* null)
 {
     char temp[150];
 
-    strcpy(temp,"start ");
-    IGetAbsolutePath(txt,temp+6);
+    IGetAbsolutePath(txt,temp);
 
     system(temp);
     //系统调用，借用BC编辑器打开文本文件
