@@ -9,6 +9,6 @@
 #ifndef __IDEBUG_H
 #define __IDEBUG_H
 
-void IDebug(int n);
+void IDebugN(int n);
 
 #endif

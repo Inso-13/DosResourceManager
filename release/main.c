@@ -28,7 +28,7 @@ void main()
     view1Image=malloc(imagesize(0,0,95,160));
     //图形界面初始化
 	IMouseMath(mouseDraw);
-    IMouseSetLimit(1023,767);
+    IMouseSetLimit(1023+2*DF,767+2*DF);
     //鼠标初始化
 
 #ifdef DB
@@ -50,7 +50,7 @@ void main()
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             id=0;
         }
-        if(kbhit()&&getch()==13||(mouseStatus&2)&&mouseX>370&&mouseX<470&&mouseY>550&&mouseY<577)
+        if(kbhit()&&getch()==13||(mouseStatus&2)&&mouseX>370+DF&&mouseX<470+DF&&mouseY>550+DF&&mouseY<577+DF)
         {
             ILoginConfirm(&id,name,password);
             if(id==1)
@@ -58,7 +58,7 @@ void main()
             id=-1;
             IWarningBeep();   
         }
-        else if((mouseStatus&2)&&mouseX>370+190&&mouseX<470+190&&mouseY>550&&mouseY<550+27)
+        else if((mouseStatus&2)&&mouseX>370+190+DF&&mouseX<470+190+DF&&mouseY>550+DF&&mouseY<550+27+DF)
         {
             id=0;
             break;
@@ -78,7 +78,7 @@ void main()
     //文件节点初始化
 
     IPlainView(fpHZ);
-    IView0(root,&curNode,nodeX,top0,4,110,&page0,1,fpHZ);
+    IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1);
     IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
     for(i=0;i<16;i++)
         for(j=0;j<16;j++)
@@ -87,19 +87,19 @@ void main()
 
     while(!exit)
     {   
-        if(coreleft()<1000)
-        {
-            setcolor(144);
-            Iouttextxy(500,300,"内存不足，将在3秒后退出",fpHZ);
-            IWarningBeep();
-            delay(3000);
-            IQuit();
-        }
+        // if(coreleft()<1000)
+        // {
+        //     setcolor(144);
+        //     Iouttextxy(500+DF,300+DF,"内存不足，将在3秒后退出",fpHZ);
+        //     IWarningBeep();
+        //     delay(3000);
+        //     IQuit();
+        // }
 
 #ifdef DB
         setcolor(0);
         sprintf(temp,"left memory:%u Byte",coreleft());
-        outtextxy(500,753,temp);
+        outtextxy(500+DF,753+DF,temp);
 #endif
 
         mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);
@@ -109,11 +109,11 @@ void main()
         if(!activeFlag)
             activeFlag=IEventStackActive(top1,mouseX,mouseY,mouseStatus);
         //改变1号窗口
-        if((mouseStatus&2)&&mouseX>1004&&mouseX<1016&&mouseY>8&&mouseY<16)
+        if((mouseStatus&2)&&mouseX>1004+DF&&mouseX<1016+DF&&mouseY>8+DF&&mouseY<16+DF)
             exit=1;
         //点击退出按钮
 
-        if((menuFlag&1)||((mouseStatus&4)&&mouseX>240&&mouseX<1024&&mouseY>88&&mouseY<744))
+        if((menuFlag&1)||((mouseStatus&4)&&mouseX>240+DF&&mouseX<1024+DF&&mouseY>88+DF&&mouseY<744+DF))
             menu=1;
         else if(mouseStatus&2)
             menu=0;
@@ -134,7 +134,7 @@ void main()
         }
         //是否按下Ctrl
 
-        if((mouseStatus&2)&&mouseX>992&&mouseX<1001&&mouseY>720&&mouseY<731)
+        if((mouseStatus&2)&&mouseX>992+DF&&mouseX<1001+DF&&mouseY>720+DF&&mouseY<731+DF)
         {
             if(!searching)
             {
@@ -147,7 +147,7 @@ void main()
                 activeFlag|=8;
             }
         }
-        else if((mouseStatus&2)&&mouseX>928&&mouseX<586*1.6&&mouseY>720&&mouseY<731)
+        else if((mouseStatus&2)&&mouseX>928+DF&&mouseX<586*1.6+DF&&mouseY>720+DF&&mouseY<731+DF)
         {
             if(!searching)
             {
@@ -166,7 +166,7 @@ void main()
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenuX=mouseX;
             lastMenuY=mouseY;
-            getimage((mouseX>928)?928:mouseX,(mouseY>607)?607:mouseY,((mouseX>928)?928:mouseX)+95,((mouseY>607)?607:mouseY)+160,view1Image);
+            getimage((mouseX>928+DF)?(928+DF):mouseX,(mouseY>607+DF)?(607+DF):mouseY,((mouseX>928+DF)?(928+DF):mouseX)+95,((mouseY>607+DF)?(607+DF):mouseY)+160,view1Image);
             IMenu(mouseX,mouseY,numOfSelected,top1,curNode,nodeX,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             if(!(menuFlag&1))
@@ -185,7 +185,7 @@ void main()
         {
 
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
-            putimage((lastMenuX>928)?928:lastMenuX,(lastMenuY>607)?607:lastMenuY,view1Image,COPY_PUT);
+            putimage((lastMenuX>928+DF)?(928+DF):lastMenuX,(lastMenuY>607+DF)?(607+DF):lastMenuY,view1Image,COPY_PUT);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenu=0;
         }   //关闭菜单窗口
@@ -194,9 +194,9 @@ void main()
         {
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             setfillstyle(SOLID_FILL,255);
-            bar(0,110,238,740);
+            bar(0+DF,110+DF,238+DF,740+DF);
             IEventStackPop(top0,1000);
-            IView0(root,&curNode,nodeX,top0,4,110,&page0,1,fpHZ);
+            IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //更新0号窗口
@@ -206,9 +206,9 @@ void main()
             page2=1;
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             setfillstyle(SOLID_FILL,255);
-            bar(248,90,1022,740);
-            bar(192,52,800,76);
-            bar(0,745,992,766);
+            bar(248+DF,90+DF,1022+DF,740+DF);
+            bar(192+DF,52+DF,800+DF,76+DF);
+            bar(0+DF,745+DF,992+DF,766+DF);
             IEventStackPop(top1,1000);
             numOfSelected=IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
@@ -222,12 +222,12 @@ void main()
                     mouseSave[i][j]=255;
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             setcolor(7);
-            rectangle(832,51,1017,78);
-            line(851,51,851,78);
+            rectangle(832+DF,51+DF,1017+DF,78+DF);
+            line(851+DF,51+DF,851+DF,78+DF);
             setfillstyle(SOLID_FILL,255);
-            bar(248,90,1022,740);
-            bar(192,52,800,76);
-            bar(0,745,992,766);
+            bar(248+DF,90+DF,1022+DF,740+DF);
+            bar(192+DF,52+DF,800+DF,76+DF);
+            bar(0+DF,745+DF,992+DF,766+DF);
             IEventStackPop(top1,1000);
             IView2(&page2,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);

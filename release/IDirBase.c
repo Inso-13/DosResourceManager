@@ -107,7 +107,7 @@ int Icopy(IFileNode * inFile,IFileNode * outParent)
     free(buff);
     //关闭文件，释放缓冲区
 
-    IAddFileNode(outParent,name);  
+    // IAddFileNode(outParent,name);  
     //添加新文件节点
     return 1;
 }
@@ -157,20 +157,9 @@ int Imkdir(IFileNode * pathNode,char* folderName)
     输出参数：无
     返回值：删除文件夹成功返回1，失败则返回0
 */
-int Irmdir(IFileNode * node,int flag)
+int Irmdir(IFileNode * node)
 {
     char temp[150];      //辅助字符串
-    
-    if(node->child) 
-        return Irmdir(node->child,0);
-    //递归删除子文件夹
-
-    if(!flag)
-    {
-        if(node->next)
-            return Irmdir(node->next,0);
-    }
-    //flag==0, 删除兄弟文件夹
 
     IGetAbsolutePath(node,temp);
     IDelFileNode(IFindParent(node),node->file.name);
@@ -192,11 +181,12 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
         if(IisFolder(oldChildChild))
         {
             if(!oldChildChild->child)
-                IAddFilelist(oldChildChild);
+                IEntree(oldChildChild);
             Imkdir(newChild,oldChildChild->file.name);
             if(oldChildChild->child)
             {
                 ICopyAll(oldChildChild->child,IFindNodeByName(oldChildChild->file.name,newChild));
+                IDetree(oldChildChild);
             }
         }
         //如果是文件夹，递归复制
@@ -229,6 +219,7 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent)
         IEntree(oldChild);
         strcat(temp,oldChild->file.name);
         ICopyAll(oldChild->child,IFindNodeByPath(temp,newParent));
+        IDetree(oldChild);
     }
     //如果是文件夹
     else
@@ -244,26 +235,24 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent)
 */
 void IDelAll(IFileNode * oldChildChild)
 {
-    IFileNode *tempNode=oldChildChild,*nextNode=oldChildChild->next;
+    IFileNode *nextNode=NULL;
 
-    if(IisFolder(oldChildChild))
+    while(oldChildChild)
     {
-        IEntree(oldChildChild);
-        if(oldChildChild->child)
+        nextNode=oldChildChild->next;
+        if(IisFolder(oldChildChild))
+        {
+            if(!oldChildChild->child)
+                IEntree(oldChildChild);
             IDelAll(oldChildChild->child);
+            Irmdir(oldChildChild);
+        }
+        else
+        {
+            Irmf(oldChildChild);
+        }
+        oldChildChild=nextNode;
     }
-    else
-    {
-        Irmf(oldChildChild);
-    }
-
-    if(nextNode)
-    {
-        tempNode=nextNode;
-        nextNode=nextNode->next;
-        IDelAll(tempNode);
-    }
-    //递归删除兄弟节点
 }
 
 /*
@@ -283,7 +272,4 @@ void Irmr(IFileNode * oldChild)
     else
         Irmf(oldChild);
     //删除文件夹中所有的文件
-
-    while(Irmdir(oldChild,1));
-    //删除剩下的所有空文件夹
 }

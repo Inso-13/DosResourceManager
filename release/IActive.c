@@ -438,11 +438,11 @@ void ISearchActive(IFileNode* cur,IFileNode* null)
 
     IGetAbsolutePath(curNode->child,path);  //获得需要查找的路径
     strcpy(temp,"\0");
-    IGetString(851,51,166,temp,1);  
+    IGetString(851+DF,51+DF,166,temp,1);  
     //得到查找的pattern
 
     setcolor(144);
-    outtextxy(900,753,"Searching...");
+    outtextxy(900+DF,753+DF,"Searching...");
 
     if(temp[0])
         ISearch(path,temp,fp);
@@ -450,7 +450,7 @@ void ISearchActive(IFileNode* cur,IFileNode* null)
     fclose(fp);
 
     setfillstyle(SOLID_FILL,255);
-    bar(900,753,950,765);
+    bar(900+DF,753+DF,950+DF,765+DF);
 }
 
 /*
@@ -526,7 +526,7 @@ void IGetName(IFileNode* nam,IFileNode* null)
 {
     char* name =(char*)nam;
 
-    IGetString(440,440,220,name,2);
+    IGetString(440+DF,440+DF,220,name,2);
     //获取用户名
 }
 
@@ -540,7 +540,7 @@ void IGetPassword(IFileNode* pass,IFileNode* null)
 {
     char* password=(char*)pass;
 
-    IGetString(440,490,220,password,3);
+    IGetString(440+DF,490+DF,220,password,3);
     //获取密码
 }
 

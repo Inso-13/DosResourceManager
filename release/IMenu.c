@@ -36,8 +36,8 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     int (*lambda[8])(IFileNode*,IFileNode*)={ISortDateUp,ISortDateDown,ISortSizeUp,ISortSizeDown,ISortNameUp,ISortNameDown,ISortTypeUp,ISortTypeDown};  
     //排序函数指针数组
 
-    if(mouseX>928) mouseX=928;
-    if(mouseY>607) mouseY=607;
+    if(mouseX>928+DF) mouseX=928+DF;
+    if(mouseY>607+DF) mouseY=607+DF;
     IDrawMenu(mouseX,mouseY,numOfSelected,curNode,nodeX,*menuFlag,fpHZ);
     //画菜单
 
@@ -206,7 +206,7 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
 
     setcolor(144);
-    outtextxy(900,753,"Pasting...");
+    outtextxy(900+DF,753+DF,"Pasting...");
 
     Icplr(nodeX->child,curNode->child);
     //复制文件节点
@@ -216,7 +216,7 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
     //如果是剪切，则删除源文件节点
     
     setfillstyle(SOLID_FILL,255);
-    bar(900,753,950,765);
+    bar(900+DF,753+DF,950+DF,765+DF);
 }
 
 /*
@@ -233,8 +233,13 @@ void ISetDelete(IFileNode* cur,IFileNode* X)
     nodeX->child=NULL;
     //辅助节点置零
 
+    setcolor(144);
+    outtextxy(900+DF,753+DF,"Deleting...");
+
     Irmlr(curNode->child);
     //激活删除函数
+    setfillstyle(SOLID_FILL,255);
+    bar(900+DF,753+DF,950+DF,765+DF);
 }
 
 /*
@@ -272,7 +277,7 @@ void ISetRename(IFileNode* cur,IFileNode* null)
     //找到被选中的文件节点
     
     strcpy(temp,tempNode->file.name);
-    IGetString(254,110+20*i,150,temp,0);
+    IGetString(254+DF,110+DF+20*i,150,temp,0);
     //获取新文件名
 
     if(temp[0])
@@ -300,7 +305,7 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
     if(!i)
     {
         setfillstyle(SOLID_FILL,255);
-        bar(500,200,1000,300);
+        bar(500+DF,200+DF,1000+DF,300+DF);
     }
     else if(!(i%30)) 
         i=30;
@@ -308,14 +313,14 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
         i=i%30;
     //找到被选中的文件节点
 
-    IGetString(254,110+20*i,150,temp,4);
+    IGetString(254+DF,110+20*i+DF,150,temp,4);
     //获取新文件名
 
     if(temp[0])
         if(!Inew(curNode->child,temp))
         {
             setcolor(249);
-            outtextxy(400,752,"Failed");
+            outtextxy(400+DF,752+DF,"Failed");
             IWarningBeep();
             delay(1500);
         }
@@ -343,7 +348,7 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
     if(!i)
     {
         setfillstyle(SOLID_FILL,255);
-        bar(500,200,1000,300);
+        bar(500+DF,200+DF,1000+DF,300+DF);
     }
     else if(!(i%30)) 
         i=30;
@@ -351,14 +356,14 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
         i=i%30;
     //找到被选中的文件节点
 
-    IGetString(254,110+20*i,150,temp,4);
+    IGetString(254+DF,110+20*i+DF,150,temp,4);
     //获取新文件名
 
     if(temp[0])
         if(!Imkdir(curNode->child,temp))
         {
             setcolor(249);
-            outtextxy(400,752,"Failed");
+            outtextxy(400+DF,752+DF,"Failed");
             IWarningBeep();
             delay(1500);
         }

@@ -15,11 +15,26 @@
     输出参数：无
     返回值：无
 */
-void IDebug(int n)
+void IDebugN(int n)
 {
     static int count;
     
     if(++count==n)
+    {
+        //断点区
+        delay(10);
+    }
+}
+
+/*
+    函数功能：当前代码执行时, 如果给定条件为真则进入调试模式
+    输入参数：boolean——需要判断的条件
+    输出参数：无
+    返回值：无
+*/
+void IDebugTrue(int boolean)
+{
+    if(boolean)
     {
         //断点区
         delay(10);

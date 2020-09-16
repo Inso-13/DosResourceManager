@@ -39,30 +39,30 @@ void IPlainView(FILE* fpHZ)
     settextstyle(1,0,2);
 
     setfillstyle(SOLID_FILL,255);
-    bar(0,0,1024,768);
+    bar(0+DF,0+DF,1024+DF,768+DF);
     setfillstyle(SOLID_FILL,84);
-    bar(0,0,1024,22);
+    bar(0+DF,0+DF,1024+DF,22+DF);
     setcolor(0);
-    Iouttextxy(10,5,"仿Windows资源管理器",fpHZ);
+    Iouttextxy(10+DF,5+DF,"仿Windows资源管理器",fpHZ);
 
     setcolor(7);
-    line(0,44,1024,44);
-    line(0,45,1024,45);
-    IPointerDown(1000,32);
-    rectangle(152,51,824,78);
-    line(803,52,803,76);
-    rectangle(832,51,1017,78);
-    line(851,51,851,78);
-    line(0,84,1024,84);
-    line(0,85,1024,85);
-    IPointerRight(172,62);
-    IRefresh(814,64);
-    IMagnifier(841,61);
-    IExit(1004,8);
+    line(0+DF,44+DF,1024+DF,44+DF);
+    line(0+DF,45+DF,1024+DF,45+DF);
+    IPointerDown(1000+DF,32+DF);
+    rectangle(152+DF,51+DF,824+DF,78+DF);
+    line(803+DF,52+DF,803+DF,76+DF);
+    rectangle(832+DF,51+DF,1017+DF,78+DF);
+    line(851+DF,51+DF,851+DF,78+DF);
+    line(0+DF,84+DF,1024+DF,84+DF);
+    line(0+DF,85+DF,1024+DF,85+DF);
+    IPointerRight(172+DF,62+DF);
+    IRefresh(814+DF,64+DF);
+    IMagnifier(841+DF,61+DF);
+    IExit(1004+DF,8+DF);
 
     setcolor(7);
-    line(240,88,240,742);
-    line(0,744,1024,744);
+    line(240+DF,88+DF,240+DF,742+DF);
+    line(0+DF,744+DF,1024+DF,744+DF);
 }
 
 /*
@@ -71,7 +71,7 @@ void IPlainView(FILE* fpHZ)
     输出参数：无
     返回值：纵坐标的偏移量
 */
-int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,int beginX,int beginY,char* page,char flag,FILE* fp)
+int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,int beginX,int beginY,char* page,char flag)
 {
     int increaceY=0,temp,n;
     char thisPage=1;
@@ -80,13 +80,13 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
 
     if(!root) return 0;         
 
-    if(beginY<110+600*(*page-1)||beginY>110+600*(*page))
+    if(beginY<110+DF+600*(*page-1)||beginY>110+DF+600*(*page))
         thisPage=0;
 
     if(thisPage&&(*curNode)->child==root)
     {
         setfillstyle(SOLID_FILL,139);
-        bar(0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22);
+        bar(0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22);
     }
 
     if(IisFolder(root))
@@ -97,10 +97,10 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
             {
                 Ifolder(beginX+11,beginY-(*page-1)*600+4);
                 setcolor(0);
-                Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fp);
-                ISetEvent(&tempEvent,0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22,8,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
+                outtextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,8,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
                 IEventStackPush(top,tempEvent);
-                ISetEvent(&tempEvent,0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22,8,IEntreeActive,root,(IFileNode*)curNode,-1);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,8,IEntreeActive,root,(IFileNode*)curNode,-1);
                 IEventStackPush(top,tempEvent);
             }
             increaceY+=24;
@@ -115,14 +115,14 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
                 else
                     Ifolder(beginX+11,beginY-(*page-1)*600+4);
                 setcolor(0);
-                Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fp);
+                outtextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,2,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
                 IEventStackPush(top,tempEvent);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,2,IEntreeActive,root,(IFileNode*)curNode,-1);
                 IEventStackPush(top,tempEvent);
-                ISetEvent(&tempEvent,0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22,8,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,8,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
                 IEventStackPush(top,tempEvent);
-                ISetEvent(&tempEvent,0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22,8,IEntreeActive,root,(IFileNode*)curNode,-1);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,8,IEntreeActive,root,(IFileNode*)curNode,-1);
                 IEventStackPush(top,tempEvent);
             }
             increaceY+=24;
@@ -131,57 +131,57 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
         {
             if(thisPage)
             {
-                IPointerDown(beginX,beginY+9);
+                IPointerDown(beginX,beginY-(*page-1)*600+9);
                 if(root->file.type[1]=='d'||root->file.type[1]=='\\')
                     Idisk(beginX+11,beginY-(*page-1)*600+4);
                 else
                     Ifolder(beginX+11,beginY-(*page-1)*600+4);
                 setcolor(0);
-                Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fp);
+                outtextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,2,IDetreeActive,root,(IFileNode*)curNode,6);
                 IEventStackPush(top,tempEvent);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,2,ISetXNull,root,(IFileNode*)nodeX,-1);
                 IEventStackPush(top,tempEvent);
-                ISetEvent(&tempEvent,0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22,8,IDetreeActive,root,(IFileNode*)curNode,6);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,8,IDetreeActive,root,(IFileNode*)curNode,6);
                 IEventStackPush(top,tempEvent);
-                ISetEvent(&tempEvent,0,beginY-(*page-1)*600,238,beginY-(*page-1)*600+22,8,ISetXNull,root,(IFileNode*)nodeX,-1);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,8,ISetXNull,root,(IFileNode*)nodeX,-1);
                 IEventStackPush(top,tempEvent);
             }
             increaceY+=24;
             if(root->child)
             {
-                increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,0,fp);
+                increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,0);
             }
         }
     }
     if(root->next)
     {
-        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,page,0,fp);
+        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,page,0);
     }
 
     if(flag)
     {
         if(*page>1)
         {
-            ISetEvent(&tempEvent,150,720,168,738,2,ILastPage,(IFileNode*)page,NULL,2);
+            ISetEvent(&tempEvent,150+DF,720+DF,168+DF,738+DF,2,ILastPage,(IFileNode*)page,NULL,2);
             IEventStackPush(top,tempEvent);
             setcolor(0);
         }
         else
             setcolor(LIGHTGRAY);
-        IGoLeft(150,720);
+        IGoLeft(150+DF,720+DF);
         if(*page<=((increaceY-24)/600))
         {
-            ISetEvent(&tempEvent,210,720,228,738,2,INextPage,(IFileNode*)page,NULL,2);
+            ISetEvent(&tempEvent,210+DF,720+DF,228+DF,738+DF,2,INextPage,(IFileNode*)page,NULL,2);
             IEventStackPush(top,tempEvent);
             setcolor(0);
         }
         else
             setcolor(LIGHTGRAY);
-        IGoRight(210,720);
+        IGoRight(210+DF,720+DF);
         sprintf(tempStr,"%d",*page);
         setcolor(0);
-        outtextxy(182,722,tempStr);
+        outtextxy(182+DF,722+DF,tempStr);
     }
     //只画一次左右箭头
     return increaceY;
@@ -211,80 +211,80 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
 
     tempNode=(*curNode)->child;
     IGetAbsolutePath(tempNode,temp);
-    outtextxy(192,61,temp);
+    outtextxy(192+DF,61+DF,temp);
     //路径栏的显示
 
-    ISetEvent(&tempEvent,803,51,824,78,2,INOP,NULL,NULL,6);
+    ISetEvent(&tempEvent,803+DF,51+DF,824+DF,78+DF,2,INOP,NULL,NULL,6);
     IEventStackPush(top,tempEvent);
     //刷新功能
 
     if(IFindParent((*curNode)->child))
     {
         setcolor(0);
-        ISetEvent(&tempEvent,108,57,120,76,2,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
+        ISetEvent(&tempEvent,108+DF,57+DF,120+DF,76+DF,2,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,108,57,120,76,2,IEntreeActive,IFindParent((*curNode)->child),(IFileNode*)curNode,-1);
+        ISetEvent(&tempEvent,108+DF,57+DF,120+DF,76+DF,2,IEntreeActive,IFindParent((*curNode)->child),(IFileNode*)curNode,-1);
         IEventStackPush(top,tempEvent);
     }
     else
         setcolor(LIGHTGRAY);
-    IGoUp(108,57);
+    IGoUp(108+DF,57+DF);
     //返回上一级功能
 
     if((*curNode)->pre&&(*curNode)->pre->child)
     {
         setcolor(0);
-        ISetEvent(&tempEvent,25,59,40,76,2,IGoLeftActive,(IFileNode*)curNode,NULL,6);
+        ISetEvent(&tempEvent,25+DF,59+DF,40+DF,76+DF,2,IGoLeftActive,(IFileNode*)curNode,NULL,6);
         IEventStackPush(top,tempEvent);
     }
     else
         setcolor(LIGHTGRAY);
-    IGoLeft(25,60);
+    IGoLeft(25+DF,60+DF);
     //返回上一目录功能
 
     if((*curNode)->next&&(*curNode)->next->child)
     {
         setcolor(0);
-        ISetEvent(&tempEvent,62,59,92,76,2,IGoRightActive,(IFileNode*)curNode,NULL,6);
+        ISetEvent(&tempEvent,62+DF,59+DF,92+DF,76+DF,2,IGoRightActive,(IFileNode*)curNode,NULL,6);
         IEventStackPush(top,tempEvent);
     }
     else
         setcolor(LIGHTGRAY);
-    IGoRight(62,60);
+    IGoRight(62+DF,60+DF);
     //返回下一目录功能
         
     setcolor(0);
     setfillstyle(SOLID_FILL,255);
-    bar(853,52,1016,77);
+    bar(853+DF,52+DF,1016+DF,77+DF);
     if(!tempNode->child)
     {
-        Iouttextxy(853,61,"无内容",fpHZ);
+        Iouttextxy(853+DF,61+DF,"无内容",fpHZ);
         if(!strcmp(tempNode->file.type,"0ds"))
-            Iouttextxy(560,240,"仅管理员可见",fpHZ);
+            Iouttextxy(560+DF,240+DF,"仅管理员可见",fpHZ);
         else
-            Iouttextxy(530,240,"未打开文件夹或未检索到内容",fpHZ);
+            Iouttextxy(530+DF,240+DF,"未打开文件夹或未检索到内容",fpHZ);
         return 0;
     }
     else if(tempNode->file.type[1]=='\\')
-        Iouttextxy(853,61,"根目录无法搜索文件",fpHZ);
+        Iouttextxy(853+DF,61+DF,"根目录无法搜索文件",fpHZ);
     else
     {
-        Iouttextxy(853,61,"在本文件夹中搜索",fpHZ);
-        ISetEvent(&tempEvent,853,52,1016,77,2,ISearchActive,(IFileNode*)(*curNode),NULL,8);
+        Iouttextxy(853+DF,61+DF,"在本文件夹中搜索",fpHZ);
+        ISetEvent(&tempEvent,853+DF,52+DF,1016+DF,77+DF,2,ISearchActive,(IFileNode*)(*curNode),NULL,8);
         IEventStackPush(top,tempEvent);
     }
     //搜索栏显示
     
     setcolor(50);
-    IPutsHZ16(254,94,"文件名",fpHZ);
-    IPutsHZ16(430,94,"修改日期",fpHZ);
-    IPutsHZ16(686,94,"类型",fpHZ);
-    IPutsHZ16(830,94,"大小",fpHZ);
+    IPutsHZ16(254+DF,94+DF,"文件名",fpHZ);
+    IPutsHZ16(430+DF,94+DF,"修改日期",fpHZ);
+    IPutsHZ16(686+DF,94+DF,"类型",fpHZ);
+    IPutsHZ16(830+DF,94+DF,"大小",fpHZ);
     setcolor(247);
-    line(424,88,424,112);
-    line(680,88,680,112);
-    line(824,88,824,112);
-    line(936,88,936,112);
+    line(424+DF,88+DF,424+DF,112+DF);
+    line(680+DF,88+DF,680+DF,112+DF);
+    line(824+DF,88+DF,824+DF,112+DF);
+    line(936+DF,88+DF,936+DF,112+DF);
     setcolor(0);
     //文件详细信息的表头
 
@@ -310,16 +310,16 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         tempNode=tempNode->next;
     //跳转至当前页
 
-    y=116;
+    y=116+DF;
     while(tempNode)     //对每一个当前页码的文件
     {
         IView1DrawIcon(tempNode,y);
         //根据文件类型，画图标
 
         setcolor(0);
-        Iouttextxy(256+20,y+6,tempNode->file.name,fpHZ);
+        Iouttextxy(256+20+DF,y+6,tempNode->file.name,fpHZ);
         sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date/512+1980,(tempNode->file.date%512)/32,tempNode->file.date%32,tempNode->file.time/2048,(tempNode->file.time%2048)/32);
-        outtextxy(432,y+6,temp);
+        outtextxy(432+DF,y+6,temp);
         if(!IisFolder(tempNode))
         {
             settextjustify(2,2);
@@ -329,61 +329,61 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
                 sprintf(temp,"<1 KB",tempNode->file.size);
             else
                 sprintf(temp,"%d KB",tempNode->file.size);
-            outtextxy(928,y+6,temp);
+            outtextxy(928+DF,y+6,temp);
             settextjustify(0,2);
         }
         //文件详细信息
 
         if((*menuFlag)&4)
-            ISetEvent(&tempEvent,248,y,936,y+19,2,ICtrlSelect,tempNode,NULL,4);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,2,ICtrlSelect,tempNode,NULL,4);
         else
-            ISetEvent(&tempEvent,248,y,936,y+19,2,ISelect,tempNode,NULL,4);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,2,ISelect,tempNode,NULL,4);
         IEventStackPush(top,tempEvent);
         //根据是否Ctrl,设置选择类型
 
         if(IisFolder(tempNode))
         {
-            ISetEvent(&tempEvent,248,y,936,y+19,8,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,8,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,248,y,936,y+19,8,IEntreeActive,tempNode,(IFileNode*)curNode,-1);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,8,IEntreeActive,tempNode,(IFileNode*)curNode,-1);
             IEventStackPush(top,tempEvent);
             if(tempNode->file.type[1]=='d')
-                Iouttextxy(688,y+6+3,"磁盘",fpHZ);
+                Iouttextxy(688+DF,y+6+3,"磁盘",fpHZ);
             else
-                Iouttextxy(688,y+6+3,"文件夹",fpHZ);
+                Iouttextxy(688+DF,y+6+3,"文件夹",fpHZ);
         }
         else
         {
-            outtextxy(688,y+6,tempNode->file.type);
+            outtextxy(688+DF,y+6,tempNode->file.type);
             if(!strcmp(tempNode->file.type,"EXE")||!strcmp(tempNode->file.type,"BAT"))
             {
-                ISetEvent(&tempEvent,248,y,936,y+19,8,IexeActive,tempNode,NULL,6);
+                ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,8,IexeActive,tempNode,NULL,6);
                 IEventStackPush(top,tempEvent);
             }
             if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"ASM"))
             {
-                ISetEvent(&tempEvent,248,y,936,y+19,8,ItxtActive,tempNode,NULL,6);
+                ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,8,ItxtActive,tempNode,NULL,6);
                 IEventStackPush(top,tempEvent);
             }
         }
         //文件打开方式
 
-        if(y>682) break;
+        if(y>682+DF) break;
         y+=20;
         tempNode=tempNode->next;
     }
 
     sprintf(temp,"%d个项目",numOfItem);
-    Iouttextxy(16,752+3,temp,fpHZ);
+    Iouttextxy(16+DF,752+3+DF,temp,fpHZ);
     if(numOfSelected)
     {
         sprintf(temp,"选中%d个项目",numOfSelected);
-        Iouttextxy(160,752+3,temp,fpHZ);
+        Iouttextxy(160+DF,752+3+DF,temp,fpHZ);
     }
     if((*menuFlag)&4)
     {
         setcolor(144);
-        outtextxy(320,752,"CTRL");
+        outtextxy(320+DF,752+DF,"CTRL");
     }
     //状态栏
     
@@ -391,26 +391,26 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     {
         (*menuFlag)&=13;
         setcolor(84);
-        rectangle(412,334,662,434);
+        rectangle(412+DF,334+DF,662+DF,434+DF);
         setfillstyle(SOLID_FILL,84);
-        bar(412,334,662,356);
+        bar(412+DF,334+DF,662+DF,356+DF);
         setfillstyle(SOLID_FILL,255);
-        bar(413,357,661,433);
-        rectangle(591,403,641,423);
-        rectangle(521,403,571,423);
+        bar(413+DF,357+DF,661+DF,433+DF);
+        rectangle(591+DF,403+DF,641+DF,423+DF);
+        rectangle(521+DF,403+DF,571+DF,423+DF);
 
         setcolor(0);
         sprintf(temp,"%s%d%s","确定要删除选中的",numOfSelected,"个项目吗？");
-        Iouttextxy(433,377,temp,fpHZ);
-        IPutsHZ16(530,406,"确定",fpHZ);
-        IPutsHZ16(600,406,"取消",fpHZ);
+        Iouttextxy(433+DF,377+DF,temp,fpHZ);
+        IPutsHZ16(530+DF,406+DF,"确定",fpHZ);
+        IPutsHZ16(600+DF,406+DF,"取消",fpHZ);
         IWarningBeep();
 
-        ISetEvent(&tempEvent,0,0,1024,768,2,INOP,NULL,NULL,0);
+        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,2,INOP,NULL,NULL,0);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,521,403,571,423,2,ISetDelete,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
+        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,2,ISetDelete,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,591,403,641,423,2,INOP,NULL,NULL,4);
+        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,2,INOP,NULL,NULL,4);
         IEventStackPush(top,tempEvent);
     }
     //删除确认
@@ -429,31 +429,31 @@ void IView1DrawIcon(IFileNode* tempNode,int y)
     if(tempNode->flags&2)
     {
         setfillstyle(SOLID_FILL,139);
-        bar(248,y,936,y+19);
+        bar(248+DF,y,936+DF,y+19);
     }
     if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"txt"))
-        Itxt(256,y+2);
+        Itxt(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
-        Idoc(256,y+2);
+        Idoc(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
-        Ic(256,y+2);
+        Ic(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
-        Ih(256,y+2);
+        Ih(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
-        Iobj(256,y+2);
+        Iobj(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
-        Iexe(256,y+2);
+        Iexe(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
-        Ipic(256,y+2);
+        Ipic(256+DF,y+2);
     else if(IisFolder(tempNode))
     {
         if(tempNode->file.type[1]=='d')
-            Idisk(256,y+2);
+            Idisk(256+DF,y+2);
         else
-            Ifolder(256,y+2);
+            Ifolder(256+DF,y+2);
     }
     else
-        Imystery(256,y+2);
+        Imystery(256+DF,y+2);
 }
 
 /*
@@ -480,15 +480,15 @@ void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem)
         setcolor(0);
     else
         setcolor(LIGHTGRAY);
-    IGoRight(992,720);
+    IGoRight(992+DF,720+DF);
     if(*page>1)
         setcolor(0);
     else
         setcolor(LIGHTGRAY);
-    IGoLeft(928,720);
+    IGoLeft(928+DF,720+DF);
     sprintf(temp,"%d",*page);
     setcolor(0);
-    outtextxy(962,722,temp);
+    outtextxy(962+DF,722+DF,temp);
 }
 
 /*
@@ -507,15 +507,15 @@ void IView2(char* page,FILE* fpHZ)
 
 
     setcolor(50);
-    IPutsHZ16(250,94,"匹配文件名",fpHZ);
-    IPutsHZ16(500,94,"绝对路径",fpHZ);
+    IPutsHZ16(250+DF,94+DF,"匹配文件名",fpHZ);
+    IPutsHZ16(500+DF,94+DF,"绝对路径",fpHZ);
 
 
-    while(fgets(tempStr,60,searched))
+    while(fgets(tempStr,150,searched))
     {
         if(++numOfsearched>=120)
         {
-            Iouttextxy(500,753,"只显示前120个匹配项",fpHZ);
+            Iouttextxy(500+DF,753+DF,"只显示前120个匹配项",fpHZ);
             break;
         }
         //搜索到多于120个匹配项
@@ -527,7 +527,7 @@ void IView2(char* page,FILE* fpHZ)
     //页码控制
     
     rewind(searched);
-    while(fgets(tempStr,60,searched)&&((++j)<=120))
+    while(fgets(tempStr,150,searched)&&((++j)<=120))
     {
         if((j-1)/30+1<*page)
             continue;
@@ -543,13 +543,13 @@ void IView2(char* page,FILE* fpHZ)
         IGetNameByPath(tempStr,name);
 
         setcolor(0);
-        Iouttextxy(250,y,name,fpHZ);
-        Iouttextxy(500,y,tempStr,fpHZ);
+        Iouttextxy(250+DF,y,name,fpHZ);
+        Iouttextxy(500+DF,y,tempStr,fpHZ);
 
         y+=20;
     }
     if(!j)
-        IPutsHZ16(530,240,"未检测到匹配项",fpHZ);
+        IPutsHZ16(530+DF,240+DF,"未检测到匹配项",fpHZ);
     //未搜索到文件
     else
     {
@@ -557,15 +557,15 @@ void IView2(char* page,FILE* fpHZ)
             setcolor(0);
         else
             setcolor(LIGHTGRAY);
-        IGoLeft(928,720);
+        IGoLeft(928+DF,720+DF);
         if(*page<(j-2)/30+1)
             setcolor(0);
         else
             setcolor(LIGHTGRAY);
-        IGoRight(992,720);
+        IGoRight(992+DF,720+DF);
         sprintf(tempStr,"%d",*page);
         setcolor(0);
-        outtextxy(962,722,tempStr);
+        outtextxy(962+DF,722+DF,tempStr);
     }
     //搜索到文件
 

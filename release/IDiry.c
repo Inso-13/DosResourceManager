@@ -121,8 +121,9 @@ void IEntree(IFileNode * root)
     if(!strcmp(root->file.type,"0ds")) return;
     //若root是被保护的磁盘，直接返回
 
-    if(root->file.type[0]=='1'||root->child) return;
-    //若root已被打开，直接返回
+    if(root->file.type[0]=='1'||root->child)
+        IDetree(root);
+    //若root已被打开，重新打开
     
     root->file.type[0]='1';
     //打开文件夹
@@ -157,12 +158,22 @@ void IEntree(IFileNode * root)
 */
 void Icplr(IFileNode * oldParent,IFileNode * newParent)
 {
-    IFileNode * tempNode=oldParent->child;
+    IFileNode * tempNode=oldParent->child,*newF=NULL;
+    char temp[150];
 
     while(tempNode)
     {
         if(tempNode->flags&2)
+        {
             Icpr(tempNode,newParent);
+            if(IisFolder(tempNode))
+            {
+                newF=IFindNodeByName(tempNode->file.name,newParent);
+                IGetAbsolutePath(newF,temp);
+                if(IPeek(newF,temp))
+                    newF->flags|=8;
+            }
+        } 
         //如果子文件节点被选中，则复制之
 
         tempNode=tempNode->next;
@@ -182,7 +193,11 @@ void Irmlr(IFileNode * oldParent)
     while(tempNode)
     {
         if(tempNode->flags&2)
+        {
             Irmr(tempNode);
+            if(IisFolder(tempNode))
+                Irmdir(tempNode);
+        }
         //如果子文件节点被选中，则删除之
 
         tempNode=tempNode->next;

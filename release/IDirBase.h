@@ -14,11 +14,12 @@
 int Icopy(IFileNode * inFile,IFileNode * outParent);
 int Irmf(IFileNode * fileNode);
 int Imkdir(IFileNode * pathNode,char* folderName);
-int Irmdir(IFileNode * node,int flag);
+int Irmdir(IFileNode * node);
 void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);
 void IDelAll(IFileNode * oldChildChild);
 void Icpr(IFileNode * oldChild,IFileNode * newParent);
 void Irmr(IFileNode * oldChild);
 void IEntree(IFileNode * root);
+void IDetree(IFileNode * root);
 
 #endif

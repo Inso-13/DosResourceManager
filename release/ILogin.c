@@ -27,14 +27,14 @@ void IPlainLogin()
     int i;
     
     setfillstyle(SOLID_FILL,248);
-    bar(0,0,1024,768);
+    bar(0+DF,0+DF,1024+DF,768+DF);
     setcolor(255);
     for(i=0;i<10;i++)
     {
-        circle(512,250,i+100);
-        circle(512,230,i+30);
-        arc(512+40,340,125,180,i+90);
-        arc(512-40,340,0,55,i+90);
+        circle(512+DF,250+DF,i+100);
+        circle(512+DF,230+DF,i+30);
+        arc(512+40+DF,340+DF,125,180,i+90);
+        arc(512-40+DF,340+DF,0,55,i+90);
         settextstyle(3,0,3);
     }
 }
@@ -56,39 +56,39 @@ void ILogin(char* name,char* password,IEventStackNode* top,int id,FILE* fpHZ)
         outtextxy(100,100,"fpHZ is NULL in ILogin");
     }
     setcolor(255);
-    Iouttextxy(370,450,"用户名:",fpHZ);
-    Iouttextxy(370+16,500,"密码:",fpHZ);
+    Iouttextxy(370+DF,450+DF,"用户名:",fpHZ);
+    Iouttextxy(386+DF,500+DF,"密码:",fpHZ);
 
     setfillstyle(SOLID_FILL,255);
-    bar(440,450-10,660,450-10+27);
-    bar(440,500-10,660,500-10+27);
+    bar(440+DF,450-10+DF,660+DF,450-10+27+DF);
+    bar(440+DF,500-10+DF,660+DF,500-10+27+DF);
 
     setfillstyle(SOLID_FILL,247);
-    bar(370,550,470,550+27);
-    bar(370+190,550,470+190,550+27);
+    bar(370+DF,550+DF,470+DF,550+27+DF);
+    bar(370+190+DF,550+DF,470+190+DF,550+27+DF);
 
     setcolor(255);
-    Iouttextxy(370+2,550+9,"登录(管理员)",fpHZ);
-    Iouttextxy(370+10+190,550+9,"取消(游客)",fpHZ);
+    Iouttextxy(370+2+DF,550+9+DF,"登录(管理员)",fpHZ);
+    Iouttextxy(370+10+190+DF,550+9+DF,"取消(游客)",fpHZ);
 
     if(id==-1)
     {
         setcolor(144);
-        Iouttextxy(370+10+190,600+9,"用户名或密码错误，请重新输入",fpHZ);
+        Iouttextxy(370+10+190+DF,600+9+DF,"用户名或密码错误，请重新输入",fpHZ);
         strcpy(name,"\0");
         strcpy(password,"\0");
     }
     //登录失败
 
     setcolor(0);
-    outtextxy(440+2,440+9,name);
+    outtextxy(440+2+DF,440+9+DF,name);
     
     for(i=0;i<strlen(password);i++)
-        outtextxy(440+2+8*i,490+9,"*");
+        outtextxy(440+2+8*i+DF,490+9+DF,"*");
 
-    ISetEvent(&tempEvent,440,450-10,660,450-10+28,2,IGetName,(IFileNode*)name,NULL,1);
+    ISetEvent(&tempEvent,440+DF,450-10+DF,660+DF,450-10+28+DF,2,IGetName,(IFileNode*)name,NULL,1);
     IEventStackPush(top,tempEvent);
-    ISetEvent(&tempEvent,440,500-10,660,500-10+28,2,IGetPassword,(IFileNode*)password,NULL,1);
+    ISetEvent(&tempEvent,440+DF,500-10+DF,660+DF,500-10+28+DF,2,IGetPassword,(IFileNode*)password,NULL,1);
     IEventStackPush(top,tempEvent);
     //设置用户名、密码的激活函数
 }
@@ -111,7 +111,7 @@ void ILoginConfirm(int* id,char* name,char* password)
         setcolor(0);
         outtextxy(100,100,"fp is NULL in main");
     }
-    while(fgets(temp,50,fp))
+    while(fgets(temp,150,fp))
     {
         for(i=0;i<strlen(temp);i++)
         {
