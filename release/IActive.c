@@ -484,10 +484,12 @@ void ItxtActive(IFileNode* txt,IFileNode* null)
 {
     char temp[150];
 
-    IGetAbsolutePath(txt,temp);
+    strcpy(temp,"C:\\BORLANDC\\BIN\\BC.EXE ");
+    IGetAbsolutePath(txt,temp+23);
 
     system(temp);
     //系统调用，借用BC编辑器打开文本文件
+    IQuit();
 }
 
 /*

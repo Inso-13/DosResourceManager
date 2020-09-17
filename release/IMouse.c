@@ -114,12 +114,16 @@ void IMouseOff(int x,int y,int (*mouseDraw)[16],int (*pixelSave)[16])
 */
 int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[16])
 {
-    int status=0,i,j,color;
+    int status=0,i,j,color,t=0;
     int x=*pMouseX;
     int y=*pMouseY;
     
     while(x==*pMouseX&&y==*pMouseY&&status==0)
     {
+        t++;
+        if(t>100)
+            break;
+            
         IMouseGetXY(pMouseX,pMouseY);
         if(*pMouseX!=x||*pMouseY!=y)    // Û±Í“∆∂Ø£¨status bit0 ÷√1
         {

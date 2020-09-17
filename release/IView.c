@@ -263,7 +263,6 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
             Iouttextxy(560+DF,240+DF,"仅管理员可见",fpHZ);
         else
             Iouttextxy(530+DF,240+DF,"未打开文件夹或未检索到内容",fpHZ);
-        return 0;
     }
     else if(tempNode->file.type[1]=='\\')
         Iouttextxy(853+DF,61+DF,"根目录无法搜索文件",fpHZ);
@@ -299,7 +298,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     //统计总文件数和被选中的文件数
 
     IView1PageControl(curNode,page,numOfItem);
-    if(*page==(numOfItem-1)/30+1)
+    if(*page>=(numOfItem-1)/30+1)
         (*menuFlag)|=8;
     else
         (*menuFlag)&=55;
