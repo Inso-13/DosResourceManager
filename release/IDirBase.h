@@ -17,7 +17,7 @@ int Imkdir(IFileNode * pathNode,char* folderName);
 int Irmdir(IFileNode * node);
 void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);
 void IDelAll(IFileNode * oldChildChild);
-void Icpr(IFileNode * oldChild,IFileNode * newParent);
+void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag);
 void Irmr(IFileNode * oldChild);
 void IEntree(IFileNode * root,char flag);
 void IDetree(IFileNode * root);

@@ -109,7 +109,7 @@ int Icopy(IFileNode * inFile,IFileNode * outParent)
     free(buff);
     //关闭文件，释放缓冲区
 
-    // IAddFileNode(outParent,name);  
+    IAddFileNode(outParent,name);  
     //添加新文件节点
     return 1;
 }
@@ -208,7 +208,7 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
     输出参数：无
     返回值：无
 */
-void Icpr(IFileNode * oldChild,IFileNode * newParent)
+void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag)
 {
     char temp[150];      //辅助字符串
     IFileNode *tempNode=NULL;
@@ -221,11 +221,10 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent)
 
         if(searchpath(temp))
         {
-            setcolor(249);
-            outtextxy(400+DF,752+DF,"Failed");
-            IWarningBeep();
-            delay(1500);
-            return;
+            if(flag)
+                Irmr(IFindNodeByPath(temp,newParent));
+            else
+                return; 
         }
         Imkdir(newParent,oldChild->file.name);
         IEntree(oldChild,0);

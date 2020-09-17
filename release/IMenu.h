@@ -21,5 +21,8 @@ void ISetRename(IFileNode* cur,IFileNode* null);
 void ISetNewFile(IFileNode* cur,IFileNode* null);
 void ISetNewFolder(IFileNode* cur,IFileNode* null);
 void ISetDeleteComfirm(IFileNode* flagx,IFileNode* null);
+void ISetPasteF(IFileNode* cur,IFileNode* X);
+void ISetPasteComfirm(IFileNode* flagx,IFileNode* null);
+void ISetPasteCheck(IFileNode* cur,IFileNode* X);
 
 #endif

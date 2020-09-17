@@ -98,6 +98,10 @@ IFileNode *IGetFileNodeList(char * path)
             childRoot=NULL;
             break;
         }
+        if(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)
+        {
+            ret=_dos_findnext(&ft);
+        }
         strcpy(tempNode->file.name,ft.name);
         tempNode->file.size=(ft.size/512+1)/2;
         if(ft.attrib&0x01)

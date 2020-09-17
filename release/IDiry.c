@@ -164,7 +164,7 @@ void IEntree(IFileNode * root,char flag)
     输出参数：无
     返回值：无
 */
-void Icplr(IFileNode * oldParent,IFileNode * newParent)
+void Icplr(IFileNode * oldParent,IFileNode * newParent,char flag)
 {
     IFileNode * tempNode=oldParent->child,*newF=NULL;
     char temp[150];
@@ -173,7 +173,7 @@ void Icplr(IFileNode * oldParent,IFileNode * newParent)
     {
         if(tempNode->flags&2)
         {
-            Icpr(tempNode,newParent);
+            Icpr(tempNode,newParent,flag);
             if(IisFolder(tempNode))
             {
                 newF=IFindNodeByName(tempNode->file.name,newParent);

@@ -13,7 +13,7 @@
 
 void IEntree(IFileNode * root,char flag);
 void IDetree(IFileNode * root);
-void Icplr(IFileNode * oldParent,IFileNode * newParent);
+void Icplr(IFileNode * oldParent,IFileNode * newParent,char flag);
 void Irmlr(IFileNode * oldParent);
 void Irename(IFileNode * oldName,char * newName);
 int Inew(IFileNode * pathNode,char* fileName);

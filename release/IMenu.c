@@ -10,6 +10,7 @@
 #include<STRING.H>
 #include<STDLIB.H>
 #include<DOS.H>
+#include<DIR.H>
 #include<BIOS.H>
 #include<CONIO.H>
 #include<GRAPHICS.H>
@@ -25,7 +26,7 @@
 
 /*
     函数功能：在View1中激活一级菜单
-    输入参数：(mouseX,mouseY)——鼠标的位置, numOfSelected——当前路径中被选中的文件数, top——View1的事件栈, curNode——当前节点,nodeX——辅助节点指针, menuFlag——菜单的标志(bit0 是否为二层菜单,bit1 是否有删除确认窗口,bit2 是否按下Ctrl, bit3 是否是最后一页), fpHZ——汉字库文件
+    输入参数：(mouseX,mouseY)——鼠标的位置, numOfSelected——当前路径中被选中的文件数, top——View1的事件栈, curNode——当前节点,nodeX——辅助节点指针, menuFlag——菜单的标志(bit0 是否为二层菜单,bit1 是否有删除确认窗口,bit2 是否按下Ctrl, bit3 是否是最后一页, bit4、5 是否有覆盖确认窗口), fpHZ——汉字库文件
     输出参数：无
     返回值：无
 */
@@ -70,7 +71,9 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
         }
         if(!numOfSelected||(curNode->child==nodeX->child))
         {
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,2,ISetPaste,(IFileNode*)curNode,(IFileNode*)nodeX,6);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,2,ISetPasteComfirm,(IFileNode*)menuFlag,NULL,6);
+            IEventStackPush(top,tempEvent);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,2,ISetPasteCheck,(IFileNode*)curNode,(IFileNode*)nodeX,-1);
             IEventStackPush(top,tempEvent);
         }
     }
@@ -82,7 +85,7 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
             ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*i,mouseX+80,mouseY+19+20*i,2,ISortActive,(IFileNode*)curNode,(IFileNode*)lambda[i],4);
             IEventStackPush(top,tempEvent);
         }
-        (*menuFlag)&=14;
+        (*menuFlag)&=62;
     }
     //如果是二级排序菜单
 }
@@ -204,7 +207,7 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
-    IFileNode* tempNode=NULL;
+    IFileNode* tempNode=nodeX->child->child;
     char temp1[150],temp2[150];
 
     IGetAbsolutePath(curNode->child,temp1);
@@ -214,7 +217,7 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
     {
         if(tempNode->flags&2 && IisFolder(tempNode))
         {
-            if(IisChild(temp1,temp2))
+            if(IisChild(temp1,temp2)||!strcmp(temp1,temp2))
             {
                 setcolor(249);
                 outtextxy(400+DF,752+DF,"Failed");
@@ -230,7 +233,7 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
     setcolor(144);
     outtextxy(900+DF,753+DF,"Pasting...");
 
-    Icplr(nodeX->child,curNode->child);
+    Icplr(nodeX->child,curNode->child,0);
     //复制文件节点
 
     if(nodeX->child->flags&1)
@@ -238,8 +241,96 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
     //如果是剪切，则删除源文件节点
     
     setfillstyle(SOLID_FILL,255);
-    bar(900+DF,753+DF,950+DF,765+DF);
+    bar(900+DF,753+DF,1000+DF,765+DF);
 }
+
+/*
+    函数功能：激活粘贴函数
+    输入参数：cur——当前节点
+    输出参数：X——辅助节点指针，用于保存被复制/剪切的节点
+    返回值：无
+*/
+void ISetPasteF(IFileNode* cur,IFileNode* X)
+{
+    IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    IFileNodePointer * nodeX=(IFileNodePointer *)X;
+
+    setcolor(144);
+    outtextxy(900+DF,753+DF,"Pasting...");
+
+    Icplr(nodeX->child,curNode->child,1);
+    //复制文件节点
+
+    if(nodeX->child->flags&1)
+        Irmlr(nodeX->child);
+    //如果是剪切，则删除源文件节点
+    
+    setfillstyle(SOLID_FILL,255);
+    bar(900+DF,753+DF,1000+DF,765+DF);
+}
+/*
+    函数功能：激活删除函数
+    输入参数：flagx——菜单状态位, null——用于占位
+    输出参数：无
+    返回值：无
+*/
+void ISetPasteComfirm(IFileNode* flagx,IFileNode* null)
+{
+    FILE* fp=fopen("C:\\DOSRES\\ETC\\TEMP.TXT","r");
+    char* flag=(char*)flagx;
+
+    if(fgetc(fp)=='f')
+    {
+        (*flag)&=31;
+        (*flag)|=16;
+    }
+    else
+    {
+        (*flag)&=47;
+        (*flag)|=32;
+    }
+    fclose(fp);
+    //激活确认覆盖窗口
+}
+
+/*
+    函数功能：激活删除函数
+    输入参数：flagx——菜单状态位, null——用于占位
+    输出参数：无
+    返回值：无
+*/
+
+void ISetPasteCheck(IFileNode* cur,IFileNode* X)
+{
+    IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    IFileNodePointer * nodeX=(IFileNodePointer *)X;
+    IFileNode * tempNode=nodeX->child->child;
+    FILE* fp=fopen("C:\\DOSRES\\ETC\\TEMP.TXT","w+");
+    char temp[150],ttemp[150];
+
+    IGetAbsolutePath(curNode->child,temp);
+    Icd(temp);
+    while(tempNode)
+    {
+        if(tempNode->flags&2)
+        {
+            if(searchpath(tempNode->file.name))
+            {
+                IGetAbsolutePath(nodeX->child,ttemp);
+                if(strcmp(temp,ttemp))
+                {
+                    fputc('f',fp);      
+                    fclose(fp);
+                    return;
+                }
+            }    
+        }
+        tempNode=tempNode->next;
+    }
+    fputc('u',fp);
+    fclose(fp);
+}
+
 
 /*
     函数功能：激活删除函数
@@ -261,7 +352,7 @@ void ISetDelete(IFileNode* cur,IFileNode* X)
     Irmlr(curNode->child);
     //激活删除函数
     setfillstyle(SOLID_FILL,255);
-    bar(900+DF,753+DF,950+DF,765+DF);
+    bar(900+DF,753+DF,1000+DF,765+DF);
 }
 
 /*

@@ -10,7 +10,7 @@
 #define __ITYPE_H
 
 // #define LM
-#define DF 128
+#define DF 0
 #define DB
 
 typedef struct IFile    //文件结构

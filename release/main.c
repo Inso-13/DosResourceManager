@@ -78,7 +78,7 @@ void main()
     //文件节点初始化
 
     IPlainView(fpHZ);
-    IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1);
+    IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1,fpHZ);
     IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
     for(i=0;i<16;i++)
         for(j=0;j<16;j++)
@@ -87,14 +87,6 @@ void main()
 
     while(!exit)
     {   
-        // if(coreleft()<1000)
-        // {
-        //     setcolor(144);
-        //     Iouttextxy(500+DF,300+DF,"内存不足，将在3秒后退出",fpHZ);
-        //     IWarningBeep();
-        //     delay(3000);
-        //     IQuit();
-        // }
 
 #ifdef DB
         setcolor(0);
@@ -125,7 +117,7 @@ void main()
             if(bioskey(2)&4)
             {
                 if(menuFlag&4)
-                    menuFlag&=11;
+                    menuFlag&=59;
                 else
                     menuFlag|=4;
 
@@ -196,7 +188,7 @@ void main()
             setfillstyle(SOLID_FILL,255);
             bar(0+DF,110+DF,238+DF,740+DF);
             IEventStackPop(top0,1000);
-            IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1);
+            IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //更新0号窗口

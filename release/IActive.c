@@ -82,7 +82,6 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
 	IFileNodePointer * newCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));     //新节点
     IFileNodePointer * tempNode=NULL,*nextNode=NULL;
 
-    IDebugN(5);
     tempNode=(*curNode)->next;
     while(tempNode)
     {
@@ -467,8 +466,11 @@ void IexeActive(IFileNode* exe,IFileNode* null)
 
     IGetAbsolutePath(exe,temp);
 
+    setfillstyle(SOLID_FILL,0);
+    bar(0,0,1280,1024);
     system(temp);
     //系统调用，借用编辑器打开文本文件
+    delay(2000);
     IQuit();
 }
 
