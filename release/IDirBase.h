@@ -11,7 +11,7 @@
 
 #include"IType.h"
 
-int Icopy(IFileNode * inFile,IFileNode * outParent);
+int Icopy(IFileNode * inFile,IFileNode * outParent,char flag);
 int Irmf(IFileNode * fileNode);
 int Imkdir(IFileNode * pathNode,char* folderName);
 int Irmdir(IFileNode * node);

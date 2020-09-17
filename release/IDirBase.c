@@ -28,7 +28,7 @@
     输出参数：无
     返回值：复制成功返回1，失败则返回0
 */
-int Icopy(IFileNode * inFile,IFileNode * outParent)
+int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
 {
     FILE * fin,*fout;
     char * buff,inPath[150],outPath[150],temp[150],i[2],name[18],ext[5];
@@ -49,32 +49,38 @@ int Icopy(IFileNode * inFile,IFileNode * outParent)
     strcat(outPath,"\\");
     strcat(outPath,inFile->file.name);
     strcpy(name,inFile->file.name);
-    if(searchpath(outPath)||!strcmp(inPath,outPath)) //原位置拷贝，文件自动重命名
+
+    if(!flag)
     {
-        strcpy(i,"1");
-        for(j=0;j<strlen(inFile->file.name);j++)
-            if(inFile->file.name[j]=='.')
-                break;
-        strcpy(ext,inFile->file.name+j);
-        if(strlen(name)>11||(j==strlen(name)&&j>7))
+        if(searchpath(outPath)||!strcmp(inPath,outPath)) //原位置拷贝，文件自动重命名
         {
-            strcpy(name+4,"~");
-            strcpy(name+5,ext);
-            j=5;
+            strcpy(i,"1");
+            for(j=0;j<strlen(inFile->file.name);j++)
+                if(inFile->file.name[j]=='.')
+                    break;
+            strcpy(ext,inFile->file.name+j);
+            if(strlen(name)>11||(j==strlen(name)&&j>7))
+            {
+                strcpy(name+4,"~");
+                strcpy(name+5,ext);
+                j=5;
+            }
+            IGetAbsolutePath(outParent,outPath);
+            strcat(outPath,"\\");
+            do
+            {
+                strcpy(name+j,"");
+                strcat(name,i);
+                strcat(name,ext);
+                strcpy(temp,outPath);
+                strcat(temp,name);
+                i[0]++;
+            }while(searchpath(temp));
+            strcpy(outPath,temp);
         }
-        IGetAbsolutePath(outParent,outPath);
-        strcat(outPath,"\\");
-        do
-        {
-            strcpy(name+j,"");
-            strcat(name,i);
-            strcat(name,ext);
-            strcpy(temp,outPath);
-            strcat(temp,name);
-            i[0]++;
-        }while(searchpath(temp));
-        strcpy(outPath,temp);
     }
+    else
+        Irmf(IFindNodeByPath(outPath,outParent));
 
     fout=fopen(outPath,"w");
     if(fout==NULL)
@@ -194,7 +200,7 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
         //如果是文件夹，递归复制
         else
         {
-            Icopy(oldChildChild,newChild);  
+            Icopy(oldChildChild,newChild,0);  
         }
         //如果是文件，则简单复制
         oldChildChild=oldChildChild->next;  
@@ -235,7 +241,7 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag)
     }
     //如果是文件夹
     else
-        Icopy(oldChild,newParent);
+        Icopy(oldChild,newParent,flag);
     //如果是文件
 }  
 
