@@ -98,7 +98,7 @@ IFileNode *IGetFileNodeList(char * path)
             childRoot=NULL;
             break;
         }
-        if(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)
+        if(!strcmp(ft.name,"ehome")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0))
         {
             ret=_dos_findnext(&ft);
         }

@@ -30,29 +30,18 @@
 */
 int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
 {
-    FILE * fin,*fout;
-    char * buff,inPath[150],outPath[150],temp[150],i[2],name[18],ext[5];
-    int ret,j;
+    char inPath[150],outPath[150],temp[150],i[2],name[18],ext[5];
+    int j;
+    char tempStr[300];
 
     IGetAbsolutePath(inFile,inPath);
-    fin=fopen(inPath,"r");
-    if(fin==NULL)
-    {
-#ifdef DB
-        printf("failed to open %s\n",inFile->file.name);
-#endif
-        return 0;
-    }
-    //打开源文件
-
     IGetAbsolutePath(outParent,outPath);
     strcat(outPath,"\\");
     strcat(outPath,inFile->file.name);
     strcpy(name,inFile->file.name);
-
     if(!flag)
     {
-        if(searchpath(outPath)||!strcmp(inPath,outPath)) //原位置拷贝，文件自动重命名
+        if(ISearchPath(outPath)||!strcmp(inPath,outPath)) //原位置拷贝，文件自动重命名
         {
             strcpy(i,"1");
             for(j=0;j<strlen(inFile->file.name);j++)
@@ -75,45 +64,28 @@ int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
                 strcpy(temp,outPath);
                 strcat(temp,name);
                 i[0]++;
-            }while(searchpath(temp));
+            }while(ISearchPath(temp));
             strcpy(outPath,temp);
         }
+        strcpy(tempStr,"copy ");
+        IGetAbsolutePath(inFile,tempStr+5);
+        strcat(tempStr," ");
+        strcat(tempStr+strlen(tempStr),outPath);
+
+        strcat(tempStr," >> C:\\DOSRES\\ETC\\log.txt");
+        system(tempStr);
     }
     else
+    {
         Irmf(IFindNodeByPath(outPath,outParent));
+        strcpy(tempStr,"copy ");
+        IGetAbsolutePath(inFile,tempStr+5);
+        strcat(tempStr," ");
+        IGetAbsolutePath(outParent,tempStr+strlen(tempStr));
 
-    fout=fopen(outPath,"w");
-    if(fout==NULL)
-    {
-#ifdef DB
-        printf("failed to open %s\n",inFile->file.name);
-#endif
-        return 0;
+        strcat(tempStr," >> C:\\DOSRES\\ETC\\log.txt");
+        system(tempStr);
     }
-    //打开目标文件
-
-    buff=malloc(BUFFSIZE);
-    if(buff==NULL)
-    {
-#ifdef DB
-        puts("not enough memory");
-#endif
-        return 0;
-    }
-
-    while(1)
-    {
-        ret=fread(buff,1,BUFFSIZE,fin);
-        fwrite(buff,ret>BUFFSIZE?BUFFSIZE:ret,1,fout);
-        if(feof(fin))
-            break;
-    }
-    //不断循环，直到文件复制完成
-
-    fclose(fin);
-    fclose(fout);
-    free(buff);
-    //关闭文件，释放缓冲区
 
     IAddFileNode(outParent,name);  
     //添加新文件节点
@@ -130,8 +102,11 @@ int Irmf(IFileNode * fileNode)
 {
     char tempStr[150];   //辅助字符串
 
-    IGetAbsolutePath(fileNode,tempStr);
-    remove(tempStr);    
+    strcpy(tempStr,"del ");
+    IGetAbsolutePath(fileNode,tempStr+4);
+
+    strcat(tempStr," >> C:\\DOSRES\\ETC\\log.txt");
+    system(tempStr);
     //删除文件
     return IDelFileNode(IFindParent(fileNode),fileNode->file.name);     
     //删除文件节点
@@ -169,11 +144,19 @@ int Irmdir(IFileNode * node)
 {
     char temp[150];      //辅助字符串
 
-    IGetAbsolutePath(node,temp);
-    IDelFileNode(IFindParent(node),node->file.name);
+    strcpy(temp,"rmdir ");
+    IGetAbsolutePath(node,temp+7);
+    
+    strcat(temp," >> C:\\DOSRES\\ETC\\log.txt");
+    system(temp);
     //更新节点
 
-    return !rmdir(temp);
+    IGetAbsolutePath(node,temp);
+    IDelFileNode(IFindParent(node),node->file.name);
+    while(ISearchPath(temp))
+        rmdir(temp);
+        
+    return 1;
 }
 
 /*
@@ -225,7 +208,7 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag)
         strcat(temp,"\\");
         strcat(temp,oldChild->file.name);
 
-        if(searchpath(temp))
+        if(ISearchPath(temp))
         {
             if(flag)
                 Irmr(IFindNodeByPath(temp,newParent));

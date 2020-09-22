@@ -357,7 +357,7 @@ char* IGetString(int x,int y,int length,char* string,int flag)
             else
                 setcolor(255);
             line(x+2+8*i,y+9,x+2+8*i,y+18);
-            t++;
+            t+=8;
         }
         //变量t用于计时，实现闪烁光标的效果
 
@@ -422,6 +422,13 @@ char* IGetString(int x,int y,int length,char* string,int flag)
                 outtextxy(x+2+8*j,y+9,"*");
         //是否加密显示
     }
+    if(flag==1)
+    {
+        setcolor(7);
+        line(0+DF,84+DF,1024+DF,84+DF);
+        line(0+DF,85+DF,1024+DF,85+DF);
+        rectangle(832+DF,51+DF,1017+DF,78+DF);
+    }
     return org;
 }
 
@@ -468,6 +475,7 @@ void IexeActive(IFileNode* exe,IFileNode* null)
 
     setfillstyle(SOLID_FILL,0);
     bar(0,0,1280,1024);
+    strcat(temp," >> C:\\DOSRES\\ETC\\log.txt");
     system(temp);
     //系统调用，借用编辑器打开文本文件
     delay(2000);
@@ -486,7 +494,8 @@ void ItxtActive(IFileNode* txt,IFileNode* null)
 
     strcpy(temp,"C:\\BORLANDC\\BIN\\BC.EXE ");
     IGetAbsolutePath(txt,temp+23);
-
+    
+    strcat(temp," >> C:\\DOSRES\\ETC\\log.txt");
     system(temp);
     //系统调用，借用BC编辑器打开文本文件
     IQuit();

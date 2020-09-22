@@ -534,7 +534,7 @@ void IView2(char* page,FILE* fpHZ)
     FILE* searched=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","r");
     char tempStr[150];
     char name[15];
-    int y=120,i,n,j=0,numOfsearched=0;
+    int y=120+DF,i,n,j=0,numOfsearched=0;
 
 
     setcolor(50);

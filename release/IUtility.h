@@ -25,5 +25,6 @@ void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(I
 void IDelPointer(IFileNodePointer* pointer);
 void IGetNameByPath(char* path,char* name);
 int IisChild(char* path1,char* path2);
+int ISearchPath(char* name);
 
 #endif

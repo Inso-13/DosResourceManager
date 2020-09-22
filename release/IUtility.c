@@ -11,6 +11,7 @@
 #include<CONIO.H>
 #include<ALLOC.H>
 #include<STDIO.H>
+#include<DOS.H>
 #include"IType.h"
 #include"IUtility.h"
 
@@ -356,4 +357,17 @@ int IisChild(char* path1,char* path2)
     if(n==strlen(path1))
         return 0;
     return 1;
+}
+
+/*
+    函数功能：判断是否有name文件
+    输入参数：name——文件绝对/相对路径
+    输出参数：无
+    返回值：若存在改文件返回1; 否则返回0
+*/
+int ISearchPath(char* name)
+{
+    struct find_t ft;
+
+    return !_dos_findfirst(name,0xf7,&ft); 
 }

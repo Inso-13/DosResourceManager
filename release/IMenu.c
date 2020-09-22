@@ -211,12 +211,12 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
     char temp1[150],temp2[150];
 
     IGetAbsolutePath(curNode->child,temp1);
-    IGetAbsolutePath(nodeX->child,temp2);
     
     while(tempNode)
     {
         if(tempNode->flags&2 && IisFolder(tempNode))
         {
+            IGetAbsolutePath(tempNode,temp2);
             if(IisChild(temp1,temp2)||!strcmp(temp1,temp2))
             {
                 setcolor(249);
@@ -314,7 +314,7 @@ void ISetPasteCheck(IFileNode* cur,IFileNode* X)
     {
         if(tempNode->flags&2)
         {
-            if(searchpath(tempNode->file.name))
+            if(ISearchPath(tempNode->file.name))
             {
                 IGetAbsolutePath(nodeX->child,ttemp);
                 if(strcmp(temp,ttemp))
