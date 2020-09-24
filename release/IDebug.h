@@ -10,5 +10,6 @@
 #define __IDEBUG_H
 
 void IDebugN(int n);
+void IDebugTrue(int boolean);
 
 #endif

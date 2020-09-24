@@ -189,15 +189,15 @@ int IView0(IFileNode* root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
 
 /*
     函数功能：右侧窗口
-    输入参数：curNode——当前目录二级指针, nodeX——辅助节点指针，用于保存被复制/剪切的节点,top——事件栈, (beginX,beginY)——开始画的位置, page——页码, flag——标志位
+    输入参数：curNode——当前目录二级指针, nodeX——辅助节点指针，用于保存被复制/剪切的节点,top——事件栈, (beginX,beginY)——开始画的位置, page——页码, flag——标志位，fpHZ——汉字库指针
     输出参数：无
     返回值：纵坐标的偏移量
 */
 int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,char* page,char* menuFlag,FILE* fpHZ)
 {
 
-    int i,y,numOfItem=0,numOfSelected=0;
-    IFileNode* tempNode;
+    int i,numOfItem=0,numOfSelected=0;
+    IFileNode* tempNode=NULL;
     IEvent tempEvent;
     char temp[150];
 
@@ -274,19 +274,6 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     }
     //搜索栏显示
     
-    setcolor(50);
-    IPutsHZ16(254+DF,94+DF,"文件名",fpHZ);
-    IPutsHZ16(430+DF,94+DF,"修改日期",fpHZ);
-    IPutsHZ16(686+DF,94+DF,"类型",fpHZ);
-    IPutsHZ16(830+DF,94+DF,"大小",fpHZ);
-    setcolor(247);
-    line(424+DF,88+DF,424+DF,112+DF);
-    line(680+DF,88+DF,680+DF,112+DF);
-    line(824+DF,88+DF,824+DF,112+DF);
-    line(936+DF,88+DF,936+DF,112+DF);
-    setcolor(0);
-    //文件详细信息的表头
-
     tempNode=(*curNode)->child->child;
     while(tempNode)
     {
@@ -301,7 +288,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     if(*page>=(numOfItem-1)/30+1)
         (*menuFlag)|=8;
     else
-        (*menuFlag)&=55;
+        (*menuFlag)&=119;
     //页码控制
 
     tempNode=(*curNode)->child->child;
@@ -309,10 +296,206 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         tempNode=tempNode->next;
     //跳转至当前页
 
-    y=116+DF;
+    setfillstyle(SOLID_FILL,139);
+    if((*menuFlag)&64)
+    {
+        bar(1001+DF,747+DF,1020+DF,766+DF);
+        IView11(curNode,nodeX,tempNode,fpHZ,top,menuFlag);
+        ISetEvent(&tempEvent,976+DF,747+DF,995+DF,766+DF,2,ISetView10,(IFileNode*)menuFlag,NULL,4);
+        IEventStackPush(top,tempEvent);
+    }
+    else
+    {
+        bar(976+DF,747+DF,995+DF,766+DF);
+        IView10(curNode,nodeX,tempNode,fpHZ,top,menuFlag);
+        ISetEvent(&tempEvent,1001+DF,747+DF,1020+DF,766+DF,2,ISetView11,(IFileNode*)menuFlag,NULL,4);
+        IEventStackPush(top,tempEvent);
+    }
+    //主视图部分
+
+    IDetailOption(980+DF,751+DF);
+    IPictureOption(1005+DF,751+DF);
+    
+    sprintf(temp,"%d个项目",numOfItem);
+    Iouttextxy(16+DF,752+3+DF,temp,fpHZ);
+    if(numOfSelected)
+    {
+        sprintf(temp,"选中%d个项目",numOfSelected);
+        Iouttextxy(160+DF,752+3+DF,temp,fpHZ);
+    }
+    if((*menuFlag)&4)
+    {
+        setcolor(144);
+        outtextxy(320+DF,752+DF,"CTRL");
+    }
+    //状态栏
+    
+    if((*menuFlag)&2)
+    {
+        (*menuFlag)&=125;
+        setcolor(84);
+        rectangle(412+DF,334+DF,662+DF,434+DF);
+        setfillstyle(SOLID_FILL,84);
+        bar(412+DF,334+DF,662+DF,356+DF);
+        setfillstyle(SOLID_FILL,255);
+        bar(413+DF,357+DF,661+DF,433+DF);
+        rectangle(591+DF,403+DF,641+DF,423+DF);
+        rectangle(521+DF,403+DF,571+DF,423+DF);
+
+        setcolor(0);
+        sprintf(temp,"%s%d%s","确定要删除选中的",numOfSelected,"个项目吗？");
+        Iouttextxy(433+DF,377+DF,temp,fpHZ);
+        IPutsHZ16(530+DF,406+DF,"确定",fpHZ);
+        IPutsHZ16(600+DF,406+DF,"取消",fpHZ);
+        IWarningBeep();
+
+        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,2,INOP,NULL,NULL,0);
+        IEventStackPush(top,tempEvent);
+        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,2,ISetDelete,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
+        IEventStackPush(top,tempEvent);
+        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,2,INOP,NULL,NULL,4);
+        IEventStackPush(top,tempEvent);
+    }
+    else if((*menuFlag)&16)
+    {
+        (*menuFlag)&=79;
+        setcolor(84);
+        rectangle(412+DF,334+DF,662+DF,434+DF);
+        setfillstyle(SOLID_FILL,84);
+        bar(412+DF,334+DF,662+DF,356+DF);
+        setfillstyle(SOLID_FILL,255);
+        bar(413+DF,357+DF,661+DF,433+DF);
+        rectangle(591+DF,403+DF,641+DF,423+DF);
+        rectangle(521+DF,403+DF,571+DF,423+DF);
+
+        setcolor(0);
+        sprintf(temp,"%s","确定要覆盖文件吗？");
+        Iouttextxy(433+DF,377+DF,temp,fpHZ);
+        IPutsHZ16(530+DF,406+DF,"确定",fpHZ);
+        IPutsHZ16(600+DF,406+DF,"取消",fpHZ);
+        IWarningBeep();
+
+        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,2,INOP,NULL,NULL,0);
+        IEventStackPush(top,tempEvent);
+        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,2,ISetPasteF,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
+        IEventStackPush(top,tempEvent);
+        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,2,ISetPaste,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
+        IEventStackPush(top,tempEvent);
+    }
+    else if((*menuFlag)&32)
+    {
+        (*menuFlag)&=79;
+        ISetEvent(&tempEvent,0,0,0,0,-1,ISetPaste,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
+        IEventStackPush(top,tempEvent);
+    }
+    //删除确认
+
+    return numOfSelected;
+}
+
+/*
+    函数功能：根据文件类型，画图标
+    输入参数：tempNode——文件节点, y——纵向位置
+    输出参数：无
+    返回值：无
+*/
+void IView10DrawIcon(IFileNode* tempNode,int y)
+{
+    if(tempNode->flags&2)
+    {
+        setfillstyle(SOLID_FILL,139);
+        bar(248+DF,y,936+DF,y+19);
+    }
+    if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"txt"))
+        Itxt(256+DF,y+2);
+    else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
+        Idoc(256+DF,y+2);
+    else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
+        Ic(256+DF,y+2);
+    else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
+        Ih(256+DF,y+2);
+    else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
+        Iobj(256+DF,y+2);
+    else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
+        Iexe(256+DF,y+2);
+    else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
+        Ipic(256+DF,y+2);
+    else if(IisFolder(tempNode))
+    {
+        if(tempNode->file.type[1]=='d')
+            Idisk(256+DF,y+2);
+        else
+            Ifolder(256+DF,y+2);
+    }
+    else
+        Imystery(256+DF,y+2);
+}
+
+/*
+    函数功能：根据文件类型，画图标
+    输入参数：tempNode——文件节点, x——横向位置, y——纵向位置
+    输出参数：无
+    返回值：无
+*/
+void IView11DrawIcon(IFileNode* tempNode,int x,int y)
+{
+    if(tempNode->flags&2)
+    {
+        setfillstyle(SOLID_FILL,139);
+        bar(x,y,x+99,y+109);
+    }
+    if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"txt"))
+        Itxt(x+25,y+10);
+    else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
+        Idoc(x+25,y+10);
+    else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
+        Ic(x+25,y+10);
+    else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
+        Ih(x+25,y+10);
+    else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
+        Iobj(x+25,y+10);
+    else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
+        Iexe(x+25,y+10);
+    else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
+        Ipic(x+25,y+10);
+    else if(IisFolder(tempNode))
+    {
+        if(tempNode->file.type[1]=='d')
+            Idisk(x+25,y+10);
+        else
+            Ifolder(x+25,y+10);
+    }
+    else
+        Imystery(x+25,y+10);
+}
+
+/*
+    函数功能：右侧窗口(详细信息)
+    输入参数：curNode——当前目录二级指针, nodeX——辅助节点指针，用于保存被复制/剪切的节点,top——事件栈
+    输出参数：无
+    返回值：无
+*/
+void IView10(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IFileNode* tempNode,FILE* fpHZ,IEventStackNode* top,char* menuFlag)
+{
+    IEvent tempEvent;
+    char temp[150];
+    int y=116+DF;
+
+    setcolor(50);
+    IPutsHZ16(254+DF,94+DF,"文件名",fpHZ);
+    IPutsHZ16(430+DF,94+DF,"修改日期",fpHZ);
+    IPutsHZ16(686+DF,94+DF,"类型",fpHZ);
+    IPutsHZ16(830+DF,94+DF,"大小",fpHZ);
+    setcolor(247);
+    line(424+DF,88+DF,424+DF,112+DF);
+    line(680+DF,88+DF,680+DF,112+DF);
+    line(824+DF,88+DF,824+DF,112+DF);
+    line(936+DF,88+DF,936+DF,112+DF);
+    //文件详细信息的表头
+
     while(tempNode)     //对每一个当前页码的文件
     {
-        IView1DrawIcon(tempNode,y);
+        IView10DrawIcon(tempNode,y);
         //根据文件类型，画图标
 
         setcolor(0);
@@ -371,122 +554,69 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         y+=20;
         tempNode=tempNode->next;
     }
-
-    sprintf(temp,"%d个项目",numOfItem);
-    Iouttextxy(16+DF,752+3+DF,temp,fpHZ);
-    if(numOfSelected)
-    {
-        sprintf(temp,"选中%d个项目",numOfSelected);
-        Iouttextxy(160+DF,752+3+DF,temp,fpHZ);
-    }
-    if((*menuFlag)&4)
-    {
-        setcolor(144);
-        outtextxy(320+DF,752+DF,"CTRL");
-    }
-    //状态栏
-    
-    if((*menuFlag)&2)
-    {
-        (*menuFlag)&=61;
-        setcolor(84);
-        rectangle(412+DF,334+DF,662+DF,434+DF);
-        setfillstyle(SOLID_FILL,84);
-        bar(412+DF,334+DF,662+DF,356+DF);
-        setfillstyle(SOLID_FILL,255);
-        bar(413+DF,357+DF,661+DF,433+DF);
-        rectangle(591+DF,403+DF,641+DF,423+DF);
-        rectangle(521+DF,403+DF,571+DF,423+DF);
-
-        setcolor(0);
-        sprintf(temp,"%s%d%s","确定要删除选中的",numOfSelected,"个项目吗？");
-        Iouttextxy(433+DF,377+DF,temp,fpHZ);
-        IPutsHZ16(530+DF,406+DF,"确定",fpHZ);
-        IPutsHZ16(600+DF,406+DF,"取消",fpHZ);
-        IWarningBeep();
-
-        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,2,INOP,NULL,NULL,0);
-        IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,2,ISetDelete,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
-        IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,2,INOP,NULL,NULL,4);
-        IEventStackPush(top,tempEvent);
-    }
-    else if((*menuFlag)&16)
-    {
-        (*menuFlag)&=15;
-        setcolor(84);
-        rectangle(412+DF,334+DF,662+DF,434+DF);
-        setfillstyle(SOLID_FILL,84);
-        bar(412+DF,334+DF,662+DF,356+DF);
-        setfillstyle(SOLID_FILL,255);
-        bar(413+DF,357+DF,661+DF,433+DF);
-        rectangle(591+DF,403+DF,641+DF,423+DF);
-        rectangle(521+DF,403+DF,571+DF,423+DF);
-
-        setcolor(0);
-        sprintf(temp,"%s","确定要覆盖文件吗？");
-        Iouttextxy(433+DF,377+DF,temp,fpHZ);
-        IPutsHZ16(530+DF,406+DF,"确定",fpHZ);
-        IPutsHZ16(600+DF,406+DF,"取消",fpHZ);
-        IWarningBeep();
-
-        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,2,INOP,NULL,NULL,0);
-        IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,2,ISetPasteF,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
-        IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,2,ISetPaste,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
-        IEventStackPush(top,tempEvent);
-    }
-    else if((*menuFlag)&32)
-    {
-        (*menuFlag)&=15;
-        ISetEvent(&tempEvent,0,0,0,0,-1,ISetPaste,(IFileNode*)(*curNode),(IFileNode*)nodeX,6);
-        IEventStackPush(top,tempEvent);
-    }
-    //删除确认
-
-    return numOfSelected;
 }
 
 /*
-    函数功能：根据文件类型，画图标
-    输入参数：tempNode——文件节点, y——纵向位置
+    函数功能：右侧窗口(大图标)
+    输入参数：curNode——当前目录二级指针, nodeX——辅助节点指针，用于保存被复制/剪切的节点,top——事件栈
     输出参数：无
     返回值：无
 */
-void IView1DrawIcon(IFileNode* tempNode,int y)
+void IView11(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IFileNode* tempNode,FILE* fpHZ,IEventStackNode* top,char* menuFlag)
 {
-    if(tempNode->flags&2)
-    {
-        setfillstyle(SOLID_FILL,139);
-        bar(248+DF,y,936+DF,y+19);
-    }
-    if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"txt"))
-        Itxt(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
-        Idoc(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
-        Ic(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
-        Ih(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
-        Iobj(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
-        Iexe(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
-        Ipic(256+DF,y+2);
-    else if(IisFolder(tempNode))
-    {
-        if(tempNode->file.type[1]=='d')
-            Idisk(256+DF,y+2);
-        else
-            Ifolder(256+DF,y+2);
-    }
-    else
-        Imystery(256+DF,y+2);
-}
+    IEvent tempEvent;
+    char temp[150];
+    int y=116+DF,x=276+DF;
+    char num=0;
 
+    while(tempNode)     //对每一个当前页码的文件
+    {
+        num++;
+        IView11DrawIcon(tempNode,x,y);
+        //根据文件类型，画图标
+        setcolor(0);
+        Iouttextxy(x+50-strlen(tempNode->file.name)*4,y+95,tempNode->file.name,fpHZ);
+
+        if((*menuFlag)&4)
+            ISetEvent(&tempEvent,x,y,x+99,y+79,2,ICtrlSelect,tempNode,NULL,4);
+        else
+            ISetEvent(&tempEvent,x,y,x+99,y+79,2,ISelect,tempNode,NULL,4);
+        IEventStackPush(top,tempEvent);
+        //根据是否Ctrl,设置选择类型
+
+        if(IisFolder(tempNode))
+        {
+            ISetEvent(&tempEvent,x,y,x+99,y+79,8,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,6);
+            IEventStackPush(top,tempEvent);
+            ISetEvent(&tempEvent,x,y,x+99,y+79,8,IEntreeActive,tempNode,(IFileNode*)curNode,-1);
+            IEventStackPush(top,tempEvent);
+        }
+        else
+        {
+            if(!strcmp(tempNode->file.type,"EXE")||!strcmp(tempNode->file.type,"BAT"))
+            {
+                ISetEvent(&tempEvent,x,y,x+99,y+79,8,IexeActive,tempNode,NULL,6);
+                IEventStackPush(top,tempEvent);
+            }
+            if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"ASM"))
+            {
+                ISetEvent(&tempEvent,x,y,x+99,y+79,8,ItxtActive,tempNode,NULL,6);
+                IEventStackPush(top,tempEvent);
+            }
+        }
+        //文件打开方式
+
+        if(num>=30) break;
+        if(num%6)
+            x+=102;
+        else
+        {
+            y+=112;
+            x=276+DF;
+        }
+        tempNode=tempNode->next;
+    }
+}
 /*
     函数功能：根据文件类型，画图标
     输入参数：curNode——当前目录二级指针, page——页码, numOfItem——项目总数
@@ -528,14 +658,25 @@ void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem)
     输出参数：无
     返回值：无
 */
-void IView2(char* page,FILE* fpHZ)
+void IView2(char* page,FILE* fpHZ,IEventStackNode* top,IFileNodePointer** curNode)
 {
 
     FILE* searched=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","r");
     char tempStr[150];
+    IEvent tempEvent;
     char name[15];
     int y=120+DF,i,n,j=0,numOfsearched=0;
 
+    setcolor(0);
+    IGoLeft(250+DF,720+DF);
+    Iouttextxy(270+DF,721+DF,"返回",fpHZ);
+    ISetEvent(&tempEvent,250+DF,720+DF,265+DF,735+DF,2,INOP,NULL,NULL,4);
+    IEventStackPush(top,tempEvent);
+
+    Iouttextxy(853+DF,61+DF,"在本文件夹中搜索",fpHZ);
+    ISetEvent(&tempEvent,853+DF,52+DF,1016+DF,77+DF,2,ISearchActive,(IFileNode*)(*curNode),NULL,8);
+    IEventStackPush(top,tempEvent);
+    //重新搜索
 
     setcolor(50);
     IPutsHZ16(250+DF,94+DF,"匹配文件名",fpHZ);

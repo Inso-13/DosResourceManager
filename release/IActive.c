@@ -585,3 +585,29 @@ void INextPage(IFileNode *pag,IFileNode* null)
     *page+=1;
     //翻到下一页
 }
+
+/*
+    函数功能：设置View0为详细信息
+    输入参数：flag——View0的控制位, null——用于占位
+    输出参数：无
+    返回值：无
+*/
+void ISetView10(IFileNode * flag,IFileNode* null)
+{
+    char *menuFlag=(char*)flag;
+
+    (*menuFlag)&=63;
+}
+
+/*
+    函数功能：设置View0为大图标
+    输入参数：flag——View0的控制位, null——用于占位
+    输出参数：无
+    返回值：无
+*/
+void ISetView11(IFileNode * flag,IFileNode* null)
+{
+    char *menuFlag=(char*)flag;
+
+    (*menuFlag)|=64;
+}

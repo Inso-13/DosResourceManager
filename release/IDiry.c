@@ -103,7 +103,7 @@ void IDetree(IFileNode * root)
 
 /*
     函数功能：将root目录下的文件加到文件树上
-    输入参数：root——需要增枝的目录
+    输入参数：root——需要增枝的目录,flag——控制位
     输出参数：无
     返回值：无
 */

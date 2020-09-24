@@ -135,3 +135,41 @@ void IExit(int x,int y)
     line(x,y+4,x+4,y);
     line(x,y+5,x+4,y+1);
 }
+
+/*
+    函数功能：详细视图
+    输入参数：x——图形的左上角横坐标, y——图形的左上角纵坐标
+    输出参数：无
+    返回值：无
+*/
+void IDetailOption(int x,int y)
+{
+    setcolor(0);
+    line(x,y,x+11,y);
+    line(x,y+1,x+11,y+1);
+    line(x,y+4,x+11,y+4);
+    line(x,y+6,x+11,y+6);
+    line(x,y+8,x+11,y+8);
+    line(x,y+10,x+11,y+10);
+    line(x,y+11,x+11,y+11);
+    putpixel(x+1,y+3,15);
+    putpixel(x+1,y+6,14);
+    putpixel(x+1,y+9,144);
+}
+
+/*
+    函数功能：大图标视图
+    输入参数：x——图形的左上角横坐标, y——图形的左上角纵坐标
+    输出参数：无
+    返回值：无
+*/
+void IPictureOption(int x,int y)
+{
+    setcolor(0);
+    rectangle(x,y,x+11,y+11);
+    setcolor(15);
+    line(x+1,y+1,x+10,y+1);
+
+    setfillstyle(SOLID_FILL,GREEN);
+    bar(x+1,y+5,x+10,y+10);
+}

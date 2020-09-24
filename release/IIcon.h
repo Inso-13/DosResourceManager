@@ -20,5 +20,6 @@ void Ih(int x,int y);
 void Iobj(int x,int y);
 void Imystery(int x,int y);
 void Ipic(int x,int y);
+void IBlackBar(int x,int y);
 
 #endif

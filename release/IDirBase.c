@@ -24,7 +24,7 @@
 
 /*
     函数功能：复制单个文件，将inFile文件复制到outParent文件夹内，并更新节点
-    输入参数：inFile——等待复制的文件, outParent——粘贴到的目标文件夹
+    输入参数：inFile——等待复制的文件, outParent——粘贴到的目标文件夹，flag——是否强制覆盖
     输出参数：无
     返回值：复制成功返回1，失败则返回0
 */
@@ -143,6 +143,7 @@ int Imkdir(IFileNode * pathNode,char* folderName)
 int Irmdir(IFileNode * node)
 {
     char temp[150];      //辅助字符串
+    int i;
 
     strcpy(temp,"rmdir ");
     IGetAbsolutePath(node,temp+7);
@@ -153,10 +154,13 @@ int Irmdir(IFileNode * node)
 
     IGetAbsolutePath(node,temp);
     IDelFileNode(IFindParent(node),node->file.name);
-    while(ISearchPath(temp))
-        rmdir(temp);
+    for(i=0;i<50;i++)
+    {
+        if(ISearchPath(temp))
+            rmdir(temp);
+    }
         
-    return 1;
+    return !ISearchPath(temp);
 }
 
 /*

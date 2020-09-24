@@ -26,7 +26,7 @@
 
 /*
     函数功能：在View1中激活一级菜单
-    输入参数：(mouseX,mouseY)——鼠标的位置, numOfSelected——当前路径中被选中的文件数, top——View1的事件栈, curNode——当前节点,nodeX——辅助节点指针, menuFlag——菜单的标志(bit0 是否为二层菜单,bit1 是否有删除确认窗口,bit2 是否按下Ctrl, bit3 是否是最后一页, bit4、5 是否有覆盖确认窗口), fpHZ——汉字库文件
+    输入参数：(mouseX,mouseY)——鼠标的位置, numOfSelected——当前路径中被选中的文件数, top——View1的事件栈, curNode——当前节点,nodeX——辅助节点指针, menuFlag——菜单的标志(bit0 是否为二层菜单,bit1 是否有删除确认窗口,bit2 是否按下Ctrl, bit3 是否是最后一页, bit4、5 是否有覆盖确认窗口,bit6 区分View1视图 0为详细信息/1为大图标), fpHZ——汉字库文件
     输出参数：无
     返回值：无
 */
@@ -85,7 +85,7 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
             ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*i,mouseX+80,mouseY+19+20*i,2,ISortActive,(IFileNode*)curNode,(IFileNode*)lambda[i],4);
             IEventStackPush(top,tempEvent);
         }
-        (*menuFlag)&=62;
+        (*menuFlag)&=126;
     }
     //如果是二级排序菜单
 }
@@ -198,7 +198,7 @@ void ISetCut(IFileNode* cur,IFileNode* X)
 }
 
 /*
-    函数功能：激活粘贴函数
+    函数功能：激活粘贴函数(非覆盖)
     输入参数：cur——当前节点
     输出参数：X——辅助节点指针，用于保存被复制/剪切的节点
     返回值：无
@@ -245,7 +245,7 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
 }
 
 /*
-    函数功能：激活粘贴函数
+    函数功能：激活粘贴函数(覆盖)
     输入参数：cur——当前节点
     输出参数：X——辅助节点指针，用于保存被复制/剪切的节点
     返回值：无
@@ -269,7 +269,7 @@ void ISetPasteF(IFileNode* cur,IFileNode* X)
     bar(900+DF,753+DF,1000+DF,765+DF);
 }
 /*
-    函数功能：激活删除函数
+    函数功能：粘贴确认函数
     输入参数：flagx——菜单状态位, null——用于占位
     输出参数：无
     返回值：无
@@ -294,12 +294,11 @@ void ISetPasteComfirm(IFileNode* flagx,IFileNode* null)
 }
 
 /*
-    函数功能：激活删除函数
-    输入参数：flagx——菜单状态位, null——用于占位
+    函数功能：粘贴检查函数
+    输入参数：cur——当前节点, X——辅助节点
     输出参数：无
     返回值：无
 */
-
 void ISetPasteCheck(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;

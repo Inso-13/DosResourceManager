@@ -217,3 +217,9 @@ void Ipic(int x,int y)
 	line(x+3,y+6,x+6,y+6);
 	line(x+4,y+5,x+5,y+4);
 }
+
+void IBlackBar(int x,int y)
+{
+	setfillstyle(SOLID_FILL,0);
+	bar(x,y,x+49,y+79);
+}

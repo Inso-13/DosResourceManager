@@ -1,7 +1,7 @@
 /*
-    版本号：0.6.3
+    版本号：0.8.1
     作者：黄子昊
-    生成日期：2020-9-10
+    生成日期：2020-9-24
     说明：仿Windows资源管理器,仍在测试中
 */
 
@@ -117,7 +117,7 @@ void main()
             if(bioskey(2)&4)
             {
                 if(menuFlag&4)
-                    menuFlag&=59;
+                    menuFlag&=123;
                 else
                     menuFlag|=4;
 
@@ -200,7 +200,7 @@ void main()
             setfillstyle(SOLID_FILL,255);
             bar(248+DF,90+DF,1022+DF,740+DF);
             bar(192+DF,52+DF,800+DF,76+DF);
-            bar(0+DF,745+DF,992+DF,766+DF);
+            bar(0+DF,745+DF,1023+DF,766+DF);
             IEventStackPop(top1,1000);
             numOfSelected=IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
@@ -219,9 +219,9 @@ void main()
             setfillstyle(SOLID_FILL,255);
             bar(248+DF,90+DF,1022+DF,740+DF);
             bar(192+DF,52+DF,800+DF,76+DF);
-            bar(0+DF,745+DF,992+DF,766+DF);
+            bar(0+DF,745+DF,1023+DF,766+DF);
             IEventStackPop(top1,1000);
-            IView2(&page2,fpHZ);
+            IView2(&page2,fpHZ,top1,&curNode);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }
         //激活2号窗口
