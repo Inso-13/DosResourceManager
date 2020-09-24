@@ -11,7 +11,7 @@
 
 // #define LM
 #define DF 0
-#define DB
+// #define DB
 
 typedef struct IFile    //文件结构
 {

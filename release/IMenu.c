@@ -59,7 +59,7 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
         {
             if(numOfSelected==1)
             {
-                ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*4,mouseX+80,mouseY+19+20*4,2,ISetRename,(IFileNode*)curNode,NULL,4);
+                ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*4,mouseX+80,mouseY+19+20*4,2,ISetRename,(IFileNode*)curNode,(IFileNode*)menuFlag,4);
                 IEventStackPush(top,tempEvent);
             }
             ISetEvent(&tempEvent,mouseX+1,mouseY+1,mouseX+80,mouseY+19,2,ISetCopy,(IFileNode*)curNode,(IFileNode*)nodeX,4);
