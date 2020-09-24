@@ -48,9 +48,9 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
             return;
         if((*menuFlag)&8)
         {
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*5,mouseX+80,mouseY+19+20*5,2,ISetNewFile,(IFileNode*)curNode,NULL,4);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*5,mouseX+80,mouseY+19+20*5,2,ISetNewFile,(IFileNode*)curNode,(IFileNode*)menuFlag,4);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*6,mouseX+80,mouseY+19+20*6,2,ISetNewFolder,(IFileNode*)curNode,NULL,6);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*6,mouseX+80,mouseY+19+20*6,2,ISetNewFolder,(IFileNode*)curNode,(IFileNode*)menuFlag,6);
             IEventStackPush(top,tempEvent);
         }
         ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*7,mouseX+80,mouseY+19+20*7,2,ISortMenuActive,(IFileNode*)menuFlag,NULL,4);
@@ -229,7 +229,8 @@ void ISetPaste(IFileNode* cur,IFileNode* X)
         }
         tempNode=tempNode->next;
     }
-
+    setfillstyle(SOLID_FILL,255);
+    bar(900+DF,745+DF,1020+DF,765+DF);
     setcolor(144);
     outtextxy(900+DF,753+DF,"Pasting...");
 
@@ -254,7 +255,9 @@ void ISetPasteF(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
-
+    
+    setfillstyle(SOLID_FILL,255);
+    bar(900+DF,745+DF,1020+DF,765+DF);
     setcolor(144);
     outtextxy(900+DF,753+DF,"Pasting...");
 
@@ -281,12 +284,12 @@ void ISetPasteComfirm(IFileNode* flagx,IFileNode* null)
 
     if(fgetc(fp)=='f')
     {
-        (*flag)&=31;
+        (*flag)&=95;
         (*flag)|=16;
     }
     else
     {
-        (*flag)&=47;
+        (*flag)&=111;
         (*flag)|=32;
     }
     fclose(fp);
@@ -344,7 +347,8 @@ void ISetDelete(IFileNode* cur,IFileNode* X)
 
     nodeX->child=NULL;
     //辅助节点置零
-
+    setfillstyle(SOLID_FILL,255);
+    bar(900+DF,745+DF,1020+DF,765+DF);
     setcolor(144);
     outtextxy(900+DF,753+DF,"Deleting...");
 
@@ -373,9 +377,10 @@ void ISetDeleteComfirm(IFileNode* flagx,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ISetRename(IFileNode* cur,IFileNode* null)
+void ISetRename(IFileNode* cur,IFileNode* flag)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    char* menuFlag=(char*)flag;
     IFileNode* tempNode=curNode->child->child;
     int i=0;
     char temp[20];
@@ -389,7 +394,10 @@ void ISetRename(IFileNode* cur,IFileNode* null)
     //找到被选中的文件节点
     
     strcpy(temp,tempNode->file.name);
-    IGetString(254+DF,110+DF+20*i,150,temp,0);
+    if((*menuFlag)&64)
+        IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,0);
+    else
+        IGetString(254+DF,110+DF+20*i,150,temp,0);
     //获取新文件名
 
     if(temp[0])
@@ -402,9 +410,10 @@ void ISetRename(IFileNode* cur,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ISetNewFile(IFileNode* cur,IFileNode* null)
+void ISetNewFile(IFileNode* cur,IFileNode* flag)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    char* menuFlag=(char*)flag;
     IFileNode* tempNode=curNode->child->child;
     int i=0;
     char temp[20];
@@ -424,8 +433,15 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
     else
         i=i%30;
     //找到被选中的文件节点
-
-    IGetString(254+DF,110+20*i+DF,150,temp,4);
+    if(*menuFlag&64)
+    {
+        if(i==30)
+            IGetString(786+DF,669+DF,150,temp,4);
+        else
+            IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,4);
+    }
+    else
+        IGetString(254+DF,110+20*i+DF,150,temp,4);
     //获取新文件名
 
     if(temp[0])
@@ -445,9 +461,10 @@ void ISetNewFile(IFileNode* cur,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ISetNewFolder(IFileNode* cur,IFileNode* null)
+void ISetNewFolder(IFileNode* cur,IFileNode* flag)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    char* menuFlag=(char*)flag;
     IFileNode* tempNode=curNode->child->child;
     int i=0;
     char temp[20];
@@ -467,8 +484,15 @@ void ISetNewFolder(IFileNode* cur,IFileNode* null)
     else
         i=i%30;
     //找到被选中的文件节点
-
-    IGetString(254+DF,110+20*i+DF,150,temp,4);
+    if(*menuFlag&64)
+    {
+        if(i==30)
+            IGetString(786+DF,669+DF,150,temp,4);
+        else
+            IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,4);
+    }
+    else
+        IGetString(254+DF,110+20*i+DF,150,temp,4);
     //获取新文件名
 
     if(temp[0])

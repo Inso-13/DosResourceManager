@@ -17,6 +17,7 @@
 #include"IHanZi.h"
 #include"IDraw.h"
 #include"IIcon.h"
+#include"IIconL.h"
 #include"IActive.h"
 #include"IMenu.h"
 #include"ISound.h"
@@ -445,28 +446,28 @@ void IView11DrawIcon(IFileNode* tempNode,int x,int y)
         bar(x,y,x+99,y+109);
     }
     if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"txt"))
-        Itxt(x+25,y+10);
+        ItxtL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
-        Idoc(x+25,y+10);
+        IdocL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
-        Ic(x+25,y+10);
+        IcL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
-        Ih(x+25,y+10);
+        IhL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
-        Iobj(x+25,y+10);
+        IobjL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
-        Iexe(x+25,y+10);
+        IexeL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
-        Ipic(x+25,y+10);
+        IpicL(x+25,y+10);
     else if(IisFolder(tempNode))
     {
         if(tempNode->file.type[1]=='d')
-            Idisk(x+25,y+10);
+            IdiskL(x+25,y+10);
         else
-            Ifolder(x+25,y+10);
+            IfolderL(x+25,y+10);
     }
     else
-        Imystery(x+25,y+10);
+        ImysteryL(x+25,y+10);
 }
 
 /*

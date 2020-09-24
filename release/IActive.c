@@ -449,6 +449,8 @@ void ISearchActive(IFileNode* cur,IFileNode* null)
     IGetString(851+DF,51+DF,166,temp,1);  
     //得到查找的pattern
 
+    setfillstyle(SOLID_FILL,255);
+    bar(900+DF,745+DF,1020+DF,765+DF);
     setcolor(144);
     outtextxy(900+DF,753+DF,"Searching...");
 
@@ -458,7 +460,7 @@ void ISearchActive(IFileNode* cur,IFileNode* null)
     fclose(fp);
 
     setfillstyle(SOLID_FILL,255);
-    bar(900+DF,753+DF,950+DF,765+DF);
+    bar(900+DF,745+DF,1020+DF,765+DF);
 }
 
 /*
