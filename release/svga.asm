@@ -293,7 +293,7 @@ PROC    Init NEAR
         mov     [BkColor], al           ; merken
 
 ; Ist im Status-Feld der DST ein Fehler eingetragen, dann direkt Ende
-; (GRAPH nimmt's anscheinend nicht so genau mit der Fehlerprï¿½fung, so daï¿½
+; (GRAPH nimmt's anscheinend nicht so genau mit der Fehlerprï¿½fung, so daï¿?
 ; ein Aufruf mit gesetztem Fehler durchaus mï¿½glich ist. In diesem Fall ist
 ; Modus 0 eingeschaltet, es sieht aber trotzdem etwas bled aus, wenn in
 ; einen ungewollten Grafik-Modus geschaltet wird).
@@ -747,7 +747,7 @@ Even
 ; X-Werten. Diese mï¿½ssen aufsteigend sortiert werden.
 ; es und ds zeigen noch auf dasselbe Segment, das von VertexList bzw.
 ; LineList und mï¿½ssen deshalb nicht neu geladen werden.
-; Ausserdem kann die Tatsache ausgenutzt werden, daï¿½ es=ds.
+; Ausserdem kann die Tatsache ausgenutzt werden, daï¿? es=ds.
 
         mov     si, [WORD LOW LineList] ; Offset von LineList laden
         mov     cx, [LineCount]         ; Zï¿½hler
@@ -770,11 +770,11 @@ Even
         loopcx  @@L10                   ; Nï¿½chster X-Wert
 
 ; Die Linienliste ist jetzt aufsteigend sortiert. Fï¿½r jeweils zwei
-; Punkte daraus wird ein horizontale Linie ausgegeben. Dazu muï¿½
+; Punkte daraus wird ein horizontale Linie ausgegeben. Dazu muï¿?
 ; zuerst das ds-Register wieder restauriert werden, da ein Zugriff
 ; auf das Datensegment ab hier notwendig ist.
 ; Zum Zeichnen der Linien wird der HorLine-Vektor verwendet.
-; Die Linie muï¿½ noch in X-Richtung geclippt werden.
+; Die Linie muï¿? noch in X-Richtung geclippt werden.
 
 
         SetToDS ds                      ; Datensegment laden
@@ -815,7 +815,7 @@ Even
 @@L20:  inc     [Y]
         jmp     @@L4                    ; Nï¿½chster Y-Wert
 
-; Ende. Datensegment muï¿½ nicht restauriert werden.
+; Ende. Datensegment muï¿? nicht restauriert werden.
 
 @@L30:  LeaveProc
         ret
@@ -946,7 +946,7 @@ NoChar: mov     di, ' ' * 8             ; Leerzeichen aus ROM nehmen
 ROMCh:  lea     di, [di+ 0FA6Eh]
         mov     es, [SegF000]           ; es:di = 0F000h:0FA6Eh + Zeichenoffset
 
-; Falls der Font um 90ï¿½ gedreht werden muï¿½ --> ab dafï¿½r
+; Falls der Font um 90ï¿? gedreht werden muï¿? --> ab dafï¿½r
 ; Beim Einsprung zeigt es:di auf die Pixel-Darstellung des Zeichens
 ; Zuerst das Zeichen nach ax-dx holen
 
@@ -957,7 +957,7 @@ CharOK: mov     ax,[es:di+00h]                  ; Byte 1 und 2
         SetToDS es                              ; es = Datensegment
         mov     di, Offset CharShape            ; Dahin soll das Zeichen
         cmp     [TextOrient], 00                ; waagrechter Text ?
-        jnz     Rotate                          ; Nein, muï¿½ gedreht werden
+        jnz     Rotate                          ; Nein, muï¿? gedreht werden
 
 ; Wir mï¿½ssen das Zeichen nur noch speichern
 
@@ -970,7 +970,7 @@ CharOK: mov     ax,[es:di+00h]                  ; Byte 1 und 2
         stosw
         jmp     GetCharEnd
 
-; Das Zeichen muï¿½ gedreht werden
+; Das Zeichen muï¿? gedreht werden
 
 Rotate: mov     bp,0008h
 RotLp:  shr     al,1
@@ -1046,7 +1046,7 @@ Local   YMult: Word, Diff: Word = LocalSize
         call    [SegSelect]             ; Segment einstellen
         push    ax                      ; Offset merken
 
-; Berechnen, wieviel am Ende einer Zeile (X2) dazugezï¿½hlt werden muï¿½ um bei
+; Berechnen, wieviel am Ende einer Zeile (X2) dazugezï¿½hlt werden muï¿? um bei
 ; (X1/Y+1) zu landen
 
         mov     ax, [MaxX]              ; Zeilenlï¿½nge in Pixeln
@@ -1136,7 +1136,7 @@ ENDP    OutChar
 PROC    Text    Near
 
         call    [GE_Ready]              ; Warten bis die GE fertig ist
-        cmp     [TextOrient], 01h       ; 90ï¿½ gedreht ?
+        cmp     [TextOrient], 01h       ; 90ï¿? gedreht ?
         jne     CharLoop
         add     bx,cx
         dec     bx
@@ -1160,7 +1160,7 @@ CharLoop:
 ; X/Y = 1/1 besitzt.
 
         mov     dx, [TextSizeX]
-        cmp     [TextOrient], 01h       ; 90ï¿½ gedreht ?
+        cmp     [TextOrient], 01h       ; 90ï¿? gedreht ?
         jnz     @@L1
         add     [CursorY], dx
         dec     bx
@@ -1199,7 +1199,7 @@ PROC    TextStyle Near
         mov     [TextNum], al
         mov     [TextOrient], ah
 
-; X und Y auf je 8 Pixel abrunden und dafï¿½r sorgen, daï¿½ die Grï¿½ï¿½e mindestens
+; X und Y auf je 8 Pixel abrunden und dafï¿½r sorgen, daï¿? die Grï¿½ï¿½e mindestens
 ; 1 betrï¿½gt
 
         and     bx, 00F8h
@@ -1340,7 +1340,7 @@ Local SX1:Word, SDiff:Word, SWidth: Word = L
         inc     ax
         push    ax                      ; retten
 
-; Errechnen wieviel bei Erreichen des Punktes X2+1 dazugezï¿½hlt werden muï¿½ um
+; Errechnen wieviel bei Erreichen des Punktes X2+1 dazugezï¿½hlt werden muï¿? um
 ; X1 in der nï¿½chsten Linie zu erreichen
 
         mov     cx, [MaxX]
@@ -1648,7 +1648,7 @@ PROC    RestoreTrans    NEAR
         jmp     @@L4                    ; Springe ans Ende
 
 ; Segment-ï¿½berlauf behandeln
-; ACHTUNG: Dies muï¿½ immer geschehen, auch dann wenn der Zï¿½hler in cx abgelaufen
+; ACHTUNG: Dies muï¿? immer geschehen, auch dann wenn der Zï¿½hler in cx abgelaufen
 ; ist. Die Abfrage auf cx=0 kommt am Ende der Segmentkorrektur !!!
 
 @@L2:   mov     ax, ds                  ; ds retten
@@ -1714,7 +1714,7 @@ Local RX1:Word, RWidth: Word, RestProc: Word = LocalSize
         inc     ax
         mov     [RWidth], ax
 
-; Errechnen wieviel bei Erreichen des Punktes X2+1 dazugezï¿½hlt werden muï¿½ um
+; Errechnen wieviel bei Erreichen des Punktes X2+1 dazugezï¿½hlt werden muï¿? um
 ; X1 in der nï¿½chsten Linie zu erreichen
 
         mov     cx, [MaxX]
@@ -2227,7 +2227,7 @@ PROC    PatBar NEAR
 
 Local BX1:Word, BY1:Word, Diff:Word, BHe:Word, BW:Word, Lines:Word, Lines8:Word = L
 
-; Stackframe erzeugen (bp muï¿½ nicht gerettet werden)
+; Stackframe erzeugen (bp muï¿? nicht gerettet werden)
 
         mov     bp, sp
         sub     sp, L
@@ -2257,7 +2257,7 @@ Local BX1:Word, BY1:Word, Diff:Word, BHe:Word, BW:Word, Lines:Word, Lines8:Word 
 @@L2:   mov     [BX1], ax
         mov     [BY1], bx
 
-; Errechnen wieviel bei Erreichen des Punktes X2+1 dazugezï¿½hlt werden muï¿½ um
+; Errechnen wieviel bei Erreichen des Punktes X2+1 dazugezï¿½hlt werden muï¿? um
 ; X1 in der nï¿½chsten Linie zu erreichen
 ; Breite und Hï¿½he in Pixeln rechnen
 
@@ -2274,7 +2274,7 @@ Local BX1:Word, BY1:Word, Diff:Word, BHe:Word, BW:Word, Lines:Word, Lines8:Word 
 ; Das achtfache der Zeilenlï¿½nge in Bytes zwischenspeichern. Alle 8 Zeilen
 ; wiederholt sich nï¿½mlich das Muster, und (wenn zwischen den 8 Zeilen kein
 ; ï¿½berlauf auftritt) kann einfach mit rep movsb kopiert werden.
-; Auï¿½erdem muï¿½ ein Zï¿½hler fï¿½r die Zeilen mitgefï¿½hrt werden, da das nur geht,
+; Auï¿½erdem muï¿? ein Zï¿½hler fï¿½r die Zeilen mitgefï¿½hrt werden, da das nur geht,
 ; wenn mindestens 7 Zeilen geschrieben worden sind (sieht zwar auch sonst gut
 ; aus, erfï¿½llt aber andere Kriterien ).
 
@@ -2334,7 +2334,7 @@ Bar1:   mov     cx, [BW]                ; Breite des Rechtecks = Anzahl Punkte
 
 ; In dieser Zeile tritt kein ï¿½berlauf auf.
 ; Als nï¿½chstes prï¿½fen, ob bereits 7 Zeilen auf dem Bildschirm stehen. Wenn
-; nicht --> Fï¿½llen zu Fuï¿½
+; nicht --> Fï¿½llen zu Fuï¿?
 
         cmp     [Lines], 7
         jbe     Bar2                    ; war nix
@@ -2920,7 +2920,7 @@ Local X: WORD, Y: WORD, Diff: DWORD, QA: DWORD, QB: DWORD, QA2: DWORD, \
         sub     [WORD low R1], ax
         sbb     [WORD high R1], dx      ; Dec (R1, QA);
 
-; Was sonst noch in der ersten Region ausgefï¿½hrt werden muï¿½
+; Was sonst noch in der ersten Region ausgefï¿½hrt werden muï¿?
 
 @@L4:   mov     ax, [WORD low DeltaX]
         mov     dx, [WORD high DeltaX]
@@ -3092,7 +3092,7 @@ PROC    Arc     NEAR
 
         call    [GE_Ready]              ; Warten bis GE bereit
 
-; Prï¿½fen ob es sich um eine 360ï¿½ Ellipse handelt
+; Prï¿½fen ob es sich um eine 360ï¿? Ellipse handelt
 
         or      ax, ax                  ; Startwinkel = 0 ?
         jnz     @@L2                    ; Nein
@@ -3109,7 +3109,7 @@ PROC    Arc     NEAR
 
 @@L1:   jmp     Ellipse                 ; Nein --> Ellipse
 
-; Es handelt sich um keine 360ï¿½-Ellipse. Emulate aufrufen
+; Es handelt sich um keine 360ï¿?-Ellipse. Emulate aufrufen
 
 @@L2:   call    Emulate                 ; Ellipse emulieren
         ret
@@ -3148,7 +3148,7 @@ PROC    PieSlice Near
 
         call    [GE_Ready]              ; Warten bis GE bereit
 
-; Prï¿½fen ob es sich um eine 360ï¿½ Ellipse handelt
+; Prï¿½fen ob es sich um eine 360ï¿? Ellipse handelt
 
         or      ax, ax                  ; Startwinkel = 0 ?
         jnz     @@L2                    ; Nein
@@ -3163,7 +3163,7 @@ PROC    PieSlice Near
 
         jmp     Ellipse
 
-; Es handelt sich um keine 360ï¿½-Ellipse. Emulate aufrufen
+; Es handelt sich um keine 360ï¿?-Ellipse. Emulate aufrufen
 
 @@L2:   call    Emulate                 ; Ellipse emulieren
         ret
@@ -3274,7 +3274,7 @@ EPL_Solid:
 
         ret
 
-; Es wird mit einem Muster gefï¿½llt. Das Muster befindet sich in ah und muï¿½
+; Es wird mit einem Muster gefï¿½llt. Das Muster befindet sich in ah und muï¿?
 ; fï¿½r die Startkoordinate passend gemacht werden.
 
 EPL_Pattern:

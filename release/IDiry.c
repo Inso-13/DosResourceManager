@@ -65,7 +65,7 @@ void Irename(IFileNode * oldName,char* newName)
         }
         if(i==strlen(oldName->file.name)-1)
         {
-            _dos_findfirst(newName,0xf7,&ft);
+            _dos_findfirst(newName, 0xf7,&ft);
             if(!(ft.attrib&0x10))
                 strcpy(oldName->file.type,"NOT");
         }
@@ -96,8 +96,11 @@ void IDetree(IFileNode * root)
     if(root->file.type[1]=='\\') return;
     //若目录为根目录，置0返回
     
-    IDelFilelist(root->child);
-    root->child=NULL;
+    if(root->child)
+    {
+        IDelFilelist(root->child);
+        root->child=NULL;
+    }
     //将root目录下的文件从文件树上减除
 }
 
@@ -225,7 +228,7 @@ void ISearch(char* path,char* pattern,FILE* fp)
     char temp[150];  //辅助字符串
 
     Icd(path);
-    ret=_dos_findfirst("*.*",0xf7,&ft);
+    ret=_dos_findfirst("*.*", 0xf7,&ft);
     while(1)
     {
         while(!strcmp(ft.name,".")||!strcmp(ft.name,".."))

@@ -31,6 +31,7 @@ void main()
     IMouseSetLimit(1023+2*DF,767+2*DF);
     //鼠标初始化
 
+    delay(2);
 #ifdef DB
     id=1;
 #else
@@ -230,10 +231,10 @@ void main()
     Icd("C:\\DOSRES\\SRC");
     //以下释放内存
     IDelPointer(curNode);
+    IDelFilelist(root);
     free(view1Image);
     IDelStack(top1);
     IDelStack(top0);
-    IDetree(root);
     fclose(fpHZ);
     free(nodeX);
     free(root);

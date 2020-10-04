@@ -19,5 +19,6 @@ void Irename(IFileNode * oldName,char * newName);
 int Inew(IFileNode * pathNode,char* fileName);
 int Imkdir(IFileNode * pathNode,char* folderName);
 void ISearch(char* path,char* name,FILE* fp);
+void IDelFilelist(IFileNode * root);
 
 #endif

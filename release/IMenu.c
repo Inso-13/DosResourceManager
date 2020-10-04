@@ -344,6 +344,45 @@ void ISetDelete(IFileNode* cur,IFileNode* X)
 {
     IFileNodePointer * curNode=(IFileNodePointer *)cur;
     IFileNodePointer * nodeX=(IFileNodePointer *)X;
+    IFileNodePointer * tempNode=NULL,*lastNode=NULL;
+    char path1[150],path2[150];
+
+    tempNode=curNode;
+    while(tempNode->next)
+        tempNode=tempNode->next;
+
+    IGetAbsolutePath(curNode->child,path2);
+    while(tempNode)
+    {
+        lastNode=tempNode->pre;
+        IGetAbsolutePath(tempNode->child,path1);
+        if(IisChild(path1,path2))
+        {
+            if(tempNode->pre)
+            {
+                if(tempNode->next)
+                {
+                    tempNode=tempNode->pre;
+                    tempNode->next=tempNode->next->next;
+                    free(tempNode->next->pre);
+                    tempNode->next->pre=tempNode;
+                }
+                else
+                {
+                    tempNode=tempNode->pre;
+                    free(tempNode->next);
+                    tempNode->next=NULL;
+                }
+            }
+            else
+            {
+                tempNode->next->pre=NULL;
+                free(tempNode);
+                break;
+            }
+        }
+        tempNode=lastNode;
+    }
 
     nodeX->child=NULL;
     //¸¨Öú½ÚµãÖÃÁã

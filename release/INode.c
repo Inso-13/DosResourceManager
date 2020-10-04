@@ -73,15 +73,14 @@ IFileNode *IGetFileNodeList(char * path)
     int ret,i,j=0;
     struct find_t ft;
 
-
     if(childRoot==NULL)
     {
         IQuit();
     }
     Icd(path);
     IFileNodeSetNull(childRoot);
-    ret=_dos_findfirst("*.*",0xf7,&ft);  
-    //"*.*"，0xf7所有文件节点   ft存储查找结果
+    ret=_dos_findfirst("*.*", 0xf7,&ft);  
+    //"*.*"， 0xf7所有文件节点   ft存储查找结果
     
     while(1)
     {
@@ -98,16 +97,18 @@ IFileNode *IGetFileNodeList(char * path)
             childRoot=NULL;
             break;
         }
-        if(!strcmp(ft.name,"ehome")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0))
+        while(!strcmp(ft.name,"ehome")||!strcmp(ft.name,"WINDOWS")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)||(ft.name[2]=='C'&&ft.name[3]=='U'))
         {
             ret=_dos_findnext(&ft);
         }
+        if(ret)
+        {
+            free(tempNode);
+            lastNode->next=NULL;
+            break;
+        }
         strcpy(tempNode->file.name,ft.name);
         tempNode->file.size=(ft.size/512+1)/2;
-        if(ft.attrib&0x01)
-            tempNode->flags|=8;
-        if(ft.attrib&0x02)
-            tempNode->flags|=16;
         if(ft.attrib&0x10)
         {
             strcpy(tempNode->file.type,"0");
@@ -169,7 +170,7 @@ int IAddFileNode(IFileNode  *parent,char* name)
     IGetAbsolutePath(parent,temp);
     Icd(temp);
     IFileNodeSetNull(child);
-    ret=_dos_findfirst(name,0xf7,&ft);  
+    ret=_dos_findfirst(name, 0xf7,&ft);  
     //查找name文件
 
     if(ret) return 0;   
@@ -305,7 +306,7 @@ int IPeek(IFileNode* node,char* path)
     if(!IisFolder(node)) return 0;
 
     Icd(path);
-    ret=_dos_findfirst("*.*",0xf7,&ft);
+    ret=_dos_findfirst("*.*", 0xf7,&ft);
 
     while(1)
     {
