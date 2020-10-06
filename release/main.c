@@ -16,12 +16,17 @@ void main()
     char activeFlag=0,numOfSelected=0,page0=1,page1=1,page2=1,menuFlag=0,searching=0;   //标志变量
     char name[13],password[13],temp[150];    //辅助字符串
     void *view1Image=NULL;  //图形缓冲区
-    FILE *fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb");    //文件指针
+    FILE *fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb"),*fpCLS=NULL;    //文件指针
     IFileNode *root=NULL;        //文件根节点
     IFileNodePointer *curNode=(IFileNodePointer*)malloc(sizeof(IFileNodePointer));  //当前节点指针
     IFileNodePointer *nodeX=(IFileNodePointer*)malloc(sizeof(IFileNodePointer));    //辅助节点指针
     IEventStackNode *top0=IInitEventStack(),*top1=IInitEventStack();    //事件栈顶
     //定义变量
+
+    fpCLS=fopen("C:\\DOSRES\\ETC\\DEL.TXT","w+");
+    fclose(fpCLS);
+    fpCLS=fopen("C:\\DOSRES\\ETC\\LOG.TXT","w+");
+    fclose(fpCLS);
 
     SVGA_Init();
     Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
@@ -228,6 +233,8 @@ void main()
         //激活2号窗口
     }
 
+    fpCLS=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+");
+    fclose(fpCLS);
     Icd("C:\\DOSRES\\SRC");
     //以下释放内存
     IDelPointer(curNode);

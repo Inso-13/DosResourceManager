@@ -101,16 +101,21 @@ int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
 int Irmf(IFileNode * fileNode)
 {
     char tempStr[150];   //辅助字符串
+    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");
+
+    IGetAbsolutePath(fileNode,tempStr);
+    strcat(tempStr,"\n");
+    fputs(tempStr,fp);
 
     strcpy(tempStr,"del ");
     IGetAbsolutePath(fileNode,tempStr+4);
-
     strcat(tempStr,">>C:\\DOSRES\\ETC\\log.txt");
 
     system(tempStr);
     //删除文件
     delay(1);
 
+    fclose(fp);
     return IDelFileNode(IFindParent(fileNode),fileNode->file.name);     
     //删除文件节点
 }
@@ -146,14 +151,12 @@ int Imkdir(IFileNode * pathNode,char* folderName)
 int Irmdir(IFileNode * node)
 {
     char temp[180];      //辅助字符串
-    int i=0;
+    int i=0;    
+    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");
 
-    // strcpy(temp,"rmdir ");
-    // IGetAbsolutePath(node,temp+6);
-    
-    // strcat(temp," >>C:\\DOSRES\\ETC\\log.txt");
-    // system(temp);
-    //更新节点
+    IGetAbsolutePath(node,temp);
+    strcat(temp,"\n");
+    fputs(temp,fp);
 
     IGetAbsolutePath(node,temp);
     IDelFileNode(IFindParent(node),node->file.name);
@@ -163,7 +166,8 @@ int Irmdir(IFileNode * node)
             rmdir(temp);
         else 
             break;
-        
+            
+    fclose(fp);
     return 1;
 }
 

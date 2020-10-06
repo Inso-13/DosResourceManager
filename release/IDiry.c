@@ -236,6 +236,11 @@ void ISearch(char* path,char* pattern,FILE* fp)
             ret=_dos_findnext(&ft);
             if(ret) break;
         }
+        while(!strcmp(ft.name,"ehome")||!strcmp(ft.name,"WINDOWS")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)||(ft.name[2]=='C'&&ft.name[3]=='U')||ft.name[0]=='$'||(ft.name[0]=='P'&&ft.name[1]=='R'&&ft.name[2]=='O'&&ft.name[5]=='A')||ft.name[0]=='3'||(ft.name[0]=='S'&&ft.name[1]=='Y'&&ft.name[2]=='S'&&ft.name[3]=='T'))
+        {
+            ret=_dos_findnext(&ft);
+            if(ret) break;
+        }
         if(ret) break;
         //排除.与..两个无用文件路径
 

@@ -72,6 +72,8 @@ IFileNode *IGetFileNodeList(char * path)
     IFileNode * childRoot=(IFileNode *)malloc(sizeof(IFileNode)), *tempNode=childRoot, *lastNode=childRoot;
     int ret,i,j=0;
     struct find_t ft;
+    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","r+");
+    char tempStr1[150],tempStr2[150];
 
     if(childRoot==NULL)
     {
@@ -97,13 +99,28 @@ IFileNode *IGetFileNodeList(char * path)
             childRoot=NULL;
             break;
         }
-        while(!strcmp(ft.name,"ehome")||!strcmp(ft.name,"WINDOWS")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)||(ft.name[2]=='C'&&ft.name[3]=='U'))
+        while(!strcmp(ft.name,"ehome")||!strcmp(ft.name,"WINDOWS")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)||(ft.name[2]=='C'&&ft.name[3]=='U')||ft.name[0]=='$'||(ft.name[0]=='P'&&ft.name[1]=='R'&&ft.name[2]=='O'&&ft.name[5]=='A')||ft.name[0]=='3'||(ft.name[0]=='S'&&ft.name[1]=='Y'&&ft.name[2]=='S'&&ft.name[3]=='T'))
         {
             ret=_dos_findnext(&ft);
+            if(ret) break;
         }
+        while(fgets(tempStr1,150,fp))
+        {
+            if(tempStr1[strlen(tempStr1)-1]=='\n')
+                tempStr1[strlen(tempStr1)-1]='\0';
+            strcpy(tempStr2,path);
+            strcat(tempStr2,"\\");
+            strcat(tempStr2,ft.name);
+            if(!strcmp(tempStr1,tempStr2))
+            {
+                ret=_dos_findnext(&ft);
+            }
+        }
+        rewind(fp);
         if(ret)
         {
             free(tempNode);
+            tempNode=NULL;
             lastNode->next=NULL;
             break;
         }
@@ -148,6 +165,7 @@ IFileNode *IGetFileNodeList(char * path)
         IFileNodeSetNull(tempNode);
         tempNode->pre=lastNode;
     }
+    fclose(fp);
     return childRoot;
 }
 

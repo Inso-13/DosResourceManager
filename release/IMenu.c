@@ -455,7 +455,7 @@ void ISetNewFile(IFileNode* cur,IFileNode* flag)
     char* menuFlag=(char*)flag;
     IFileNode* tempNode=curNode->child->child;
     int i=0;
-    char temp[20];
+    char temp[20],tempStr1[150],tempStr2[150];
 
     while(tempNode)
     {
@@ -484,6 +484,7 @@ void ISetNewFile(IFileNode* cur,IFileNode* flag)
     //获取新文件名
 
     if(temp[0])
+    {
         if(!Inew(curNode->child,temp))
         {
             setcolor(249);
@@ -491,6 +492,7 @@ void ISetNewFile(IFileNode* cur,IFileNode* flag)
             IWarningBeep();
             delay(1500);
         }
+    }    
         //如果创建文件失败
 }
 
