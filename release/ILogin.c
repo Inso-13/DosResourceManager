@@ -1,20 +1,13 @@
 /*
-    版本号：1.0
-    作者：黄子昊
-    生成日期：2020-9-5
-    说明：登录界面
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：黄子昊
+ *   生成日期：2020-9-4
+ *   说明：登录界面
+ **************************************************
+ */
 
-
-#include<GRAPHICS.H>
-#include<STDIO.H>
-#include<STRING.H>
-#include<STDLIB.H>
-#include"IEvent.h"
-#include"IActive.h"
-#include"IUtility.h"
-#include"IHanZi.h"
-#include"ISecret.h"
+#include"ILogin.h"
 
 /*
     函数功能：画登录界面的背景
@@ -132,4 +125,32 @@ void ILoginConfirm(int* id,char* name,char* password)
     }
     fclose(fp);
     fp=NULL;
+}
+
+/*
+    函数功能：获取用户名
+    输入参数：nam——用于存储用户名, null——用于占位
+    输出参数：无
+    返回值：无
+*/
+void IGetName(IFileNode* nam,IFileNode* null)
+{
+    char* name =(char*)nam;
+
+    IGetString(440+DF,440+DF,220,name,2);
+    //获取用户名
+}
+
+/*
+    函数功能：获取用户名
+    输入参数：pass——用于存储密码, null——用于占位
+    输出参数：无
+    返回值：无
+*/
+void IGetPassword(IFileNode* pass,IFileNode* null)
+{
+    char* password=(char*)pass;
+
+    IGetString(440+DF,490+DF,220,password,3);
+    //获取密码
 }

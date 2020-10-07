@@ -3,20 +3,14 @@
  *   版本号：1.0
  *   作者：黄子昊
  *   生成日期：2020-9-4
- *   说明：主要定义加密函数
+ *   说明：通配符匹配函数
  **************************************************
  */
-
-
-
-#ifndef __ISECRET_H
-#define __ISECRET_H
-
-//库文件
-#include<STRING.H>
-
+#ifndef __IMATCH_H
+#define __IMATCH_H
 
 //函数原型
-void IEncrypt(char* plain,char* cipher);
+int IMatch(char* src,char* pattern);
+int IMatchi(char a,char b);
 
 #endif

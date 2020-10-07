@@ -1,13 +1,13 @@
 /*
-    版本号：1.0
-    作者：郭一菲
-    生成日期：2020-9-4
-    说明：主要定义排序函数
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：郭一菲
+ *   生成日期：2020-9-4
+ *   说明：主要定义排序函数
+ **************************************************
+ */
 
-#include<STRING.H>
-#include"IUtility.h"
-#include"INode.h"
+
 #include"ISort.h"
 
 /*
@@ -173,4 +173,75 @@ int ISortTypeUp(IFileNode* node1,IFileNode* node2)
 int ISortTypeDown(IFileNode* node1,IFileNode* node2)
 {
     return strcmp(node2->file.type,node1->file.type);
+}
+
+/*
+    函数功能：打开排序菜单
+    输入参数：flag——排序菜单打开标志, null——用于占位
+    输出参数：无
+    返回值：无
+*/
+void ISortMenuActive(IFileNode* flag,IFileNode* null)
+{
+    char *n=(char*) flag;
+    *n|=1;
+    //将打开标志置为1
+}
+
+/*
+    函数功能：激活排序函数
+    输入参数：cur——当前节点, pfun——用于确定顺序的函数指针，类似于lambda
+    输出参数：无
+    返回值：无
+*/
+void ISortActive(IFileNode* cur,IFileNode* pfun)
+{
+    IFileNodePointer* curNode=(IFileNodePointer*)cur;
+    int (*fun)(IFileNode*,IFileNode*)=(int(*)(IFileNode*,IFileNode*))pfun;
+    
+    if(curNode->child->child)
+        ISort(curNode->child,fun);
+    //激活排序函数
+}
+
+/*
+    函数功能：排序时,用于交换两个兄弟节点在链表中的顺序
+    输入参数：(node1,node2)——两个需要交换的节点
+    输出参数：无
+    返回值：无
+*/
+void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
+{
+    if(node1->flags&4)
+    {
+        node1->flags&=27;
+        node2->flags|=4;
+        node1->pre->child=node2;
+        node2->pre=node1->pre;
+        if(node2->next)
+        {
+            node2->next->pre=node1;
+            node1->next=node2->next;
+        }
+        else 
+            node1->next=NULL;
+        node2->next=node1;
+        node1->pre=node2;
+    }
+    //如果node1是链表头
+    else
+    {
+        if(node2->next)
+        {
+            node2->next->pre=node1;
+            node1->next=node2->next;
+        }
+        else
+            node1->next=NULL;
+        node1->pre->next=node2;
+        node2->pre=node1->pre;
+        node2->next=node1;
+        node1->pre=node2;
+    }
+    //如果node1不是链表头
 }

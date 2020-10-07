@@ -1,20 +1,12 @@
 /*
-    版本号：1.0
-    作者：黄子昊
-    生成日期：2020-9-4
-    说明：与文件节点操作相关的部分函数，比较底层
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：黄子昊
+ *   生成日期：2020-9-4
+ *   说明：与文件节点操作相关的部分函数，比较底层
+ **************************************************
+ */
 
-
-#include<string.h>
-#include<stdlib.h>
-#include<DOS.H>
-#include<DIR.H>
-#include<IO.H>
-#include<ALLOC.H>
-#include<STDIO.H>
-#include"IUtility.h"
-#include"IQuit.h"
 #include"INode.h"
 
 /*
@@ -344,43 +336,25 @@ int IPeek(IFileNode* node,char* path)
 }
 
 /*
-    函数功能：排序时,用于交换两个兄弟节点在链表中的顺序
-    输入参数：(node1,node2)——两个需要交换的节点
+    函数功能：更换磁盘并进入目录
+    输入参数：path——绝对路
     输出参数：无
     返回值：无
 */
-void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
+void Icd(char * path)
 {
-    if(node1->flags&4)
+    char temp[150]="";
+
+    if(path[1]==':'&&getdisk()!=(path[0]-'A'))  //当前磁盘与目标不一致
     {
-        node1->flags&=27;
-        node2->flags|=4;
-        node1->pre->child=node2;
-        node2->pre=node1->pre;
-        if(node2->next)
-        {
-            node2->next->pre=node1;
-            node1->next=node2->next;
-        }
-        else 
-            node1->next=NULL;
-        node2->next=node1;
-        node1->pre=node2;
-    }
-    //如果node1是链表头
-    else
+        setdisk(path[0]-'A');   //更改磁盘
+    } 
+    if(strlen(path)<=3)     //路径标准化
     {
-        if(node2->next)
-        {
-            node2->next->pre=node1;
-            node1->next=node2->next;
-        }
-        else
-            node1->next=NULL;
-        node1->pre->next=node2;
-        node2->pre=node1->pre;
-        node2->next=node1;
-        node1->pre=node2;
-    }
-    //如果node1不是链表头
+        strcpy(temp,path);
+        strcpy(temp+1,"");
+        strcat(temp,":\\.");
+        chdir(temp);
+    }   
+    chdir(path);    //更改目录
 }

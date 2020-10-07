@@ -1,22 +1,12 @@
 /*
-    版本号：1.0
-    作者：黄子昊
-    生成日期：2020-9-4
-    说明：DiryBase作为Diry库的底层支撑，封装了许多常用的文件操作函数
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：黄子昊
+ *   生成日期：2020-9-4
+ *   说明：DiryBase作为Diry库的底层支撑，封装了许多常用的文件操作函数
+ **************************************************
+ */
 
-
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
-#include<DOS.H>
-#include<DIR.H>
-#include<IO.H>
-#include<ALLOC.H>
-#include<GRAPHICS.H>
-#include"IUtility.h"
-#include"ISound.h"
-#include"INode.h"
 #include"IDirBase.h"
 
 #define BUFFSIZE 256
@@ -285,4 +275,17 @@ void Irmr(IFileNode * oldChild)
     else
         Irmf(oldChild);
     //删除文件夹中所有的文件
+}
+
+/*
+    函数功能：判断是否有name文件
+    输入参数：name——文件绝对/相对路径
+    输出参数：无
+    返回值：若存在改文件返回1; 否则返回0
+*/
+int ISearchPath(char* name)
+{
+    struct find_t ft;
+
+    return !_dos_findfirst(name,0xf7,&ft); 
 }

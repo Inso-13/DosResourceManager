@@ -1,14 +1,16 @@
 /*
-    版本号：0.8.3
-    作者：黄子昊
-    生成日期：2020-9-24
-    说明：仿Windows资源管理器,仍在测试中
-*/
-
+ **************************************************
+ *   版本号：1.0.0
+ *   作者：黄子昊
+ *   生成日期：2020-10-7
+ *   说明：仿Windows资源管理器,仍在测试中
+ **************************************************
+ */
 
 #ifndef __DOSRES_H
 #define __DOSRES_H
 
+//库文件
 #include<STDIO.H>
 #include<ALLOC.H>
 #include<STRING.H>
@@ -17,19 +19,19 @@
 #include<PROCESS.H>
 #include<BIOS.H>
 #include<GRAPHICS.H>
+
+//辅助模块
 #include"IType.h"
 #include"IQuit.h"
-#include"IMouse.h"
-#include"IInit.h"
-#include"IEvent.h"
-#include"IUtility.h"
-#include"IDiry.h"
-#include"IHanZi.h"
-#include"IView.h"
-#include"IMenu.h"
-#include"IActive.h"
-#include"ILogin.h"
 #include"ISound.h"
-#include"ISecret.h"
+#include"IHanZi.h"
+#include"IEvent.h"
+
+//调用模块
+#include"IInit.h"
+#include"IMouse.h"
+#include"IView.h"
+#include"ILogin.h"
+#include"IDisk.h"
 
 #endif

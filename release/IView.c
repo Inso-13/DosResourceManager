@@ -1,26 +1,12 @@
 /*
-    版本号：1.0
-    作者：黄子昊
-    生成日期：2020-9-8
-    说明：视图函数等
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：黄子昊
+ *   生成日期：2020-9-4
+ *   说明：视图函数等
+ **************************************************
+ */
 
-
-#include<GRAPHICS.H>
-#include<CONIO.H>
-#include<STDIO.H>
-#include<STRING.H>
-#include<STDLIB.H>
-#include"IEvent.h"
-#include"IUtility.h"
-#include"IDiry.h"
-#include"IHanZi.h"
-#include"IDraw.h"
-#include"IIcon.h"
-#include"IIconL.h"
-#include"IActive.h"
-#include"IMenu.h"
-#include"ISound.h"
 #include"IView.h"
 
 /*

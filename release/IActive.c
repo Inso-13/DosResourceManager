@@ -1,29 +1,13 @@
 /*
-    版本号：1.0
-    作者：郭一菲
-    生成日期：2020-9-4
-    说明：Active类函数处于中间层，用于将后端（如Diry等）函数的接口统一化，供前端调用栈使用
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：郭一菲
+ *   生成日期：2020-9-4
+ *   说明：Active类函数处于中间层，用于将后端（如Diry等）函数的接口统一化，供前端调用栈使用
+ **************************************************
+ */
 
-
-#include<STDIO.H>
-#include<STRING.H>
-#include<STDLIB.H>
-#include<BIOS.H>
-#include<DOS.H>
-#include<GRAPHICS.H>
-#include<CONIO.H>
-#include"IEvent.h"
-#include"IUtility.h"
-#include"IDiry.h"
-#include"ISort.h"
-#include"IInit.h"
-#include"IHanZi.h"
-#include"IQuit.h"
 #include"IActive.h"
-#include"IDebug.h"
-
-
 
 /*
     函数功能：在激活IEntree函数后，回收垃圾内存
@@ -303,136 +287,6 @@ void IGoRightActive(IFileNode* cur,IFileNode* null)
 }
 
 /*
-    函数功能：交互性地获取字符串
-    输入参数：x——输入框位置的横坐标, y——输入框位置的纵坐标, length——输入框的长度. flag——输入框的类型
-    输出参数：string——获取的字符串
-    返回值：获取的字符串的首地址
-    注：flag=0 重命名;flag=1 搜素框; flag=2 输入用户名;flag=3 输入密码;flag=4 新文件/新文件夹
-*/
-char* IGetString(int x,int y,int length,char* string,int flag)
-{
-    char* org=string;       //记录下string的初始位置
-    char tempChar='\0';     //用于接收输入的字符
-    char temp[20];          //辅助字符串
-    int n,i,t=0,j;
-
-    fflush(stdin);
-    //刷新键盘缓冲区
-
-    setcolor(0);
-    if(flag>=1&&flag<=3)
-    {
-        rectangle(x-1,y,x+length+1,y+27);
-        setfillstyle(SOLID_FILL,255);
-        bar(x,y+1,x+length,y+26);
-    }
-    else
-    {
-        if(flag==4)
-            strcpy(string,"");
-        rectangle(x-1,y+6,x+length+1,y+25);
-        setfillstyle(SOLID_FILL,255);
-        bar(x,y+7,x+length,y+24);   
-    }
-    //初始化输入框
-    n=strlen(string);
-    i=n;
-
-    setcolor(144);
-    if(flag!=3)
-        outtextxy(x+2,y+9,string);
-    else
-        for(j=0;j<n;j++)
-        {
-            outtextxy(x+2+8*j,y+9,"*");
-        }
-    //如果flag==3, 加密显示输入内容
-
-    while(1)
-    {
-        while(!kbhit())
-        {
-            if(t>0)
-                setcolor(144);
-            else
-                setcolor(255);
-            line(x+2+8*i,y+9,x+2+8*i,y+18);
-            t++;
-        }
-        //变量t用于计时，实现闪烁光标的效果
-
-        if(flag>=1&&flag<=3)
-            bar(x,y+1,x+length,y+26);
-        else
-            bar(x,y+7,x+length,y+24);
-        //两种不同的输入框
-
-        tempChar=getch();
-
-        if(tempChar=='\r')  //回车键
-            break;
-        else if(tempChar=='\b')  //退格键
-        {
-            if(n&&i)
-            {
-                strcpy(string+i-1,string+i);
-                n--;
-                i--;
-            }
-        }
-        else if(tempChar==0x1B)  //ESC键
-        {
-            strcpy(string,"");
-            break;
-        }
-        else if(tempChar=='\0')
-        {
-            tempChar=getch();
-            if(tempChar=='K'&&i)  //左方向键
-                i--;
-            else if(tempChar=='M'&&n>i)    //右方向键
-                i++;
-            else
-            {
-                getch();
-                tempChar=getch();
-                continue;
-            }
-        }
-        else if(n<12&&((tempChar>='0'&&tempChar<='9')||(tempChar>='a'&&tempChar<='z')||(tempChar>='A'&&tempChar<='Z')||tempChar=='.'||tempChar=='_'||(flag==1&&(tempChar=='?'||tempChar=='*'))))
-        {
-            strcpy(temp,string+i);
-            string[i++]=tempChar;
-            strcpy(string+i,temp);
-            n++;
-        }
-        //合法字符检验
-
-        setcolor(144);
-        if(flag>=1&&flag<=3)
-            bar(x,y+1,x+length,y+26);
-        else
-            bar(x,y+7,x+length,y+24);   
-        //两种输入框
-
-        if(flag!=3)
-            outtextxy(x+2,y+9,string);
-        else
-            for(j=0;j<n;j++)
-                outtextxy(x+2+8*j,y+9,"*");
-        //是否加密显示
-    }
-    if(flag==1)
-    {
-        setcolor(7);
-        line(0+DF,84+DF,1024+DF,84+DF);
-        line(0+DF,85+DF,1024+DF,85+DF);
-        rectangle(832+DF,51+DF,1017+DF,78+DF);
-    }
-    return org;
-}
-
-/*
     函数功能：激活查找函数
     输入参数：cur——当前节点, null——用于占位
     输出参数：无
@@ -501,63 +355,6 @@ void ItxtActive(IFileNode* txt,IFileNode* null)
     system(temp);
     //系统调用，借用BC编辑器打开文本文件
     IQuit();
-}
-
-/*
-    函数功能：打开排序菜单
-    输入参数：flag——排序菜单打开标志, null——用于占位
-    输出参数：无
-    返回值：无
-*/
-void ISortMenuActive(IFileNode* flag,IFileNode* null)
-{
-    char *n=(char*) flag;
-    *n|=1;
-    //将打开标志置为1
-}
-
-/*
-    函数功能：激活排序函数
-    输入参数：cur——当前节点, pfun——用于确定顺序的函数指针，类似于lambda
-    输出参数：无
-    返回值：无
-*/
-void ISortActive(IFileNode* cur,IFileNode* pfun)
-{
-    IFileNodePointer* curNode=(IFileNodePointer*)cur;
-    int (*fun)(IFileNode*,IFileNode*)=(int(*)(IFileNode*,IFileNode*))pfun;
-    
-    if(curNode->child->child)
-        ISort(curNode->child,fun);
-    //激活排序函数
-}
-
-/*
-    函数功能：获取用户名
-    输入参数：nam——用于存储用户名, null——用于占位
-    输出参数：无
-    返回值：无
-*/
-void IGetName(IFileNode* nam,IFileNode* null)
-{
-    char* name =(char*)nam;
-
-    IGetString(440+DF,440+DF,220,name,2);
-    //获取用户名
-}
-
-/*
-    函数功能：获取用户名
-    输入参数：pass——用于存储密码, null——用于占位
-    输出参数：无
-    返回值：无
-*/
-void IGetPassword(IFileNode* pass,IFileNode* null)
-{
-    char* password=(char*)pass;
-
-    IGetString(440+DF,490+DF,220,password,3);
-    //获取密码
 }
 
 /*

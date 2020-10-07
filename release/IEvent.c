@@ -1,15 +1,12 @@
 /*
-    版本号：1.0
-    作者：郭一菲
-    生成日期：2020-9-4
-    说明：与事件相关的函数
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：郭一菲
+ *   生成日期：2020-9-4
+ *   说明：与事件相关的函数
+ **************************************************
+ */
 
-
-#include<CONIO.H>
-#include<STDIO.H>
-#include<ALLOC.H>
-#include"IQuit.h"
 #include"IEvent.h"
 
 /*
@@ -119,4 +116,24 @@ void IDelStack(IEventStackNode * top)
 
     free(top);
     //释放栈顶
+}
+
+
+/*
+    函数功能：设置(初始化)事件
+    输入参数：event——待初始化的事件, 其他——事件的属性
+    输出参数：无
+    返回值：无
+*/
+void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change)
+{
+    event->x1=x1;
+    event->y1=y1;
+    event->x2=x2;
+    event->y2=y2;
+    event->type=type;
+    event->pfun=pfun;
+    event->node0=node0;
+    event->node1=node1;
+    event->change=change;
 }

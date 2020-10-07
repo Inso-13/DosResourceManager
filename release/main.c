@@ -1,10 +1,11 @@
 /*
-    版本号：0.8.3
-    作者：黄子昊
-    生成日期：2020-9-24
-    说明：仿Windows资源管理器,仍在测试中
-*/
-
+ **************************************************
+ *   版本号：1.0.0
+ *   作者：黄子昊
+ *   生成日期：2020-10-7
+ *   说明：仿Windows资源管理器,仍在测试中
+ **************************************************
+ */
 
 #include"main.h"
 
@@ -26,17 +27,16 @@ void main()
     fpCLS=fopen("C:\\DOSRES\\ETC\\DEL.TXT","w+");
     fclose(fpCLS);
     fpCLS=fopen("C:\\DOSRES\\ETC\\LOG.TXT","w+");
-    fclose(fpCLS);
+    fclose(fpCLS);  //清空文件
 
     SVGA_Init();
     Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
-    view1Image=malloc(imagesize(0,0,95,160));
-    //图形界面初始化
+    view1Image=malloc(imagesize(0,0,95,160));   //图形界面初始化
+
 	IMouseMath(mouseDraw);
     IMouseSetLimit(1023+2*DF,767+2*DF);
-    //鼠标初始化
+    delay(2);   //鼠标初始化
 
-    delay(2);
 #ifdef DB
     id=1;
 #else
@@ -55,7 +55,7 @@ void main()
             ILogin(name,password,top0,id,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             id=0;
-        }
+        }   //等待输入用户名密码
         if(kbhit()&&getch()==13||(mouseStatus&2)&&mouseX>370+DF&&mouseX<470+DF&&mouseY>550+DF&&mouseY<577+DF)
         {
             ILoginConfirm(&id,name,password);
@@ -63,12 +63,12 @@ void main()
                 break;
             id=-1;
             IWarningBeep();   
-        }
+        }   //检查登录
         else if((mouseStatus&2)&&mouseX>370+190+DF&&mouseX<470+190+DF&&mouseY>550+DF&&mouseY<550+27+DF)
         {
             id=0;
             break;
-        }
+        }   //取消登录
     }
 #endif
     //登录界面
@@ -80,8 +80,7 @@ void main()
     curNode->wait=30000;
     nodeX->child=NULL;
     nodeX->pre=NULL;
-    nodeX->next=NULL;
-    //文件节点初始化
+    nodeX->next=NULL;   //文件节点初始化
 
     IPlainView(fpHZ);
     IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1,fpHZ);
@@ -89,33 +88,27 @@ void main()
     for(i=0;i<16;i++)
         for(j=0;j<16;j++)
             mouseSave[i][j]=getpixel(mouseX+j,mouseY+i);
+    
     //主循环开始
-
     while(!exit)
     {   
-
 #ifdef DB
         setcolor(0);
         sprintf(temp,"left memory:%u Byte",coreleft());
         outtextxy(500+DF,753+DF,temp);
 #endif
 
-        mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);
-        //鼠标状态查询
-        activeFlag=IEventStackActive(top0,mouseX,mouseY,mouseStatus);
-        //改变0号窗口
+        mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);//鼠标状态查询
+        activeFlag=IEventStackActive(top0,mouseX,mouseY,mouseStatus);//改变0号窗口
         if(!activeFlag)
-            activeFlag=IEventStackActive(top1,mouseX,mouseY,mouseStatus);
-        //改变1号窗口
+            activeFlag=IEventStackActive(top1,mouseX,mouseY,mouseStatus);//改变1/2号窗口
         if((mouseStatus&2)&&mouseX>1004+DF&&mouseX<1016+DF&&mouseY>8+DF&&mouseY<16+DF)
-            exit=1;
-        //点击退出按钮
+            exit=1; //点击退出按钮
 
         if((menuFlag&1)||((mouseStatus&4)&&mouseX>240+DF&&mouseX<1024+DF&&mouseY>88+DF&&mouseY<744+DF))
             menu=1;
         else if(mouseStatus&2)
-            menu=0;
-        //是否尝试激活菜单
+            menu=0; //是否尝试激活菜单
 
         if(bioskey(2)&4)
         {
@@ -129,8 +122,7 @@ void main()
 
                 activeFlag|=4;
             }
-        }
-        //是否按下Ctrl
+        }   //是否按下Ctrl
 
         if((mouseStatus&2)&&mouseX>992+DF&&mouseX<1001+DF&&mouseY>720+DF&&mouseY<731+DF)
         {
@@ -157,8 +149,7 @@ void main()
                 page2--;
                 activeFlag|=8;
             }
-        }
-        //1号窗口的翻页
+        }   //窗口翻页
 
         if(!lastMenu&&menu==1){
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
@@ -196,8 +187,7 @@ void main()
             IEventStackPop(top0,1000);
             IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
-        }
-        //更新0号窗口
+        }   //更新0号窗口
         if((activeFlag&4)||(menuFlag&2))
         {
             searching=0;
@@ -210,8 +200,7 @@ void main()
             IEventStackPop(top1,1000);
             numOfSelected=IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
-        }
-        //更新1号窗口
+        }   //更新1号窗口
         if(activeFlag&8)
         {
             searching=1;
@@ -229,8 +218,7 @@ void main()
             IEventStackPop(top1,1000);
             IView2(&page2,fpHZ,top1,&curNode);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
-        }
-        //激活2号窗口
+        }   //激活2号窗口
     }
 
     fpCLS=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+");

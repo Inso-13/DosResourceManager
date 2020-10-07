@@ -1,21 +1,12 @@
 /*
-    版本号：1.0
-    作者：黄子昊
-    生成日期：2020-9-4
-    说明：Diry以DirBase为基础，提供了基本可以被前端直接使用的文件操作函数
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：黄子昊
+ *   生成日期：2020-9-4
+ *   说明：Diry以DirBase为基础，提供了基本可以被前端直接使用的文件操作函数
+ **************************************************
+ */
 
-
-#include<STRING.H>
-#include<STDLIB.H>
-#include<CONIO.H>
-#include<ALLOC.H>
-#include<DOS.H>
-#include<IO.H>
-#include<STDIO.H>
-#include"IUtility.h"
-#include"INode.h"
-#include"IDirBase.h"
 #include"IDiry.h"
 
 /*

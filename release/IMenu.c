@@ -1,27 +1,12 @@
 /*
-    版本号：1.0
-    作者：黄子昊
-    生成日期：2020-9-4
-    说明：与菜单相关的部分函数
-*/
+ **************************************************
+ *   版本号：1.0
+ *   作者：黄子昊
+ *   生成日期：2020-9-4
+ *   说明：与菜单相关的部分函数
+ **************************************************
+ */
 
-
-#include<STDIO.H>
-#include<STRING.H>
-#include<STDLIB.H>
-#include<DOS.H>
-#include<DIR.H>
-#include<BIOS.H>
-#include<CONIO.H>
-#include<GRAPHICS.H>
-#include"IEvent.h"
-#include"IUtility.h"
-#include"ISound.h"
-#include"IHanZi.h"
-#include"IDiry.h"
-#include"ISort.h"
-#include"IView.h"
-#include"IActive.h"
 #include"IMenu.h"
 
 /*
