@@ -34,14 +34,13 @@ void IDelPointer(IFileNodePointer* pointer)
     while(tempNode->next)
     {
         tempNode=tempNode->next;
-    }
-    //找到链表尾
+    }   //找到链表尾
 
     while(tempNode->pre)
     {
         tempNode=tempNode->pre;
         free(tempNode->next);
         tempNode->next=NULL;
-    }
-    free(tempNode);
+    }   //从链表尾到链表头，不断释放节点
+    free(tempNode);    //释放最后一个节点
 }

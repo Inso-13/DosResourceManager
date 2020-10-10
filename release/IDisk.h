@@ -15,12 +15,13 @@
 #include<STRING.H>
 #include<DIR.H>
 
-
 //辅助模块
+#include"IDefs.h"
 #include"IType.h"
 #include"IUtility.h"
 
 
+//函数原型
 IFileNode * IDiskInit(int id);
 
 #endif

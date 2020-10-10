@@ -7,7 +7,6 @@
  **************************************************
  */
 
-
 #ifndef __IDIRBASE_H
 #define __IDIRBASE_H
 
@@ -30,7 +29,7 @@
 //º¯ÊýÔ­ÐÍ
 int Icopy(IFileNode * inFile,IFileNode * outParent,char flag);
 int Irmf(IFileNode * fileNode);
-int Imkdir(IFileNode * pathNode,char* folderName);
+int Imkdir(IFileNode * pathNode,char *folderName);
 int Irmdir(IFileNode * node);
 void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);
 void IDelAll(IFileNode * oldChildChild);
@@ -38,6 +37,6 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag);
 void Irmr(IFileNode * oldChild);
 void IEntree(IFileNode * root,char flag);
 void IDetree(IFileNode * root);
-int ISearchPath(char* name);
+int ISearchPath(char *name);
 
 #endif

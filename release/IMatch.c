@@ -15,10 +15,10 @@
     输出参数：无
     返回值：匹配则返回1，否则返回0
 */
-int IMatch(char* s,char* p)
+int IMatch(char *s,char *p)
 {
     int flag;
-    char* src=s,*pattern=p;
+    char *src=s,*pattern=p;
 
     while(*src)
     {

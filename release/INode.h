@@ -27,12 +27,12 @@
 
 //º¯ÊýÔ­ÐÍ
 int IAddChild(IFileNode * parent,IFileNode * child);
-int IAddFileNode(IFileNode  *parent,char* name);
-int IDelFileNode(IFileNode  *parent,char* name);
+int IAddFileNode(IFileNode  *parent,char *name);
+int IDelFileNode(IFileNode  *parent,char *name);
 void IDelFilelist(IFileNode * root);
 void IAddFilelist(IFileNode * root);
 IFileNode * IGetFileNodeList(char * path);
-int IPeek(IFileNode * oldParent,char* path);
+int IPeek(IFileNode * oldParent,char *path);
 void Icd(char * path);
 
 #endif

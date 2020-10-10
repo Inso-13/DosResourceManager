@@ -18,12 +18,12 @@
 
 //º¯ÊýÔ­ÐÍ
 int IisFolder(IFileNode * node);
-int IisChild(char* path1,char* path2);
+int IisChild(char *path1,char *path2);
 IFileNode * IFindParent(IFileNode * child);
 IFileNode * IFindNodeByPath(char * path,IFileNode * root);
 IFileNode * IFindNodeByName(char * name,IFileNode * root); 
-void IGetNameByPath(char* path,char* name);
-void IGetAbsolutePath(IFileNode * node,char* temp);
+void IGetNameByPath(char *path,char *name);
+void IGetAbsolutePath(IFileNode * node,char *temp);
 void IFileNodeSetNull(IFileNode * node);
 
 #endif

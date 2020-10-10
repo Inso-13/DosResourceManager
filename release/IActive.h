@@ -22,6 +22,7 @@
 #include"IHanZi.h"
 #include"IType.h"
 #include"IEvent.h"
+#include"IDefs.h"
 
 //调用模块
 #include"IDiry.h"
@@ -29,21 +30,21 @@
 
 
 //函数原型
-void IAfterEntree(IFileNode* cur,IFileNode* X);
-void IEntreeActive(IFileNode* node,IFileNode* cur);
-void IDetreeActive(IFileNode* node,IFileNode* cur);
-void ISelect(IFileNode* node,IFileNode* null);
-void ICtrlSelect(IFileNode* node,IFileNode* null);
-void INOP(IFileNode* null1,IFileNode* null2);
-void IGoLeftActive(IFileNode* cur,IFileNode* null);
-void IGoRightActive(IFileNode* cur,IFileNode* null);
-void IexeActive(IFileNode* exe,IFileNode* null);
-void ItxtActive(IFileNode* txt,IFileNode* null);
-void ISearchActive(IFileNode* cur,IFileNode* null);
-void ILastPage(IFileNode *pag,IFileNode* null);
-void INextPage(IFileNode *pag,IFileNode* null);
-void ISetXNull(IFileNode* node,IFileNode* X);
-void ISetView10(IFileNode * flag,IFileNode* null);
-void ISetView11(IFileNode * flag,IFileNode* null);
+void IAfterEntree(IFileNode *cur,IFileNode *X);
+void IEntreeActive(IFileNode *node,IFileNode *cur);
+void IDetreeActive(IFileNode *node,IFileNode *cur);
+void ISelect(IFileNode *node,IFileNode *null);
+void ICtrlSelect(IFileNode *node,IFileNode *null);
+void INOP(IFileNode *null1,IFileNode *null2);
+void IGoLeftActive(IFileNode *cur,IFileNode *null);
+void IGoRightActive(IFileNode *cur,IFileNode *null);
+void IexeActive(IFileNode *exe,IFileNode *null);
+void ItxtActive(IFileNode *txt,IFileNode *null);
+void ISearchActive(IFileNode *cur,IFileNode *null);
+void ILastPage(IFileNode *pag,IFileNode *null);
+void INextPage(IFileNode *pag,IFileNode *null);
+void ISetXNull(IFileNode *node,IFileNode *X);
+void ISetView10(IFileNode * flag,IFileNode *null);
+void ISetView11(IFileNode * flag,IFileNode *null);
 
 #endif

@@ -17,7 +17,7 @@
 */
 void IPointerRight(int x,int y)
 {
-    setcolor(0);
+    setcolor(DRM_BLACK);
     line(x,y,x+2,y+2);
     line(x+1,y,x+3,y+2);
     line(x,y+4,x+1,y+3);
@@ -32,7 +32,7 @@ void IPointerRight(int x,int y)
 */
 void IPointerDown(int x,int y)
 {
-    setcolor(0);
+    setcolor(DRM_BLACK);
     line(x,y,x+2,y+2);
     line(x,y+1,x+2,y+3);
     line(x+4,y,x+3,y+1);
@@ -98,12 +98,12 @@ void IGoUp(int x,int y)
 */
 void IRefresh(int centerX,int centerY)
 {
-    setcolor(0);
+    setcolor(DRM_BLACK);
     arc(centerX,centerY,0,45,3);
     arc(centerX,centerY,110,180,3);
     arc(centerX,centerY+1,180,360,3);
     line(centerX-2,centerY-3,centerX-3,centerY-3);
-    putpixel(centerX-1,centerY-1,0);
+    putpixel(centerX-1,centerY-1,DRM_BLACK);
 }
 
 /*
@@ -114,7 +114,7 @@ void IRefresh(int centerX,int centerY)
 */
 void IMagnifier(int x,int y)
 {
-    setcolor(0);
+    setcolor(DRM_BLACK);
     circle(x+2,y+2,2);
     circle(x+2,y+2,3);
     line(x,y+4,x-2,y+6);
@@ -129,7 +129,7 @@ void IMagnifier(int x,int y)
 */
 void IExit(int x,int y)
 {
-    setcolor(255);
+    setcolor(DRM_WHITE);
     line(x,y,x+4,y+4);
     line(x,y+1,x+4,y+5);
     line(x,y+4,x+4,y);
@@ -144,7 +144,7 @@ void IExit(int x,int y)
 */
 void IDetailOption(int x,int y)
 {
-    setcolor(0);
+    setcolor(DRM_BLACK);
     line(x,y,x+11,y);
     line(x,y+1,x+11,y+1);
     line(x,y+4,x+11,y+4);
@@ -152,9 +152,9 @@ void IDetailOption(int x,int y)
     line(x,y+8,x+11,y+8);
     line(x,y+10,x+11,y+10);
     line(x,y+11,x+11,y+11);
-    putpixel(x+1,y+3,15);
-    putpixel(x+1,y+6,14);
-    putpixel(x+1,y+9,144);
+    putpixel(x+1,y+3,DRM_BLUE);
+    putpixel(x+1,y+6,DRM_DARKBLUE);
+    putpixel(x+1,y+9,DRM_ORANGE);
 }
 
 /*
@@ -165,11 +165,10 @@ void IDetailOption(int x,int y)
 */
 void IPictureOption(int x,int y)
 {
-    setcolor(0);
+    setcolor(DRM_BLACK);
     rectangle(x,y,x+11,y+11);
-    setcolor(15);
+    setcolor(DRM_BLUE);
     line(x+1,y+1,x+10,y+1);
-
     setfillstyle(SOLID_FILL,GREEN);
     bar(x+1,y+5,x+10,y+10);
 }

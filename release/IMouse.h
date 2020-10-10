@@ -16,6 +16,9 @@
 #include<DOS.H>
 #include<CONIO.H>
 
+//辅助模块
+#include"IDefs.h"
+
 
 //函数原型
 void IMouseMath(int (*mouseDraw)[16]);

@@ -17,12 +17,12 @@
 */
 void IDebugN(int n)
 {
-    static int count;
+    static int count;   //静态记录被执行的次数
     
-    if(++count==n)
+    if(++count==n)  //如果被执行的次数为n次
     {
-        //断点区
         delay(10);
+        //断点区
     }
 }
 
@@ -34,9 +34,9 @@ void IDebugN(int n)
 */
 void IDebugTrue(int boolean)
 {
-    if(boolean)
+    if(boolean) //如果静态断言为真
     {
-        //断点区
         delay(10);
+        //断点区
     }
 }

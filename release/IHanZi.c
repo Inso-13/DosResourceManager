@@ -1,7 +1,7 @@
 /*
  **************************************************
  *   版本号：1.0
- *   作者：黄子昊
+ *   修改者/作者：黄子昊
  *   生成日期：2020-9-4
  *   说明：汉字输出相关的函数
  **************************************************
@@ -14,10 +14,11 @@
     输入参数：(x,y)——输出位置, str——需要输出的中文, fp——汉字库文件
     输出参数：无
     返回值：无
+    注：本函数源于往届学长，有修改
 */
 void IPutsHZ16(int x,int y,char *str,FILE * fp)
 {
-    unsigned ZCode,BCode;
+    unsigned ZCode,BCode;   //区码、位码
     int i,j,k,rec;
     long len;
     char buf[32];
@@ -61,12 +62,13 @@ void IPutsHZ16(int x,int y,char *str,FILE * fp)
 */
 void Iouttextxy(int x,int y,char *str,FILE * fp)
 {
-    int inc=0,n,i=0;
+    int inc=0;  //横轴增量
+    int n,i=0;  //循环辅助变量
     char temp[3]={'\0','\0','\0'};  //辅助字符串
 
-    if(!str) return;
+    if(!str) return;   //如果字符串为空，则返回
 
-    n=strlen(str);
+    n=strlen(str);  //字符串的长度
     while(i<n)
     {
         if((unsigned char)str[i]>=0xa0)
@@ -79,7 +81,6 @@ void Iouttextxy(int x,int y,char *str,FILE * fp)
             i+=2;
         }
         //如果是中文
-
         else
         {
             temp[0]=str[i];

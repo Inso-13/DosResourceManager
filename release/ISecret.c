@@ -15,7 +15,7 @@
     输出参数：cipher——密文密码
     返回值：无
 */
-void IEncrypt(char* plain,char* cipher)
+void IEncrypt(char *plain,char *cipher)
 {
     int i,n;
     unsigned long num;

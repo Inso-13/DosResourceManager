@@ -7,12 +7,14 @@
  **************************************************
 */
 
-
 #ifndef __IDRAW_H
 #define __IDRAW_H
 
 //库文件
 #include<GRAPHICS.H>
+
+//辅助模块
+#include"IDefs.h"
 
 
 //函数原型

@@ -9,9 +9,6 @@
 
 #include"IDirBase.h"
 
-#define BUFFSIZE 256
-//复制文件时的缓存区大小
-
 /*
     函数功能：复制单个文件，将inFile文件复制到outParent文件夹内，并更新节点
     输入参数：inFile——等待复制的文件, outParent——粘贴到的目标文件夹，flag——是否强制覆盖
@@ -20,16 +17,20 @@
 */
 int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
 {
-    char inPath[150],outPath[150],temp[150],i[2],name[18],ext[5];
-    int j;
-    char tempStr[300];
+    char inPath[PATH_LEN];  //输入文件的路径
+    char outPath[PATH_LEN]; //输出文件夹的路径
+    char temp[PATH_LEN]; //辅助字符串
+    char i[2],name[18],ext[5]; //文件名，后缀名
+    char tempStr[30+2*PATH_LEN];  //命令行辅助字符串
+    int j;  //循环辅助变量，记录后缀名的分界点
 
-    IGetAbsolutePath(inFile,inPath);
-    IGetAbsolutePath(outParent,outPath);
+    IGetAbsolutePath(inFile,inPath);    //得到输入文件的路径
+    IGetAbsolutePath(outParent,outPath);    //得到输出文件夹的路径
     strcat(outPath,"\\");
-    strcat(outPath,inFile->file.name);
-    strcpy(name,inFile->file.name);
-    if(!flag)
+    strcat(outPath,inFile->file.name);      //得到输出文件的路径
+    strcpy(name,inFile->file.name);     //获取文件名
+    
+    if(!flag)   //如果不需要强制覆盖
     {
         if(ISearchPath(outPath)||!strcmp(inPath,outPath)) //原位置拷贝，文件自动重命名
         {
@@ -38,10 +39,10 @@ int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
                 if(inFile->file.name[j]=='.')
                     break;
             strcpy(ext,inFile->file.name+j);
-            if(strlen(name)>11||(j==strlen(name)&&j>7))
+            if(strlen(name)>11||(j==strlen(name)&&j>7)) //如果文件名过长
             {
-                strcpy(name+4,"~");
-                strcpy(name+5,ext);
+                strcpy(name+4,"~"); //添加省略符
+                strcpy(name+5,ext); //复制后缀名
                 j=5;
             }
             IGetAbsolutePath(outParent,outPath);
@@ -54,9 +55,9 @@ int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
                 strcpy(temp,outPath);
                 strcat(temp,name);
                 i[0]++;
-            }while(ISearchPath(temp));
+            }while(ISearchPath(temp));  //不断改变后缀，直到文件名合法
             strcpy(outPath,temp);
-        }
+        } // end of if(ISearchPath(outPath)||!strcmp(inPath,outPath))
         strcpy(tempStr,"copy ");
         IGetAbsolutePath(inFile,tempStr+5);
         strcat(tempStr," ");
@@ -65,20 +66,19 @@ int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
         strcat(tempStr,">>C:\\DOSRES\\ETC\\log.txt");
         system(tempStr);
     }
-    else
+    else    //如果需要强制覆盖
     {
-        Irmf(IFindNodeByPath(outPath,outParent));
+        Irmf(IFindNodeByPath(outPath,outParent));   //删除原有文件
         strcpy(tempStr,"copy ");
         IGetAbsolutePath(inFile,tempStr+5);
         strcat(tempStr," ");
         IGetAbsolutePath(outParent,tempStr+strlen(tempStr));
 
         strcat(tempStr,">>C:\\DOSRES\\ETC\\log.txt");
-        system(tempStr);
-    }
+        system(tempStr);    //复制新文件
+    }   // end of if(!flag)
 
-    IAddFileNode(outParent,name);  
-    //添加新文件节点
+    IAddFileNode(outParent,name);   //添加新文件节点
     return 1;
 }
 
@@ -90,8 +90,8 @@ int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
 */
 int Irmf(IFileNode * fileNode)
 {
-    char tempStr[150];   //辅助字符串
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");
+    char tempStr[PATH_LEN];   //辅助字符串
+    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");    //打开删除辅助文件
 
     IGetAbsolutePath(fileNode,tempStr);
     strcat(tempStr,"\n");
@@ -100,14 +100,10 @@ int Irmf(IFileNode * fileNode)
     strcpy(tempStr,"del ");
     IGetAbsolutePath(fileNode,tempStr+4);
     strcat(tempStr,">>C:\\DOSRES\\ETC\\log.txt");
+    system(tempStr);    //删除文件
 
-    system(tempStr);
-    //删除文件
-    delay(1);
-
-    fclose(fp);
-    return IDelFileNode(IFindParent(fileNode),fileNode->file.name);     
-    //删除文件节点
+    fclose(fp);    //关闭删除辅助文件
+    return IDelFileNode(IFindParent(fileNode),fileNode->file.name); //删除文件节点
 }
 
 /*
@@ -116,16 +112,15 @@ int Irmf(IFileNode * fileNode)
     输出参数：无
     返回值：创建文件夹成功返回1，失败则返回0
 */
-int Imkdir(IFileNode * pathNode,char* folderName)    
+int Imkdir(IFileNode * pathNode,char *folderName)    
 {
-    char temp[150];     //辅助字符串
+    char temp[PATH_LEN];     //辅助字符串
     
     IGetAbsolutePath(pathNode,temp);
     strcat(temp,"\\");
-    strcat(temp,folderName);
-    //得到新文件夹的绝对路径
+    strcat(temp,folderName);    //得到新文件夹的绝对路径
 
-    if(mkdir(temp)==-1)
+    if(mkdir(temp)==-1) //如果创建文件夹失败
         return 0;
     else
         return IAddFileNode(pathNode,folderName);
@@ -140,24 +135,24 @@ int Imkdir(IFileNode * pathNode,char* folderName)
 */
 int Irmdir(IFileNode * node)
 {
-    char temp[180];      //辅助字符串
-    int i=0;    
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");
+    int i=0;    //循环辅助变量
+    char temp[PATH_LEN];      //辅助字符串
+    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");    //打开删除辅助文件
 
-    IGetAbsolutePath(node,temp);
+    IGetAbsolutePath(node,temp);    
     strcat(temp,"\n");
-    fputs(temp,fp);
+    fputs(temp,fp);     //将要删除的文件夹记录到辅助文件里
 
     IGetAbsolutePath(node,temp);
-    IDelFileNode(IFindParent(node),node->file.name);
+    IDelFileNode(IFindParent(node),node->file.name);    //删除文件节点
 
     for(i=0;i<100;i++)
         if(ISearchPath(temp))
-            rmdir(temp);
+            rmdir(temp);    //不断尝试删除文件夹
         else 
             break;
             
-    fclose(fp);
+    fclose(fp);  //关闭删除辅助文件
     return 1;
 }
 
@@ -171,23 +166,21 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
 {
     while(oldChildChild)
     {
-        if(IisFolder(oldChildChild))
+        if(IisFolder(oldChildChild))    //如果是文件夹，递归复制
         {
-            if(!oldChildChild->child)
-                IEntree(oldChildChild,0);
-            Imkdir(newChild,oldChildChild->file.name);
-            if(oldChildChild->child)
+            if(!oldChildChild->child)   //如果文件未被打开
+                IEntree(oldChildChild,UNFORCED);
+            Imkdir(newChild,oldChildChild->file.name); //创建文件夹
+            if(oldChildChild->child)    //如果有子节点
             {
-                ICopyAll(oldChildChild->child,IFindNodeByName(oldChildChild->file.name,newChild));
-                IDetree(oldChildChild);
+                ICopyAll(oldChildChild->child,IFindNodeByName(oldChildChild->file.name,newChild));  //复制整个链表
+                IDetree(oldChildChild); //删除原链表
             }
         }
-        //如果是文件夹，递归复制
-        else
+        else    //如果文件
         {
-            Icopy(oldChildChild,newChild,0);  
+            Icopy(oldChildChild,newChild,UNFORCED);   //复制文件
         }
-        //如果是文件，则简单复制
         oldChildChild=oldChildChild->next;  
     }
     //递归复制兄弟节点
@@ -201,10 +194,10 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
 */
 void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag)
 {
-    char temp[150];      //辅助字符串
-    IFileNode *tempNode=NULL;
+    char temp[PATH_LEN];      //辅助字符串
+    IFileNode *tempNode=NULL;   //辅助节点
 
-    if(IisFolder(oldChild))
+    if(IisFolder(oldChild)) //如果是文件
     {
         IGetAbsolutePath(newParent,temp);
         strcat(temp,"\\");
@@ -212,22 +205,20 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag)
 
         if(ISearchPath(temp))
         {
-            if(flag)
+            if(flag)    //如果是强制覆盖
                 Irmr(IFindNodeByPath(temp,newParent));
             else
-                return; 
+                return;
         }
-        Imkdir(newParent,oldChild->file.name);
-        IEntree(oldChild,0);
+        Imkdir(newParent,oldChild->file.name);  //创建文件夹
+        IEntree(oldChild,UNFORCED);  
         tempNode=IFindNodeByPath(temp,newParent);
-        tempNode->flags|=16;
+        tempNode->flags|=NODE_TO_REENTREE;
         ICopyAll(oldChild->child,tempNode);
-        IDetree(oldChild);
+        IDetree(oldChild);    //释放原节点的内存
     }
-    //如果是文件夹
     else
-        Icopy(oldChild,newParent,flag);
-    //如果是文件
+        Icopy(oldChild,newParent,flag); //如果是文件
 }  
 
 /*
@@ -238,21 +229,21 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag)
 */
 void IDelAll(IFileNode * oldChildChild)
 {
-    IFileNode *nextNode=NULL;
+    IFileNode *nextNode=NULL;   //辅助文件节点
 
     while(oldChildChild)
     {
         nextNode=oldChildChild->next;
-        if(IisFolder(oldChildChild))
+        if(IisFolder(oldChildChild))    //如果是文件夹
         {
             if(!oldChildChild->child)
-                IEntree(oldChildChild,0);
+                IEntree(oldChildChild,UNFORCED);
             IDelAll(oldChildChild->child);
             Irmdir(oldChildChild);
         }
-        else
+        else    //如果是文件
         {
-            Irmf(oldChildChild);
+            Irmf(oldChildChild);   //删除文件 
         }
         oldChildChild=nextNode;
     }
@@ -266,9 +257,9 @@ void IDelAll(IFileNode * oldChildChild)
 */
 void Irmr(IFileNode * oldChild)
 {
-    if(IisFolder(oldChild))
+    if(IisFolder(oldChild)) //如果是文件夹
     {
-        IEntree(oldChild,0);
+        IEntree(oldChild,UNFORCED);
         if(oldChild->child)
             IDelAll(oldChild->child);
     }
@@ -283,9 +274,10 @@ void Irmr(IFileNode * oldChild)
     输出参数：无
     返回值：若存在改文件返回1; 否则返回0
 */
-int ISearchPath(char* name)
+int ISearchPath(char *name)
 {
-    struct find_t ft;
+    struct find_t ft;   //查找结构体
 
     return !_dos_findfirst(name,0xf7,&ft); 
+    //查找是否有名叫name的文件
 }

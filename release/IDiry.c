@@ -15,12 +15,12 @@
     输出参数：无
     返回值：复制成功返回1，失败则返回0
 */
-int Inew(IFileNode * pathNode,char* fileName)
+int Inew(IFileNode * pathNode,char *fileName)
 {
-    char temp[150];  //辅助字符串
+    char temp[PATH_LEN];  //辅助字符串
 
     IGetAbsolutePath(pathNode,temp);
-    Icd(temp);
+    Icd(temp);  //进入当前目录
     if(creatnew(fileName,0)==-1)
         return 0;
     //创建失败，返回0
@@ -35,11 +35,11 @@ int Inew(IFileNode * pathNode,char* fileName)
     输出参数：无
     返回值：无
 */
-void Irename(IFileNode * oldName,char* newName)
+void Irename(IFileNode * oldName,char *newName)
 {
-    char temp[150];
-    int i;
-    struct find_t ft;
+    char temp[PATH_LEN];  //辅助字符串
+    struct find_t ft;  //查找文件结构体
+    int i;  //循环变量
 
     IGetAbsolutePath(IFindParent(oldName),temp);
     Icd(temp);
@@ -54,10 +54,10 @@ void Irename(IFileNode * oldName,char* newName)
             strcpy(oldName->file.type,oldName->file.name+i+1);
             break;
         }
-        if(i==strlen(oldName->file.name)-1)
+        if(i==strlen(oldName->file.name)-1) //如果没有后缀名
         {
-            _dos_findfirst(newName, 0xf7,&ft);
-            if(!(ft.attrib&0x10))
+            _dos_findfirst(newName,0xf7,&ft);
+            if(!(ft.attrib&0x10))   //如果不是文件夹
                 strcpy(oldName->file.type,"NOT");
         }
     }
@@ -104,7 +104,7 @@ void IDetree(IFileNode * root)
 void IEntree(IFileNode * root,char flag)
 {
     IFileNode * childRoot;
-    char temp[150];
+    char temp[PATH_LEN];
 
     if(!root) return;
     //若root==NULL，直接返回
@@ -120,7 +120,7 @@ void IEntree(IFileNode * root,char flag)
         if(flag)
         {
             IDetree(root);
-            root->flags&=15;
+            root->flags&=NODE_DEL_TO_REENTREE;
         }
         else 
             return;
@@ -145,7 +145,7 @@ void IEntree(IFileNode * root,char flag)
         {
             IGetAbsolutePath(childRoot,temp);
             if(IPeek(childRoot,temp))
-                childRoot->flags|=8;
+                childRoot->flags|=NODE_HAS_FOLDER;
         }
         childRoot=childRoot->next;
     }
@@ -161,19 +161,19 @@ void IEntree(IFileNode * root,char flag)
 void Icplr(IFileNode * oldParent,IFileNode * newParent,char flag)
 {
     IFileNode * tempNode=oldParent->child,*newF=NULL;
-    char temp[150];
+    char temp[PATH_LEN];    //储存文件路径
 
     while(tempNode)
     {
-        if(tempNode->flags&2)
+        if(tempNode->flags&NODE_IS_SELECTED)
         {
             Icpr(tempNode,newParent,flag);
-            if(IisFolder(tempNode))
+            if(IisFolder(tempNode)) //如果是文件夹
             {
                 newF=IFindNodeByName(tempNode->file.name,newParent);
                 IGetAbsolutePath(newF,temp);
                 if(IPeek(newF,temp))
-                    newF->flags|=8;
+                    newF->flags|=NODE_HAS_FOLDER;
             }
         } 
         //如果子文件节点被选中，则复制之
@@ -194,7 +194,7 @@ void Irmlr(IFileNode * oldParent)
 
     while(tempNode)
     {
-        if(tempNode->flags&2)
+        if(tempNode->flags&NODE_IS_SELECTED)
         {
             Irmr(tempNode);
             if(IisFolder(tempNode))
@@ -212,14 +212,14 @@ void Irmlr(IFileNode * oldParent)
     输出参数：fp——暂存文件
     返回值：无
 */
-void ISearch(char* path,char* pattern,FILE* fp)
+void ISearch(char *path,char *pattern,FILE* fp)
 {
     int ret,i;
     struct find_t ft;
-    char temp[150];  //辅助字符串
+    char temp[PATH_LEN];  //辅助字符串
 
-    Icd(path);
-    ret=_dos_findfirst("*.*", 0xf7,&ft);
+    Icd(path);  //进入当前路径
+    ret=_dos_findfirst("*.*", 0xf7,&ft);  //搜索全部文件
     while(1)
     {
         while(!strcmp(ft.name,".")||!strcmp(ft.name,".."))
@@ -233,7 +233,7 @@ void ISearch(char* path,char* pattern,FILE* fp)
             if(ret) break;
         }
         if(ret) break;
-        //排除.与..两个无用文件路径
+        //排除无用文件路径或被保护的文件路径
 
         if(IMatch(ft.name,pattern))
         {
@@ -254,8 +254,7 @@ void ISearch(char* path,char* pattern,FILE* fp)
         }
         //如果是文件夹，递归查找
 
-        Icd(path);
-        ret=_dos_findnext(&ft);
-        //查找下一项
+        Icd(path);  //回到当前路径
+        ret=_dos_findnext(&ft); //查找下一项
     }
 }

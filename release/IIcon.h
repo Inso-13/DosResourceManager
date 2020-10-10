@@ -14,6 +14,9 @@
 //库文件
 #include<GRAPHICS.H>
 
+//辅助模块
+#include"IDefs.h"
+
 
 //函数原型
 void Igeneral(int x,int y);
@@ -27,6 +30,5 @@ void Ih(int x,int y);
 void Iobj(int x,int y);
 void Imystery(int x,int y);
 void Ipic(int x,int y);
-void IBlackBar(int x,int y);
 
 #endif

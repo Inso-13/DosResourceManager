@@ -15,27 +15,27 @@
     输出参数：cur——当前节点
     返回值：无
 */
-void IAfterEntree(IFileNode* cur,IFileNode* X)
+void IAfterEntree(IFileNode *cur,IFileNode *X)
 {
-#ifdef LM
-    IFileNodePointer ** curNode=(IFileNodePointer **)cur;
-    IFileNodePointer * nodeX=(IFileNodePointer *)X;
-    IFileNodePointer * tempNode=(*curNode)->pre,*lastNode=tempNode->pre;
-    char path1[150],path2[150],path[150];
+#ifdef LM   //在内存有限时使用
+    IFileNodePointer **curNode=(IFileNodePointer **)cur;   //当前节点
+    IFileNodePointer *nodeX=(IFileNodePointer *)X;    //辅助文件节点
+    IFileNodePointer *tempNode=(*curNode)->pre,*lastNode=tempNode->pre;    //循环使用
+    char path1[PATH_LEN],path2[PATH_LEN],path[PATH_LEN];   //暂存字符串
 
-    IGetAbsolutePath((*curNode)->child,path1);
-    if(nodeX&&nodeX->child)
-        IGetAbsolutePath(nodeX->child,path2);
-    else
-        strcpy(path2,"");
+    IGetAbsolutePath((*curNode)->child,path1);  //获得当前位置
+    if(nodeX&&nodeX->child)     //如果nodeX不为空           
+        IGetAbsolutePath(nodeX->child,path2);   //得到nodeX指向的路径
+    else          
+        strcpy(path2,"");   //如果为空就将路径置为空
 
     while(tempNode)
     {
         lastNode=tempNode->pre;
-        IGetAbsolutePath(tempNode->child,path);
-        if(strcmp(path,"DOS")&&strcmp(path,path1)&&strcmp(path,path2)&&!IisChild(path1,path)&&!IisChild(path2,path))
-        {
-            IDetree(tempNode->child);
+        IGetAbsolutePath(tempNode->child,path);     //得到待检查的链表节点
+        if(strcmp(path,ROOT_NAME)&&strcmp(path,path1)&&strcmp(path,path2)&&!IisChild(path1,path)&&!IisChild(path2,path))
+        {           //如果发生冲突
+            IDetree(tempNode->child);   //释放节点
             if(tempNode->pre)
             {
                 tempNode=tempNode->pre;
@@ -47,10 +47,10 @@ void IAfterEntree(IFileNode* cur,IFileNode* X)
             {
                 tempNode->next->pre=NULL;
                 free(tempNode);
-            }
+            }   //从链表中删除节点
         }
-        tempNode=lastNode;
-    }
+        tempNode=lastNode;  //继续检查
+    }   //end of while(tempNode)
 #endif
 }
 
@@ -60,38 +60,36 @@ void IAfterEntree(IFileNode* cur,IFileNode* X)
     输出参数：cur——当前节点
     返回值：无
 */
-void IEntreeActive(IFileNode* node,IFileNode* cur)
+void IEntreeActive(IFileNode *node,IFileNode *cur)
 {
-    IFileNodePointer ** curNode=(IFileNodePointer **)cur;
-	IFileNodePointer * newCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));     //新节点
-    IFileNodePointer * tempNode=NULL,*nextNode=NULL;
+    IFileNodePointer **curNode=(IFileNodePointer **)cur;   //当前节点
+	IFileNodePointer *newCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));     //新节点
+    IFileNodePointer *tempNode=NULL,*nextNode=NULL;    //循环辅助节点
 
-    tempNode=(*curNode)->next;
+    tempNode=(*curNode)->next;  //tempNode指向循环的下一项
     while(tempNode)
     {
         nextNode=tempNode->next;
         tempNode->pre->next=NULL;
         free(tempNode);
         tempNode=nextNode;
-    }
-    //假如curNode链表有后一项，递归删除后面的所有节点
+    }//假如curNode链表有后一项，递归删除后面的所有节点
 
     newCurNode->child=node;
     newCurNode->next=NULL;
-    newCurNode->wait=10;
+    newCurNode->wait=WAIT_COUNT;
     newCurNode->pre=*curNode;
     (*curNode)->next=newCurNode;
     *curNode=newCurNode;
     //新节点初始化
 
-    IEntree(node,node->flags&16);
-    //激活IEntree函数
+    IEntree(node,node->flags&NODE_TO_REENTREE);   //激活IEntree函数
 
     tempNode=(*curNode)->pre;
     while(tempNode)
     {
-        tempNode->wait--;
-        if(tempNode->wait<0)
+        tempNode->wait--;   //减少前面节点的等待次数
+        if(tempNode->wait<WAIT_OFF)    //如果节点的等待次数不足0
         {
             if(tempNode->pre)
             {
@@ -118,7 +116,7 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
         }
         else
             tempNode=tempNode->pre;
-    }
+    }   //end of while(tempNode)
     //删除curNode链表中的超时节点，以节约内存
 }
 
@@ -128,19 +126,19 @@ void IEntreeActive(IFileNode* node,IFileNode* cur)
     输出参数：X——辅助文件节点
     返回值：无
 */
-void ISetXNull(IFileNode* node,IFileNode* X)
+void ISetXNull(IFileNode *node,IFileNode *X)
 {
-    IFileNodePointer * nodeX=(IFileNodePointer *)X;
-    char path1[150],path2[150];
+    IFileNodePointer *nodeX=(IFileNodePointer *)X;    //文件辅助节点
+    char path1[PATH_LEN],path2[PATH_LEN];     //辅助字符串
 
     if(node->file.type[1]=='\\')
-        return;
+        return;     //如果是根目录，不进行操作
 
     IGetAbsolutePath(node,path1);
     if(nodeX&&nodeX->child)
-        IGetAbsolutePath(nodeX->child,path2);   
+        IGetAbsolutePath(nodeX->child,path2);      //得到两者的路径
     if(!strcmp(path1,path2)||IisChild(path2,path1))
-        nodeX->child=NULL;
+        nodeX->child=NULL;  //发生冲突，删除辅助节点，取消粘贴等待
 }
 
 /*
@@ -149,31 +147,30 @@ void ISetXNull(IFileNode* node,IFileNode* X)
     输出参数：cur——当前节点
     返回值：无
 */
-void IDetreeActive(IFileNode* node,IFileNode* cur)
+void IDetreeActive(IFileNode *node,IFileNode *cur)
 {
-    IFileNodePointer ** curNode=(IFileNodePointer **)cur;
-    IFileNodePointer * tempNode,*nextNode,*lastNode;
-    char path1[150],path2[150];
+    IFileNodePointer **curNode=(IFileNodePointer **)cur;   //当前节点
+    IFileNodePointer *tempNode=NULL,*nextNode=NULL,*lastNode=NULL;    //循环辅助节点
+    char path1[PATH_LEN],path2[PATH_LEN];  //辅助字符串
 
-    if(node->file.type[1]=='\\') return;
+    if(node->file.type[1]=='\\') return;    //如果是根节点，直接返回
 
-    tempNode=(*curNode)->next;
+    tempNode=(*curNode)->next;  
     while(tempNode)
     {
         nextNode=tempNode->next;
         tempNode->pre->next=NULL;
         free(tempNode);
         tempNode=nextNode;
-    }
-    //假如curNode链表有后一项，递归删除后面的所有节点
+    }   //假如curNode链表有后一项，递归删除后面的所有节点
 
     tempNode=(*curNode);
-    IGetAbsolutePath(node,path2);
+    IGetAbsolutePath(node,path2);   //得到要删除节点的位置
     while(tempNode)
     {
         lastNode=tempNode->pre;
-        IGetAbsolutePath(tempNode->child,path1);
-        if(IisChild(path1,path2))
+        IGetAbsolutePath(tempNode->child,path1);    //得到需检查的节点的位置
+        if(IisChild(path1,path2))   //如果发生冲突
         {
             if(tempNode->pre)
             {
@@ -200,18 +197,14 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
             }
         }
         tempNode=lastNode;
-    }
-    //如果curNode链表中有node节点，将该节点从链表中除去
+    }   //如果curNode链表中有node节点，将该节点从链表中除去
 
     if(node->file.type[1]!='\\')
-        (*curNode)->child=IFindParent(node);
-    //更改curNode节点
+        (*curNode)->child=IFindParent(node);    //更改curNode节点
 
-    IDetree(node);
-    //激活IDetree函数
+    IDetree(node);  //激活IDetree函数
 
-    node->file.type[0]='0';
-    //关闭文件夹
+    node->file.type[0]='0'; //关闭文件夹
 }
 
 /*
@@ -220,19 +213,17 @@ void IDetreeActive(IFileNode* node,IFileNode* cur)
     输出参数：无
     返回值：无
 */
-void ISelect(IFileNode* node,IFileNode* null)
+void ISelect(IFileNode *node,IFileNode *null)
 {
-    IFileNode* tempNode=IFindParent(node)->child;
+    IFileNode *tempNode=IFindParent(node)->child;   //选择节点的父节点
 
     while(tempNode)
     {
-        tempNode->flags&=29;
+        tempNode->flags&=NODE_DEL_SELECT;    
         tempNode=tempNode->next;
-    }
-    //如果当前路径下已经有被选中的节点，将该节点置为未被选中
+    }   //如果当前路径下已经有被选中的节点，将其置为未被选中
 
-    node->flags|=2;
-    //选中该节点
+    node->flags|=NODE_ADD_SELECT; //选中该节点
 }
 
 /*
@@ -241,12 +232,12 @@ void ISelect(IFileNode* node,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ICtrlSelect(IFileNode* node,IFileNode* null)
+void ICtrlSelect(IFileNode *node,IFileNode *null)
 {
-    if(!(node->flags&2))
-        node->flags|=2;
+    if(!(node->flags&NODE_IS_SELECTED))
+        node->flags|=NODE_ADD_SELECT;
     else
-        node->flags&=5;
+        node->flags&=NODE_DEL_SELECT;
     //如果该节点已被选中，则解选中；否则选中该节点
 }
 
@@ -256,7 +247,7 @@ void ICtrlSelect(IFileNode* node,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void INOP(IFileNode* null1,IFileNode* null2){}
+void INOP(IFileNode *null1,IFileNode *null2){}
 
 /*
     函数功能：返回上一目录
@@ -264,12 +255,11 @@ void INOP(IFileNode* null1,IFileNode* null2){}
     输出参数：cur——当前节点
     返回值：无
 */
-void IGoLeftActive(IFileNode* cur,IFileNode* null)
+void IGoLeftActive(IFileNode *cur,IFileNode *null)
 {
-    IFileNodePointer ** curNode=(IFileNodePointer **)cur;
+    IFileNodePointer **curNode=(IFileNodePointer **)cur;
 
-    *curNode=(*curNode)->pre;
-    //返回上一目录
+    *curNode=(*curNode)->pre;   //返回上一目录
 }
 
 /*
@@ -278,12 +268,11 @@ void IGoLeftActive(IFileNode* cur,IFileNode* null)
     输出参数：cur——当前节点
     返回值：无
 */
-void IGoRightActive(IFileNode* cur,IFileNode* null)
+void IGoRightActive(IFileNode *cur,IFileNode *null)
 {
-    IFileNodePointer ** curNode=(IFileNodePointer **)cur;
+    IFileNodePointer **curNode=(IFileNodePointer **)cur;
 
-    *curNode=(*curNode)->next;
-    //返回下一目录
+    *curNode=(*curNode)->next;  //返回下一目录
 }
 
 /*
@@ -292,29 +281,27 @@ void IGoRightActive(IFileNode* cur,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ISearchActive(IFileNode* cur,IFileNode* null)
+void ISearchActive(IFileNode *cur,IFileNode *null)
 {
-    IFileNodePointer * curNode=(IFileNodePointer *)cur;
+    IFileNodePointer *curNode=(IFileNodePointer *)cur;  //当前节点
     FILE* fp=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+"); //覆盖的方式打开用于记录的文件
-    char temp[20],path[150];     //辅助字符串
+    char temp[20],path[PATH_LEN];     //辅助字符串
 
     IGetAbsolutePath(curNode->child,path);  //获得需要查找的路径
-    strcpy(temp,"\0");
-    IGetString(851+DF,51+DF,166,temp,1);  
-    //得到查找的pattern
+    strcpy(temp,"\0");  //清空字符串
+    IGetString(851+DF,51+DF,166,temp,1);   //得到查找的pattern，可以使用？*
 
-    setfillstyle(SOLID_FILL,255);
+    setfillstyle(SOLID_FILL,DRM_WHITE);
     bar(900+DF,745+DF,1020+DF,765+DF);
-    setcolor(144);
-    outtextxy(900+DF,753+DF,"Searching...");
+    setcolor(DRM_RED);
+    outtextxy(900+DF,753+DF,"Searching...");    //提示正在搜索
 
     if(temp[0])
-        ISearch(path,temp,fp);
-    //激活查找函数
-    fclose(fp);
+        ISearch(path,temp,fp);  //激活查找函数
+    fclose(fp);    //关闭用来记录的文件
 
-    setfillstyle(SOLID_FILL,255);
-    bar(900+DF,745+DF,1020+DF,765+DF);
+    setfillstyle(SOLID_FILL,DRM_WHITE);
+    bar(900+DF,745+DF,1020+DF,765+DF);  //停止显示Searching...
 }
 
 /*
@@ -323,19 +310,18 @@ void ISearchActive(IFileNode* cur,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void IexeActive(IFileNode* exe,IFileNode* null)
+void IexeActive(IFileNode *exe,IFileNode *null)
 {
-    char temp[180];
+    char temp[PATH_LEN+24];     //辅助字符串
 
     IGetAbsolutePath(exe,temp);
 
-    setfillstyle(SOLID_FILL,0);
+    setfillstyle(SOLID_FILL,DRM_BLACK);
     bar(0,0,1280,1024);
-    strcat(temp,">>C:\\DOSRES\\ETC\\log.txt");
-    system(temp);
-    //系统调用，借用编辑器打开文本文件
-    delay(2000);
-    IQuit();
+    strcat(temp,">>C:\\DOSRES\\ETC\\log.txt");  //将日志信息输出至log.txt
+    system(temp);   //系统调用，借用编辑器打开文本文件
+    delay(2000);  //短暂停留
+    IQuit();    //短暂停留后退出
 }
 
 /*
@@ -344,17 +330,16 @@ void IexeActive(IFileNode* exe,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ItxtActive(IFileNode* txt,IFileNode* null)
+void ItxtActive(IFileNode *txt,IFileNode *null)
 {
-    char temp[150];
+    char temp[PATH_LEN+48];   //辅助字符串
 
-    strcpy(temp,"C:\\BORLANDC\\BIN\\BC.EXE ");
-    IGetAbsolutePath(txt,temp+23);
+    strcpy(temp,"C:\\BORLANDC\\BIN\\BC.EXE ");  //调用BC编辑器
+    IGetAbsolutePath(txt,temp+23);  
     
-    strcat(temp,">>C:\\DOSRES\\ETC\\log.txt");
-    system(temp);
-    //系统调用，借用BC编辑器打开文本文件
-    IQuit();
+    strcat(temp,">>C:\\DOSRES\\ETC\\log.txt");  //输出重定向至log.txt
+    system(temp);   //系统调用，借用BC编辑器打开文本文件
+    IQuit();    //返回时退出
 }
 
 /*
@@ -363,12 +348,11 @@ void ItxtActive(IFileNode* txt,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ILastPage(IFileNode *pag,IFileNode* null)
+void ILastPage(IFileNode *pag,IFileNode *null)
 {
-    char* page=(char*)pag;
+    char *page=(char*)pag;  //页码控制
 
-    *page-=1;
-    //翻到上一页
+    *page-=1;   //翻到上一页
 }
 
 /*
@@ -377,12 +361,11 @@ void ILastPage(IFileNode *pag,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void INextPage(IFileNode *pag,IFileNode* null)
+void INextPage(IFileNode *pag,IFileNode *null)
 {
-    char* page=(char*)pag;
+    char *page=(char*)pag;  //页码控制
 
-    *page+=1;
-    //翻到下一页
+    *page+=1;   //翻到下一页
 }
 
 /*
@@ -391,11 +374,11 @@ void INextPage(IFileNode *pag,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ISetView10(IFileNode * flag,IFileNode* null)
+void ISetView10(IFileNode * flag,IFileNode *null)
 {
-    char *menuFlag=(char*)flag;
+    char *menuFlag=(char*)flag;    //菜单/视图控制
 
-    (*menuFlag)&=63;
+    (*menuFlag)&=MENU_SET_VIEW10;    //设置为显示view1的0号视图
 }
 
 /*
@@ -404,9 +387,9 @@ void ISetView10(IFileNode * flag,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ISetView11(IFileNode * flag,IFileNode* null)
+void ISetView11(IFileNode * flag,IFileNode *null)
 {
-    char *menuFlag=(char*)flag;
+    char *menuFlag=(char*)flag; //菜单/视图控制
 
-    (*menuFlag)|=64;
+    (*menuFlag)|=MENU_SET_VIEW11;    //设置为显示view1的1号视图
 }

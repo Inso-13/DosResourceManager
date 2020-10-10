@@ -19,17 +19,17 @@
 
 
 //º¯ÊýÔ­ÐÍ
-void ISort(IFileNode* parent,int (*fun)(IFileNode*,IFileNode*));
-int ISortDateUp(IFileNode* node1,IFileNode* node2);
-int ISortDateDown(IFileNode* node1,IFileNode* node2);
-int ISortSizeUp(IFileNode* node1,IFileNode* node2);
-int ISortSizeDown(IFileNode* node1,IFileNode* node2);
-int ISortNameUp(IFileNode* node1,IFileNode* node2);
-int ISortNameDown(IFileNode* node1,IFileNode* node2);
-int ISortTypeUp(IFileNode* node1,IFileNode* node2);
-int ISortTypeDown(IFileNode* node1,IFileNode* node2);
-void ISortMenuActive(IFileNode* flag,IFileNode* null);
-void ISortActive(IFileNode* parent,IFileNode* pfun);
-void IExchangeFileNode(IFileNode* node1,IFileNode* node2);
+void ISort(IFileNode *parent,int (*fun)(IFileNode*,IFileNode*));
+int ISortDateUp(IFileNode *node1,IFileNode *node2);
+int ISortDateDown(IFileNode *node1,IFileNode *node2);
+int ISortSizeUp(IFileNode *node1,IFileNode *node2);
+int ISortSizeDown(IFileNode *node1,IFileNode *node2);
+int ISortNameUp(IFileNode *node1,IFileNode *node2);
+int ISortNameDown(IFileNode *node1,IFileNode *node2);
+int ISortTypeUp(IFileNode *node1,IFileNode *node2);
+int ISortTypeDown(IFileNode *node1,IFileNode *node2);
+void ISortMenuActive(IFileNode *flag,IFileNode *null);
+void ISortActive(IFileNode *parent,IFileNode *pfun);
+void IExchangeFileNode(IFileNode *node1,IFileNode *node2);
 
 #endif

@@ -20,11 +20,11 @@ IEventStackNode * IInitEventStack(void)
     IEventStackNode * top=(IEventStackNode *)malloc(sizeof(IEventStackNode));
     if(top==NULL)
     {
-#ifdef  DB
-        printf("not enough memory\n");
+#ifdef DB  //如果是在调试模式下
+        printf("not enough memory in IInitEventStack\n");
 #endif
         IQuit();
-    }
+    }   //内存检查
     top->next=NULL;     //初始化栈顶
     return top;
 }
@@ -41,11 +41,11 @@ void IEventStackPush(IEventStackNode * top,IEvent newEvent)
 
     if(q==NULL)
     {
-#ifdef  DB
-        printf("not enough memory\n");
+#ifdef DB  //如果是在调试模式下
+        printf("not enough memory in IEventStackPush\n");
 #endif
         IQuit();
-    }
+    }   //内存检查
     q->event = newEvent;
     q->next = top->next;
     top->next = q;  //入栈
@@ -68,7 +68,7 @@ int IEventStackPop(IEventStackNode * top,int n)
         q = top->next;
         top->next = q->next;
         q->next = NULL;
-        free(q);
+        free(q);    //释放内存
     }
     return 1;       //正常返回1
 }
@@ -86,18 +86,18 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type)
     while(temp)
     {
         if(temp->event.type==-1||(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2&&(temp->event.type&type)))
-        {
+        {   //如果完全符合点击条件
             temp->event.pfun(temp->event.node0,temp->event.node1);      //激活槽函数
             if(temp->event.change<0)
             {
                 temp=temp->next;
-                continue;
+                continue;   //级联向下查询
             }
             else
-                return temp->event.change;
+                return temp->event.change;  //返回需要改变的视图值
         }
         else
-            temp=temp->next;
+            temp=temp->next;    //不符合点击条件，继续查找
     }
     return 0;   //未激活槽函数，返回0
 }
@@ -111,11 +111,9 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type)
 void IDelStack(IEventStackNode * top)
 {
     while(top->next)
-        IEventStackPop(top,5);  
-    //不断出栈
+        IEventStackPop(top,5);    //不断出栈
 
-    free(top);
-    //释放栈顶
+    free(top);  //释放栈顶
 }
 
 

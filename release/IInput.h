@@ -19,6 +19,8 @@
 //调用模块
 #include"IType.h"
 
-char* IGetString(int x,int y,int length,char* string,int flag);
+
+//函数原型
+char *IGetString(int x,int y,int length,char *string,int flag);
 
 #endif

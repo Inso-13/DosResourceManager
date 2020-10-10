@@ -18,9 +18,9 @@
 */
 void IWarningBeep()
 {
-    sound(700);
-    delay(200);
-    sound(300);
-    delay(200);
-    nosound();
+    sound(700); //发出700Hz声音
+    delay(200); //持续200ms
+    sound(300); //发出300Hz声音
+    delay(200); //持续200ms
+    nosound();  //停止发声
 }

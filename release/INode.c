@@ -39,14 +39,14 @@ int IAddChild(IFileNode * parent,IFileNode * child)
         }
         temp->next=child;
         child->pre=temp;
-        child->flags&=27;       //child->isHead=0;
+        child->flags&=NODE_DEL_HEAD;
     }
     //如果父节点已有子节点
     else
     {
         parent->child=child;
         child->pre=parent;
-        child->flags|=4;        //child->isHead=1;
+        child->flags|=NODE_ADD_HEAD;
     }
     //如果父节点未有子节点
     return 1;   
@@ -65,7 +65,7 @@ IFileNode *IGetFileNodeList(char * path)
     int ret,i,j=0;
     struct find_t ft;
     FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","r+");
-    char tempStr1[150],tempStr2[150];
+    char tempStr1[PATH_LEN],tempStr2[PATH_LEN];
 
     if(childRoot==NULL)
     {
@@ -96,7 +96,7 @@ IFileNode *IGetFileNodeList(char * path)
             ret=_dos_findnext(&ft);
             if(ret) break;
         }
-        while(fgets(tempStr1,150,fp))
+        while(fgets(tempStr1,PATH_LEN,fp))
         {
             if(tempStr1[strlen(tempStr1)-1]=='\n')
                 tempStr1[strlen(tempStr1)-1]='\0';
@@ -143,7 +143,7 @@ IFileNode *IGetFileNodeList(char * path)
         //查找下一个节点
 
         if(ret) break;
-        if(j>120) break;
+        if(j>MAXNODES) break;
         //如果该路径下节点数大于120, 则不再继续查找
 
         lastNode=tempNode;
@@ -167,12 +167,12 @@ IFileNode *IGetFileNodeList(char * path)
     输出参数：无
     返回值：成功则返回1, 失败则返回0
 */
-int IAddFileNode(IFileNode  *parent,char* name)
+int IAddFileNode(IFileNode  *parent,char *name)
 {
     IFileNode * child=(IFileNode *)malloc(sizeof(IFileNode));
     int ret,i;
     struct find_t ft;
-    char temp[150];
+    char temp[PATH_LEN];
 
     if(child==NULL)
         IQuit();
@@ -218,11 +218,11 @@ int IAddFileNode(IFileNode  *parent,char* name)
     输出参数：无
     返回值：成功则返回1, 失败则返回0
 */
-int IDelFileNode(IFileNode *parent,char* name)
+int IDelFileNode(IFileNode *parent,char *name)
 {
     IFileNode * child=parent->child;
     int ret,i;
-    char temp[150];
+    char temp[PATH_LEN];
 
     IGetAbsolutePath(parent,temp);
     Icd(temp);
@@ -233,13 +233,13 @@ int IDelFileNode(IFileNode *parent,char* name)
     if(child==NULL)
         return 0;
 
-    if(child->flags&4)
+    if(child->flags&NODE_IS_HEAD)
     {
         child->pre->child=child->next;
         if(child->next)
         {
             child->next->pre=child->pre;
-            child->next->flags|=4;
+            child->next->flags|=NODE_ADD_HEAD;
         }
     }
     //如果是链表头
@@ -260,7 +260,7 @@ int IDelFileNode(IFileNode *parent,char* name)
     输出参数：无
     返回值：无
 */
-void IDelFilelist(IFileNode* root)
+void IDelFilelist(IFileNode *root)
 {
     if(root->child)
     {
@@ -281,10 +281,10 @@ void IDelFilelist(IFileNode* root)
     输出参数：无
     返回值：无
 */
-void IAddFilelist(IFileNode* root)
+void IAddFilelist(IFileNode *root)
 {
-    IFileNode* childRoot;
-    char temp[150];
+    IFileNode *childRoot;
+    char temp[PATH_LEN];
 
     if(!root->child&&IisFolder(root))
     {
@@ -307,11 +307,11 @@ void IAddFilelist(IFileNode* root)
     输出参数：无
     返回值：若有子文件夹，返回1; 否则返回0
 */
-int IPeek(IFileNode* node,char* path)
+int IPeek(IFileNode *node,char *path)
 {
     int ret;
     struct find_t ft;
-    char temp[150];
+    char temp[PATH_LEN];
 
     if(!IisFolder(node)) return 0;
 
@@ -343,7 +343,7 @@ int IPeek(IFileNode* node,char* path)
 */
 void Icd(char * path)
 {
-    char temp[150]="";
+    char temp[PATH_LEN]="";
 
     if(path[1]==':'&&getdisk()!=(path[0]-'A'))  //当前磁盘与目标不一致
     {

@@ -17,21 +17,20 @@
     返回值：获取的字符串的首地址
     注：flag=0 重命名;flag=1 搜素框; flag=2 输入用户名;flag=3 输入密码;flag=4 新文件/新文件夹
 */
-char* IGetString(int x,int y,int length,char* string,int flag)
+char *IGetString(int x,int y,int length,char *string,int flag)
 {
-    char* org=string;       //记录下string的初始位置
+    char *org=string;       //记录下string的初始位置
     char tempChar='\0';     //用于接收输入的字符
     char temp[20];          //辅助字符串
-    int n,i,t=0,j;
+    int n,i,t=0,j;          //循环辅助变量
 
-    fflush(stdin);
-    //刷新键盘缓冲区
+    fflush(stdin);  //刷新键盘缓冲区
 
-    setcolor(0);
+    setcolor(DRM_BLACK);
     if(flag>=1&&flag<=3)
     {
         rectangle(x-1,y,x+length+1,y+27);
-        setfillstyle(SOLID_FILL,255);
+        setfillstyle(SOLID_FILL,DRM_WHITE);
         bar(x,y+1,x+length,y+26);
     }
     else
@@ -39,14 +38,14 @@ char* IGetString(int x,int y,int length,char* string,int flag)
         if(flag==4)
             strcpy(string,"");
         rectangle(x-1,y+6,x+length+1,y+25);
-        setfillstyle(SOLID_FILL,255);
+        setfillstyle(SOLID_FILL,DRM_WHITE);
         bar(x,y+7,x+length,y+24);   
     }
     //初始化输入框
     n=strlen(string);
     i=n;
 
-    setcolor(144);
+    setcolor(DRM_RED);
     if(flag!=3)
         outtextxy(x+2,y+9,string);
     else
@@ -61,9 +60,9 @@ char* IGetString(int x,int y,int length,char* string,int flag)
         while(!kbhit())
         {
             if(t>0)
-                setcolor(144);
+                setcolor(DRM_RED);
             else
-                setcolor(255);
+                setcolor(DRM_WHITE);
             line(x+2+8*i,y+9,x+2+8*i,y+18);
             t++;
         }
@@ -116,7 +115,7 @@ char* IGetString(int x,int y,int length,char* string,int flag)
         }
         //合法字符检验
 
-        setcolor(144);
+        setcolor(DRM_RED);
         if(flag>=1&&flag<=3)
             bar(x,y+1,x+length,y+26);
         else
@@ -132,7 +131,7 @@ char* IGetString(int x,int y,int length,char* string,int flag)
     }
     if(flag==1)
     {
-        setcolor(7);
+        setcolor(DRM_DARKGRAY);
         line(0+DF,84+DF,1024+DF,84+DF);
         line(0+DF,85+DF,1024+DF,85+DF);
         rectangle(832+DF,51+DF,1017+DF,78+DF);

@@ -124,29 +124,29 @@ int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[
         IMouseGetXY(pMouseX,pMouseY);
         if(*pMouseX!=x||*pMouseY!=y)    //Êó±êÒÆ¶¯£¬status bit0 ÖÃ1
         {
-            status+=1;
+            status+=MOUSE_MOVE;
             IMouseOff(x,y,mouseDraw,pixelSave);
             IMouseOn(*pMouseX,*pMouseY,mouseDraw,pixelSave);
         }
         if(ILeftPress())    //Êó±ê×ó¼üµ¥»÷£¬status bit1 ÖÃ1
         {
-            status+=2;
+            status+=MOUSE_LEFT_PRESS;
             delay(100);
             if(!ILeftPress())   //Êó±ê×ó¼üË«»÷£¬status bit3 ÖÃ1
             {
                 delay(100);
                 if(ILeftPress())
-                    status+=8;
+                    status+=MOUSE_DOUBLE_LEFT_PRESS;
             }
         }
         if(IRightPress())   //Êó±êÓÒ¼üµ¥»÷£¬status bit2 ÖÃ1
         {
             delay(18);
             if(IRightPress())    //·À¶¶¶¯
-               status+=4;
+               status+=MOUSE_RIGHT_PRESS;
         }
         if(IMouseLeftRelease()) //Êó±ê×ó¼üÊÍ·Å£¬status bit4 ÖÃ1
-            status+=16;
+            status+=MOUSE_LEFT_RELEASE;
     }
     return status;
 } 

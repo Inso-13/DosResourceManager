@@ -17,6 +17,6 @@
 
 
 //º¯ÊýÔ­ÐÍ
-void IEncrypt(char* plain,char* cipher);
+void IEncrypt(char *plain,char *cipher);
 
 #endif

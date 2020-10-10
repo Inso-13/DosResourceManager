@@ -16,29 +16,28 @@
     输出参数：无
     返回值：无
 */
-void ISort(IFileNode* parent,int (*fun)(IFileNode*,IFileNode*))
+void ISort(IFileNode *parent,int (*fun)(IFileNode*,IFileNode*))
 {
-    IFileNode* tempNode=parent->child;
+    IFileNode *tempNode=parent->child;
     int n=0,i,j,u;
 
     while(tempNode)
     {
         n++;
         tempNode=tempNode->next;
-    }
-    //计算链表的长度
+    }    //计算链表的长度
 
     for(i=0;i<n-1;i++)
     {
-        for(j=0;j<n-i-1;j++)
+        for(j=0;j<n-i-1;j++)    
         {
             tempNode=parent->child;
             for(u=0;u<j;u++)
                 tempNode=tempNode->next;
             if(fun(tempNode,tempNode->next)>0)
-                IExchangeFileNode(tempNode,tempNode->next);
+                IExchangeFileNode(tempNode,tempNode->next); //交换节点
         }
-    }
+    }   //冒泡排序
 }
 
 /*
@@ -47,13 +46,14 @@ void ISort(IFileNode* parent,int (*fun)(IFileNode*,IFileNode*))
     输出参数：无
     返回值：无
 */
-int ISortDateUp(IFileNode* node1,IFileNode* node2)
+int ISortDateUp(IFileNode *node1,IFileNode *node2)
 {
-    int t;
+    int t;  
+
     t=(int)node1->file.date-(int)node2->file.date;
-    if(t) return t;
+    if(t) return t; //先比较日期
     t=(int)node1->file.time-(int)node2->file.time;
-    return t;
+    return t;   //后比较时间
 }
 
 /*
@@ -62,13 +62,14 @@ int ISortDateUp(IFileNode* node1,IFileNode* node2)
     输出参数：无
     返回值：无
 */
-int ISortDateDown(IFileNode* node1,IFileNode* node2)
+int ISortDateDown(IFileNode *node1,IFileNode *node2)
 {
     int t;
+
     t=(int)node2->file.date-(int)node1->file.date;
-    if(t) return t;
+    if(t) return t; //先比较日期
     t=(int)node2->file.time-(int)node1->file.time;
-    return t;
+    return t; //后比较时间
 }
 
 /*
@@ -77,7 +78,7 @@ int ISortDateDown(IFileNode* node1,IFileNode* node2)
     输出参数：无
     返回值：无
 */
-int ISortSizeUp(IFileNode* node1,IFileNode* node2)
+int ISortSizeUp(IFileNode *node1,IFileNode *node2)
 {
     if(IisFolder(node1))
     {
@@ -85,9 +86,10 @@ int ISortSizeUp(IFileNode* node1,IFileNode* node2)
             return 0;
         else 
             return -1;
-    }
+    }   
     else if(IisFolder(node2))
-        return 1;
+        return 1;   //文件夹最小
+
     else if(node1->file.size<0)
     {
         if(node2->file.size<0)
@@ -96,7 +98,7 @@ int ISortSizeUp(IFileNode* node1,IFileNode* node2)
             return 1;
     }
     else if(node2->file.size<0)
-        return -1;
+        return -1;  //超过32K的文件最大
     else
         return node1->file.size-node2->file.size;
 }
@@ -107,7 +109,7 @@ int ISortSizeUp(IFileNode* node1,IFileNode* node2)
     输出参数：无
     返回值：无
 */
-int ISortSizeDown(IFileNode* node1,IFileNode* node2)
+int ISortSizeDown(IFileNode *node1,IFileNode *node2)
 {
     if(IisFolder(node1))
     {
@@ -117,7 +119,7 @@ int ISortSizeDown(IFileNode* node1,IFileNode* node2)
             return 1;
     }
     else if(IisFolder(node2))
-        return -1;
+        return -1;  //文件夹最小
     else if(node1->file.size<0)
     {
         if(node2->file.size<0)
@@ -126,7 +128,7 @@ int ISortSizeDown(IFileNode* node1,IFileNode* node2)
             return -1;
     }
     else if(node2->file.size<0)
-        return 1;
+        return 1;   //超过32K的文件最大
     else
         return node2->file.size-node1->file.size;
 }
@@ -137,7 +139,7 @@ int ISortSizeDown(IFileNode* node1,IFileNode* node2)
     输出参数：无
     返回值：无
 */
-int ISortNameUp(IFileNode* node1,IFileNode* node2)
+int ISortNameUp(IFileNode *node1,IFileNode *node2)
 {
     return strcmp(node1->file.name,node2->file.name);
 }
@@ -148,7 +150,7 @@ int ISortNameUp(IFileNode* node1,IFileNode* node2)
     输出参数：无
     返回值：无
 */
-int ISortNameDown(IFileNode* node1,IFileNode* node2)
+int ISortNameDown(IFileNode *node1,IFileNode *node2)
 {
     return strcmp(node2->file.name,node1->file.name);
 }
@@ -159,7 +161,7 @@ int ISortNameDown(IFileNode* node1,IFileNode* node2)
     输出参数：无
     返回值：无
 */
-int ISortTypeUp(IFileNode* node1,IFileNode* node2)
+int ISortTypeUp(IFileNode *node1,IFileNode *node2)
 {
     return strcmp(node1->file.type,node2->file.type);
 }
@@ -170,7 +172,7 @@ int ISortTypeUp(IFileNode* node1,IFileNode* node2)
     输出参数：无
     返回值：无
 */
-int ISortTypeDown(IFileNode* node1,IFileNode* node2)
+int ISortTypeDown(IFileNode *node1,IFileNode *node2)
 {
     return strcmp(node2->file.type,node1->file.type);
 }
@@ -181,11 +183,11 @@ int ISortTypeDown(IFileNode* node1,IFileNode* node2)
     输出参数：无
     返回值：无
 */
-void ISortMenuActive(IFileNode* flag,IFileNode* null)
+void ISortMenuActive(IFileNode *flag,IFileNode *null)
 {
-    char *n=(char*) flag;
-    *n|=1;
-    //将打开标志置为1
+    char *n=(char*)flag;   
+    
+    *n|=1;  //将打开标志置为1
 }
 
 /*
@@ -194,14 +196,13 @@ void ISortMenuActive(IFileNode* flag,IFileNode* null)
     输出参数：无
     返回值：无
 */
-void ISortActive(IFileNode* cur,IFileNode* pfun)
+void ISortActive(IFileNode *cur,IFileNode *pfun)
 {
-    IFileNodePointer* curNode=(IFileNodePointer*)cur;
-    int (*fun)(IFileNode*,IFileNode*)=(int(*)(IFileNode*,IFileNode*))pfun;
+    IFileNodePointer* curNode=(IFileNodePointer*)cur;   //当前节点
+    int (*fun)(IFileNode*,IFileNode*)=(int(*)(IFileNode*,IFileNode*))pfun;  //比较函数指针
     
     if(curNode->child->child)
-        ISort(curNode->child,fun);
-    //激活排序函数
+        ISort(curNode->child,fun);  //激活排序函数
 }
 
 /*
@@ -210,9 +211,9 @@ void ISortActive(IFileNode* cur,IFileNode* pfun)
     输出参数：无
     返回值：无
 */
-void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
+void IExchangeFileNode(IFileNode *node1,IFileNode *node2)
 {
-    if(node1->flags&4)
+    if(node1->flags&4)  //如果node1是链表头
     {
         node1->flags&=27;
         node2->flags|=4;
@@ -228,8 +229,7 @@ void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
         node2->next=node1;
         node1->pre=node2;
     }
-    //如果node1是链表头
-    else
+    else //如果node1不是链表头
     {
         if(node2->next)
         {
@@ -243,5 +243,4 @@ void IExchangeFileNode(IFileNode* node1,IFileNode* node2)
         node2->next=node1;
         node1->pre=node2;
     }
-    //如果node1不是链表头
 }

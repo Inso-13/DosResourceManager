@@ -10,9 +10,7 @@
 #if !defined(__ITYPE_H)
 #define __ITYPE_H
 
-#define LM
-#define DF 0
-#define DB
+#include"IDefs.h"
 
 typedef struct IFile    //文件结构
 {
@@ -26,7 +24,7 @@ typedef struct IFile    //文件结构
 typedef struct IFileNode    //文件节点
 {
     IFile file;                 //文件
-    char flags;                 // bit0 是否等待cut,bit1 是否被选中,bit2 是否为链表头,bit 3 是否有子文件夹,bit 4 保留
+    char flags;                 // bit0 是否等待cut,bit1 是否被选中,bit2 是否为链表头,bit 3 是否有子文件夹,bit 4 强制覆盖子节点
     struct IFileNode * pre;     //前一个节点（如果是链表头，则pre为父节点）
     struct IFileNode * next;    //后一个节点
     struct IFileNode * child;   //子链表头
@@ -34,8 +32,8 @@ typedef struct IFileNode    //文件节点
 
 typedef struct IFileNodePointer  //文件节点的指针链表，主要用于curNode链表
 {
-    struct IFileNodePointer * pre;      //前一项
-    struct IFileNodePointer * next;     //后一项
+    struct IFileNodePointer *pre;      //前一项
+    struct IFileNodePointer *next;     //后一项
     IFileNode * child;                  //所指向的文件节点
     int wait;                           //等待被删除的次数
 }IFileNodePointer;

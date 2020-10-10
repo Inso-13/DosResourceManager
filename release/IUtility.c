@@ -31,7 +31,7 @@ void IFileNodeSetNull(IFileNode * node)
 IFileNode * IFindNodeByPath(char * path,IFileNode * root)
 {
     IFileNode * tempNode;
-    char temp[150];
+    char temp[PATH_LEN];
 
     if(!root)
         return 0;
@@ -95,9 +95,9 @@ int IisFolder(IFileNode * node)
     输出参数：temp——文件的绝对路径
     返回值：无
 */
-void IGetAbsolutePath(IFileNode * node,char* temp)
+void IGetAbsolutePath(IFileNode * node,char *temp)
 {
-    if(node->file.name[1]==':'||!strcmp(node->file.name,"DOS"))
+    if(node->file.name[1]==':'||!strcmp(node->file.name,ROOT_NAME))
         strcpy(temp,node->file.name);
     else
     {
@@ -121,7 +121,7 @@ IFileNode * IFindParent(IFileNode * child)
         return NULL;
     //如果child是DOS根节点, 则返回NULL
 
-    while(!(temp->flags&4))    //找到链表头
+    while(!(temp->flags&NODE_IS_HEAD))    //找到链表头
     {
         temp=temp->pre;
     }
@@ -134,7 +134,7 @@ IFileNode * IFindParent(IFileNode * child)
     输出参数：name——文件名
     返回值：无
 */
-void IGetNameByPath(char* path,char* name)
+void IGetNameByPath(char *path,char *name)
 {
     int i;
     int n=strlen(path);
@@ -153,7 +153,7 @@ void IGetNameByPath(char* path,char* name)
     输出参数：无
     返回值：若path2是否为path1的子路径, 返回1; 否则返回0
 */
-int IisChild(char* path1,char* path2)
+int IisChild(char *path1,char *path2)
 {
     int n=strlen(path2),i;
 

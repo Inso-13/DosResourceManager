@@ -13,6 +13,9 @@
 //库文件
 #include<GRAPHICS.H>
 
+//辅助模块
+#include"IDefs.h"
+
 
 //函数原型
 void IgeneralL(int x,int y);

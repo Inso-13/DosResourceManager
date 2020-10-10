@@ -10,7 +10,7 @@
 #define __IMATCH_H
 
 //º¯ÊıÔ­ĞÍ
-int IMatch(char* src,char* pattern);
+int IMatch(char *src,char *pattern);
 int IMatchi(char a,char b);
 
 #endif

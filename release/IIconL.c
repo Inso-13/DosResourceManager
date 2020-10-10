@@ -19,8 +19,9 @@ void IdiskL(int x,int y)
 {
    int i;
    int v[]={-10,51,20,65,20,79,-10,65,-10,51};
-   setlinestyle(0,0,3);
-   setcolor(247);
+
+   setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+   setcolor(DRM_LIGHTGRAY);
    for(i=0;i<5;i++)
    {
 		v[2*i]=x+v[2*i];
@@ -34,11 +35,11 @@ void IdiskL(int x,int y)
    lineto(x+20,y+79);
    moveto(x+20,y+65);
    lineto(x+60,y+45);
-   setfillstyle(1,248);
-   floodfill(x+5,y+65,247);
-   setlinestyle(0,0,1);
-   setcolor(140);
-   setfillstyle(1,140);
+   setfillstyle(SOLID_FILL,DRM_DARKGRAY);
+   floodfill(x+5,y+65,DRM_LIGHTGRAY);
+   setlinestyle(SOLID_LINE,0,NORM_WIDTH);
+   setcolor(DRM_LIGHTGREEN);
+   setfillstyle(SOLID_FILL,DRM_LIGHTGREEN);
    fillellipse(x+15,y+70,2,2);
 }
 
@@ -48,11 +49,10 @@ void IdiskL(int x,int y)
     输出参数：无
     返回值：无
 */
-
 void IgeneralL(int x,int y)
 {
-	setlinestyle(0,0,3);
-	setcolor(247);
+	setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+	setcolor(DRM_LIGHTGRAY);
 	line(x,y,x+34,y);
 	line(x+34,y,x+34,y+14);
 	line(x+34,y+14,x+49,y+14);
@@ -60,8 +60,9 @@ void IgeneralL(int x,int y)
 	line(x+49,y+14,x+49,y+79);
 	line(x+49,y+79,x,y+79);	
 	line(x,y+79,x,y);
-	setlinestyle(0,0,1); 
+	setlinestyle(SOLID_LINE,0,NORM_WIDTH); 
 }
+
 /*
     函数功能：大图标模式下文本文件图标
     输入参数：(x,y)——图形左上角位置
@@ -71,9 +72,10 @@ void IgeneralL(int x,int y)
 void ItxtL(int x,int y)
 {
 	int i;
+
 	IgeneralL(x,y);
-	setcolor(248);
-	setlinestyle(0,0,1);
+	setcolor(DRM_DARKGRAY);
+	setlinestyle(SOLID_LINE,0,NORM_WIDTH);
 	for(i=2;i<=5;i++)
 	{
 		line(x+5,y+3*i,x+29,y+3*i);
@@ -90,78 +92,79 @@ void ItxtL(int x,int y)
     输出参数：无
     返回值：无
 */
-
 void IdocL(int x,int y)
 {
 	int i; 
+
 	IgeneralL(x,y);
-	setfillstyle(1,11);
+	setfillstyle(SOLID_FILL,DRM_BLUE);
 	bar(x-10,y+12,x+30,y+48);
-	setcolor(255);
-	setlinestyle(0,0,3);
+	setcolor(DRM_WHITE);
+	setlinestyle(SOLID_LINE,0,THICK_WIDTH);
 	line(x-8,y+16,x,y+42);
 	line(x,y+42,x+8,y+16);
 	line(x+8,y+16,x+16,y+42);
 	line(x+16,y+42,x+24,y+16);
-	setlinestyle(0,0,1); 
-	setcolor(247);
+	setlinestyle(SOLID_LINE,0,NORM_WIDTH); 
+	setcolor(DRM_LIGHTGRAY);
 	for(i=14;i<=18;i++)
 	{
 		line(x+5,y+4*i,x+43,y+4*i);
 	}
 }
+
 /*
     函数功能：大图标模式下文件夹图标
     输入参数：(x,y)——图形左上角位置
     输出参数：无
     返回值：无
 */
-
 void IfolderL(int x,int y)
 {
-	setfillstyle(1,202);
+	setfillstyle(SOLID_FILL,DRM_ORANGE);
 	bar(x,y,x+43,y+64);
-	setcolor(207);
+	setcolor(DRM_LIGHTYELLOW);
 	rectangle(x,y,x+43,y+64);
-	setcolor(202);
+	setcolor(DRM_ORANGE);
 	line(x,y+64,x+16,y+64);
-	setcolor(207);
+	setcolor(DRM_LIGHTYELLOW);
 	line(x,y,x+16,y+16);
 	line(x+16,y+16,x+16,y+80);
 	line(x+16,y+80,x,y+64);
 	line(x,y+64,x,y);
-	setcolor(206);
-	floodfill(x+5,y+53,207);	
-	floodfill(x+11,y+69,207);	
+	setcolor(DRM_YELLOW);
+	floodfill(x+5,y+53,DRM_LIGHTYELLOW);	
+	floodfill(x+11,y+69,DRM_LIGHTYELLOW);	
 }
+
 /*
     函数功能：大图标模式下可执行文件图标
     输入参数：(x,y)——图形左上角位置
     输出参数：无
     返回值：无
 */
-
 void IexeL(int x,int y)
 {
 	int i;
-	setfillstyle(1,247);
+
+	setfillstyle(SOLID_FILL,DRM_LIGHTGRAY);
 	bar(x-10,y+14,x+60,y+66);
-	setcolor(248);
-	setlinestyle(0,0,3);
+	setcolor(DRM_DARKGRAY);
+	setlinestyle(SOLID_LINE,0,THICK_WIDTH);
 	rectangle(x-10,y+14,x+60,y+66);
-	setfillstyle(1,248);
+	setfillstyle(SOLID_FILL,DRM_DARKGRAY);
 	bar(x-11,y+9,x+61,y+14);
-	setfillstyle(1,255);
+	setfillstyle(SOLID_FILL,DRM_WHITE);
 	bar(x+5,y+17,x+57,y+63);
-	setfillstyle(1,11);
+	setfillstyle(SOLID_FILL,DRM_BLUE);
 	bar(x+7,y+19,x+35,y+55);
-	setcolor(248);
+	setcolor(DRM_DARKGRAY);
 	line(x-5,y+20,x+2,y+20);
 	line(x-5,y+27,x+2,y+27);
 	line(x-5,y+34,x+2,y+34);
 	line(x-5,y+41,x+2,y+41);
-	setcolor(247);
-	setlinestyle(0,0,1);
+	setcolor(DRM_LIGHTGRAY);
+	setlinestyle(SOLID_LINE,0,NORM_WIDTH);
 	for(i=4;i<10;i++)
 	{
 		line(x+38,y+5*i,x+54,y+5*i);
@@ -177,25 +180,25 @@ void IexeL(int x,int y)
 void IcL(int x,int y)
 {
 	int i;
-	setlinestyle(0,0,3);
-	setcolor(247);
+
+	setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+	setcolor(DRM_LIGHTGRAY);
 	rectangle(x,y,x+49,y+79);
-	setfillstyle(1,11);
+	setfillstyle(SOLID_FILL,DRM_BLUE);
 	bar(x+10,y+47,x+57,y+74);
-	setcolor(0);
+	setcolor(DRM_BLACK);
 	rectangle(x+10,y+48,x+57,y+75);
-	setcolor(255);
+	setcolor(DRM_WHITE);
 	arc(x+42,y+60,60,300,7);
-	setfillstyle(1,255);
+	setfillstyle(SOLID_FILL,DRM_WHITE);
 	bar(x+29,y+67,x+33,y+69);
-	setlinestyle(0,0,1);
-	setcolor(247);
+	setlinestyle(SOLID_LINE,0,NORM_WIDTH);
+	setcolor(DRM_LIGHTGRAY);
 	for(i=2;i<9;i++)
 	{
 		line(x+5,y+5*i,x+44,y+5*i);
 	}
 }
-
 
 /*
     函数功能：大图标模式下h源码文件图标
@@ -203,25 +206,25 @@ void IcL(int x,int y)
     输出参数：无
     返回值：无
 */
-
 void IhL(int x,int y)
 {
 	int i;
-	setlinestyle(0,0,3);
-	setcolor(247);
+	
+	setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+	setcolor(DRM_LIGHTGRAY);
 	rectangle(x,y,x+49,y+79);
-	setfillstyle(1,180);
+	setfillstyle(SOLID_FILL,DRM_RED);
 	bar(x+10,y+47,x+57,y+74);
-	setcolor(248);
+	setcolor(DRM_DARKGRAY);
 	rectangle(x+10,y+48,x+57,y+75);
-	setfillstyle(1,255);
+	setfillstyle(SOLID_FILL,DRM_WHITE);
 	bar(x+27,y+67,x+31,y+69);
-	setcolor(255);
+	setcolor(DRM_WHITE);
 	line(x+35,y+53,x+35,y+69);
 	line(x+43,y+53,x+43,y+69);
 	line(x+35,y+61,x+43,y+61);
-	setlinestyle(0,0,1);
-	setcolor(247);
+	setlinestyle(SOLID_LINE,0,NORM_WIDTH);
+	setcolor(DRM_LIGHTGRAY);
 	for(i=2;i<9;i++)
 	{
 		line(x+5,y+5*i,x+44,y+5*i);
@@ -237,8 +240,8 @@ void IhL(int x,int y)
 void IobjL(int x,int y)
 {
 	IgeneralL(x,y);
-	setlinestyle(0,0,3);
-	setcolor(0);
+	setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+	setcolor(DRM_BLACK);
 	moveto(x+24,y+70);
 	lineto(x+39,y+59);
 	lineto(x+39,y+39);
@@ -249,7 +252,7 @@ void IobjL(int x,int y)
 	lineto(x+24,y+28);
 	lineto(x+39,y+39);
 	line(x+9,y+39,x+20,y+47);
-	setlinestyle(0,0,1);
+	setlinestyle(SOLID_LINE,0,NORM_WIDTH);
 }
 
 /*
@@ -268,22 +271,22 @@ void ImysteryL(int x,int y){IgeneralL(x,y);}
 */
 void IpicL(int x,int y)
 {
-	setfillstyle(1,31);
+	setfillstyle(SOLID_FILL,DRM_BRIGHTBLUE);
 	bar(x-10,y+9,x+60,y+66);
-	setfillstyle(SOLID_FILL,6);
+	setfillstyle(SOLID_FILL,DRM_LIGHTGREEN);
 	bar(x-10,y+35,x+60,y+49);
-    setfillstyle(SOLID_FILL,23);
+    setfillstyle(SOLID_FILL,DRM_LIDHTBLUE);
 	bar(x-10,y+49,x+60,y+66);
-	setcolor(202);
-	setfillstyle(SOLID_FILL,202);
+	setcolor(DRM_ORANGE);
+	setfillstyle(SOLID_FILL,DRM_ORANGE);
 	fillellipse(x+44,y+23,7,7);
-	setlinestyle(0,0,3);
-	setcolor(248);
+	setlinestyle(SOLID_LINE,0,THICK_WIDTH);
+	setcolor(DRM_DARKGRAY);
 	rectangle(x-10,y+9,x+60,y+66);
-	setcolor(6);
+	setcolor(DRM_LIGHTGREEN);
 	line(x+1,y+35,x+12,y+20);
 	line(x+12,y+20,x+23,y+35);
-	setfillstyle(1,6);
-	floodfill(x+12,y+30,6);
-	setlinestyle(0,0,1);
+	setfillstyle(SOLID_FILL,DRM_LIGHTGREEN);
+	floodfill(x+12,y+30,DRM_LIGHTGREEN);
+	setlinestyle(SOLID_LINE,0,NORM_WIDTH);
 }
