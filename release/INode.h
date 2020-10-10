@@ -23,6 +23,7 @@
 #include"IUtility.h"
 #include"IQuit.h"
 #include"IType.h"
+#include"IDefs.h"
 
 
 //º¯ÊýÔ­ÐÍ

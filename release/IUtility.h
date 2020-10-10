@@ -15,6 +15,8 @@
 
 //辅助模块
 #include"IType.h"
+#include"IDefs.h"
+
 
 //函数原型
 int IisFolder(IFileNode * node);

@@ -79,23 +79,11 @@ IFileNode *IGetFileNodeList(char * path)
     while(1)
     {
         j++;
-        while(!strcmp(ft.name,".")||!strcmp(ft.name,".."))
+        while(!strcmp(ft.name,".")||!strcmp(ft.name,"..")||!strcmp(ft.name,"ehome")||!strcmp(ft.name,"WINDOWS")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)||(ft.name[2]=='C'&&ft.name[3]=='U')||ft.name[0]=='$'||(ft.name[0]=='P'&&ft.name[1]=='R'&&ft.name[2]=='O'&&ft.name[5]=='A')||ft.name[0]=='3'||(ft.name[0]=='S'&&ft.name[1]=='Y'&&ft.name[2]=='S'&&ft.name[3]=='T'))
         {
             ret=_dos_findnext(&ft);
             if(ret) break;
-        }
-        //跳过无用节点
-        if(ret)
-        {
-            free(childRoot);
-            childRoot=NULL;
-            break;
-        }
-        while(!strcmp(ft.name,"ehome")||!strcmp(ft.name,"WINDOWS")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)||(ft.name[2]=='C'&&ft.name[3]=='U')||ft.name[0]=='$'||(ft.name[0]=='P'&&ft.name[1]=='R'&&ft.name[2]=='O'&&ft.name[5]=='A')||ft.name[0]=='3'||(ft.name[0]=='S'&&ft.name[1]=='Y'&&ft.name[2]=='S'&&ft.name[3]=='T'))
-        {
-            ret=_dos_findnext(&ft);
-            if(ret) break;
-        }
+        }   //跳过无用节点
         while(fgets(tempStr1,PATH_LEN,fp))
         {
             if(tempStr1[strlen(tempStr1)-1]=='\n')
@@ -106,14 +94,18 @@ IFileNode *IGetFileNodeList(char * path)
             if(!strcmp(tempStr1,tempStr2))
             {
                 ret=_dos_findnext(&ft);
+                if(ret) break;
             }
         }
         rewind(fp);
+
         if(ret)
         {
+            if(tempNode==lastNode)
+                childRoot=NULL;
+            else
+                lastNode->next=NULL;
             free(tempNode);
-            tempNode=NULL;
-            lastNode->next=NULL;
             break;
         }
         strcpy(tempNode->file.name,ft.name);

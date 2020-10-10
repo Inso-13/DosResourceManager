@@ -378,7 +378,7 @@ void ISetView10(IFileNode * flag,IFileNode *null)
 {
     char *menuFlag=(char*)flag;    //菜单/视图控制
 
-    (*menuFlag)&=MENU_SET_VIEW10;    //设置为显示view1的0号视图
+    (*menuFlag)&=FLAG_ADD_VIEW10;    //设置为显示view1的0号视图
 }
 
 /*
@@ -391,5 +391,5 @@ void ISetView11(IFileNode * flag,IFileNode *null)
 {
     char *menuFlag=(char*)flag; //菜单/视图控制
 
-    (*menuFlag)|=MENU_SET_VIEW11;    //设置为显示view1的1号视图
+    (*menuFlag)|=FLAG_ADD_VIEW11;    //设置为显示view1的1号视图
 }

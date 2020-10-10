@@ -16,6 +16,9 @@
 #include<STRING.H>
 #include<CONIO.H>
 
+//辅助模块
+#include"IDefs.h"
+
 //调用模块
 #include"IType.h"
 

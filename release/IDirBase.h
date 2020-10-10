@@ -24,6 +24,7 @@
 #include"IUtility.h"
 #include"INode.h"
 #include"IType.h"
+#include"IDefs.h"
 
 
 //º¯ÊýÔ­ÐÍ

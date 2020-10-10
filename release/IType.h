@@ -10,8 +10,6 @@
 #if !defined(__ITYPE_H)
 #define __ITYPE_H
 
-#include"IDefs.h"
-
 typedef struct IFile    //文件结构
 {
     char name[13];  //文件名

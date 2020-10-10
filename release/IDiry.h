@@ -23,6 +23,7 @@
 //辅助模块
 #include"IType.h"
 #include"IUtility.h"
+#include"IDefs.h"
 
 //调用模块
 #include"INode.h"
