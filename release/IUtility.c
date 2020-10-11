@@ -166,3 +166,39 @@ int IisChild(char *path1,char *path2)
         return 0;
     return 1;
 }
+
+/*
+    函数功能：判断字符串是否开始于pattern
+    输入参数：str——字符串，pattern——匹配模式
+    输出参数：无
+    返回值：如果为真，返回1,；否则返回0
+*/
+char IStartWith(char *str,char *pattern)
+{
+    int n=strlen(pattern);
+    int i;
+
+    for(i=0;i<n;i++)
+        if(str[i]!=pattern[i])
+            return 0;
+    return 1;
+}
+
+/*
+    函数功能：判断字符串是否结束于pattern
+    输入参数：str——字符串，pattern——匹配模式
+    输出参数：无
+    返回值：如果为真，返回1,；否则返回0
+*/
+char IEndWith(char *str,char *pattern)
+{
+    int n=strlen(pattern);
+    int m=strlen(str);
+    int i;
+
+    if(m<n) return 0;
+    for(i=0;i<n;i++)
+        if(str[m-1-i]!=pattern[n-i-1])
+            return 0;
+    return 1;
+}

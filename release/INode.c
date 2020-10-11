@@ -62,7 +62,7 @@ int IAddChild(IFileNode * parent,IFileNode * child)
 IFileNode *IGetFileNodeList(char * path)
 {
     IFileNode * childRoot=(IFileNode *)malloc(sizeof(IFileNode)), *tempNode=childRoot, *lastNode=childRoot;
-    int ret,i,j=0;
+    int ret,checkAgain=0,i,j=0;
     struct find_t ft;
     FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","r+");
     char tempStr1[PATH_LEN],tempStr2[PATH_LEN];
@@ -75,11 +75,9 @@ IFileNode *IGetFileNodeList(char * path)
     IFileNodeSetNull(childRoot);
     ret=_dos_findfirst("*.*", 0xf7,&ft);  
     //"*.*"， 0xf7所有文件节点   ft存储查找结果
-    
     while(1)
     {
-        j++;
-        while(!strcmp(ft.name,".")||!strcmp(ft.name,"..")||!strcmp(ft.name,"ehome")||!strcmp(ft.name,"WINDOWS")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)||(ft.name[2]=='C'&&ft.name[3]=='U')||ft.name[0]=='$'||(ft.name[0]=='P'&&ft.name[1]=='R'&&ft.name[2]=='O'&&ft.name[5]=='A')||ft.name[0]=='3'||(ft.name[0]=='S'&&ft.name[1]=='Y'&&ft.name[2]=='S'&&ft.name[3]=='T'))
+        while(!strcmp(ft.name,".")||!strcmp(ft.name,"..")||!strcmp(ft.name,"WINDOWS")||IStartWith(ft.name,"DOCUME")||IStartWith(ft.name,"$")||IStartWith(ft.name,"PROGRA")||IStartWith(ft.name,"360")||IStartWith(ft.name,"SYSTE")||IEndWith(ft.name,"SYS")||IEndWith(ft.name,"INI"))
         {
             ret=_dos_findnext(&ft);
             if(ret) break;
@@ -95,10 +93,15 @@ IFileNode *IGetFileNodeList(char * path)
             {
                 ret=_dos_findnext(&ft);
                 if(ret) break;
+                else checkAgain=1;
             }
         }
         rewind(fp);
-
+        if(checkAgain)
+        {
+            checkAgain=0;
+            continue;
+        }
         if(ret)
         {
             if(tempNode==lastNode)
@@ -108,6 +111,8 @@ IFileNode *IGetFileNodeList(char * path)
             free(tempNode);
             break;
         }
+        j++;
+
         strcpy(tempNode->file.name,ft.name);
         tempNode->file.size=(ft.size/512+1)/2;
         if(ft.attrib&0x10)

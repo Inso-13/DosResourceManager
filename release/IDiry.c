@@ -222,7 +222,7 @@ void ISearch(char *path,char *pattern,FILE* fp)
     ret=_dos_findfirst("*.*", 0xf7,&ft);  //搜索全部文件
     while(1)
     {
-        while(!strcmp(ft.name,".")||!strcmp(ft.name,"..")||!strcmp(ft.name,"ehome")||!strcmp(ft.name,"WINDOWS")||(ft.name[0]=='C'&&(unsigned char)ft.name[1]>0xa0)||(ft.name[2]=='C'&&ft.name[3]=='U')||ft.name[0]=='$'||(ft.name[0]=='P'&&ft.name[1]=='R'&&ft.name[2]=='O'&&ft.name[5]=='A')||ft.name[0]=='3'||(ft.name[0]=='S'&&ft.name[1]=='Y'&&ft.name[2]=='S'&&ft.name[3]=='T'))
+        while(!strcmp(ft.name,".")||!strcmp(ft.name,"..")||!strcmp(ft.name,"WINDOWS")||IStartWith(ft.name,"DOCUME")||IStartWith(ft.name,"$")||IStartWith(ft.name,"PROGRA")||IStartWith(ft.name,"360")||IStartWith(ft.name,"SYSTE")||IEndWith(ft.name,"SYS")||IEndWith(ft.name,"INI"))
         {
             ret=_dos_findnext(&ft);
             if(ret) break;

@@ -27,5 +27,7 @@ IFileNode * IFindNodeByName(char * name,IFileNode * root);
 void IGetNameByPath(char *path,char *name);
 void IGetAbsolutePath(IFileNode * node,char *temp);
 void IFileNodeSetNull(IFileNode * node);
+char IStartWith(char *str,char *pattern);
+char IEndWith(char *str,char *pattern);
 
 #endif

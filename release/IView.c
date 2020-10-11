@@ -17,7 +17,7 @@
 */
 void IPlainView(FILE* fpHZ)
 {
-    if(fpHZ==NULL)
+    if(fpHZ==NULL)  //检查汉字库
     {
         setcolor(DRM_BLACK);
         outtextxy(100,100,"fpHZ is NULL in IPlainView");
@@ -30,7 +30,7 @@ void IPlainView(FILE* fpHZ)
     setfillstyle(SOLID_FILL,DRM_VIOLET);
     bar(0+DF,0+DF,1024+DF,22+DF);
     setcolor(DRM_BLACK);
-    Iouttextxy(10+DF,5+DF,"仿Windows资源管理器",fpHZ);
+    Iouttextxy(10+DF,5+DF,"仿Windows资源管理器",fpHZ);  //头部栏
 
     setcolor(DRM_DARKGRAY);
     line(0+DF,44+DF,1024+DF,44+DF);
@@ -45,11 +45,11 @@ void IPlainView(FILE* fpHZ)
     IPointerRight(172+DF,62+DF);
     IRefresh(814+DF,64+DF);
     IMagnifier(841+DF,61+DF);
-    IExit(1004+DF,8+DF);
-
+    IExit(1004+DF,8+DF);    
     setcolor(DRM_DARKGRAY);
     line(240+DF,88+DF,240+DF,742+DF);
     line(0+DF,744+DF,1024+DF,744+DF);
+    //伪菜单栏，和分栏线
 }
 
 /*
@@ -60,98 +60,85 @@ void IPlainView(FILE* fpHZ)
 */
 int IView0(IFileNode *root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,int beginX,int beginY,char *page,char flag,FILE* fpHZ)
 {
-    int increaceY=0,temp,n;
-    char thisPage=1;
-    char tempStr[3];
-    IEvent tempEvent;
+    int increaceY=0;    //y轴偏移量
+    char thisPage=1;    //是否为当前页
+    char tempStr[3];    //暂存页码  
+    IEvent tempEvent;   //辅助事件
 
     if(!root) return 0;         
 
     if(beginY<110+DF+600*(*page-1)||beginY>110+DF+600*(*page))
-        thisPage=0;
+        thisPage=0; //并非该页的数据
 
-    if(thisPage&&(*curNode)->child==root)
+    if(thisPage&&(*curNode)->child==root)   //选中某个文件夹
     {
         setfillstyle(SOLID_FILL,DRM_CHOSENBLUE);
         bar(0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22);
     }
 
-    if(IisFolder(root))
+    if(IisFolder(root)) //如果是文件夹
     {
-        if(!(root->flags&NODE_HAS_FOLDER))         //空文件夹
-        {
-            if(thisPage)
+        increaceY+=24;  //y轴偏移量
+        if(thisPage)    //如果是该页文件夹
+            if(!(root->flags&NODE_HAS_FOLDER))         //空文件夹
             {
-                Ifolder(beginX+11,beginY-(*page-1)*600+4);
+                Ifolder(beginX+11,beginY-(*page-1)*600+4);  //画图标
                 setcolor(DRM_BLACK);
                 Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fpHZ);
                 ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //双击打开文件夹
                 ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,root,(IFileNode*)curNode,REACT_MORE);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //双击打开文件夹
             }
-            increaceY+=24;
-        }
-        else if(root->file.type[0]=='0')   //未打开
-        {
-            if(thisPage)
+            else if(root->file.type[0]=='0')   //未打开
             {
                 IPointerRight(beginX+1,beginY-(*page-1)*600+8);
                 if(root->file.type[1]=='d'||root->file.type[1]=='\\')
                     Idisk(beginX+11,beginY-(*page-1)*600+4);
                 else
-                    Ifolder(beginX+11,beginY-(*page-1)*600+4);
+                    Ifolder(beginX+11,beginY-(*page-1)*600+4);  //画图标
                 setcolor(DRM_BLACK);
                 Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fpHZ);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //单击打开文件夹
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IEntreeActive,root,(IFileNode*)curNode,REACT_MORE);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //单击打开文件夹
                 ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //双击打开文件夹
                 ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,root,(IFileNode*)curNode,REACT_MORE);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //双击打开文件夹
             }
-            increaceY+=24;
-        }
-        else        //打开的文件夹
-        {
-            if(thisPage)
+            else        //打开的文件夹
             {
-                IPointerDown(beginX,beginY-(*page-1)*600+9);
+                if(!(root->file.type[1]=='\\'))
+                    IPointerDown(beginX,beginY-(*page-1)*600+9);
                 if(root->file.type[1]=='d'||root->file.type[1]=='\\')
                     Idisk(beginX+11,beginY-(*page-1)*600+4);
                 else
-                    Ifolder(beginX+11,beginY-(*page-1)*600+4);
+                    Ifolder(beginX+11,beginY-(*page-1)*600+4);  //画图标
                 setcolor(DRM_BLACK);
                 Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fpHZ);
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IDetreeActive,root,(IFileNode*)curNode,REACT_VIEW01);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //单击关闭文件夹
                 ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,ISetXNull,root,(IFileNode*)nodeX,REACT_MORE);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //将nodeX置为null
                 ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IDetreeActive,root,(IFileNode*)curNode,REACT_VIEW01);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent);//单击关闭文件夹
                 ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,ISetXNull,root,(IFileNode*)nodeX,REACT_MORE);
-                IEventStackPush(top,tempEvent);
+                IEventStackPush(top,tempEvent); //将nodeX置为null
             }
-            increaceY+=24;
-            if(root->child)
-            {
-                increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,0,fpHZ);
-            }
-        }
+        if(root->child&&root->file.type[0]=='1')
+            increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,VIEW0_UNPAGE,fpHZ);
     }
     if(root->next)
-    {
-        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,page,0,fpHZ);
-    }
+        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,page,VIEW0_UNPAGE,fpHZ);
 
-    if(flag)
+    if(flag==VIEW0_PAGE)
     {
         if(*page>1)
         {
             ISetEvent(&tempEvent,150+DF,720+DF,168+DF,738+DF,MOUSE_LEFT_PRESS,ILastPage,(IFileNode*)page,NULL,REACT_VIEW0);
-            IEventStackPush(top,tempEvent);
+            IEventStackPush(top,tempEvent); //回到上一页
             setcolor(DRM_BLACK);
         }
         else
@@ -160,7 +147,7 @@ int IView0(IFileNode *root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
         if(*page<=((increaceY-24)/600))
         {
             ISetEvent(&tempEvent,210+DF,720+DF,228+DF,738+DF,MOUSE_LEFT_PRESS,INextPage,(IFileNode*)page,NULL,REACT_VIEW0);
-            IEventStackPush(top,tempEvent);
+            IEventStackPush(top,tempEvent); //回到下一页
             setcolor(DRM_BLACK);
         }
         else
@@ -168,9 +155,8 @@ int IView0(IFileNode *root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
         IGoRight(210+DF,720+DF);
         sprintf(tempStr,"%d",*page);
         setcolor(DRM_BLACK);
-        outtextxy(182+DF,722+DF,tempStr);
-    }
-    //只画一次左右箭头
+        outtextxy(182+DF,722+DF,tempStr);   //输出页码
+    }   //只画一次左右箭头
     return increaceY;
 }
 
@@ -182,14 +168,13 @@ int IView0(IFileNode *root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
 */
 int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,char *page,char *menuFlag,FILE* fpHZ)
 {
-
     int i,numOfItem=0,numOfSelected=0;
     IFileNode *tempNode=NULL;
-    IEvent tempEvent;
+    IEvent tempEvent;                   //辅助事件
     char temp[PATH_LEN];
 
     settextstyle(0,0,0);
-    if(fpHZ==NULL)
+    if(fpHZ==NULL)  //检查汉字库
     {
         setcolor(DRM_BLACK);
         outtextxy(100,100,"fpHZ is NULL in IView1");
@@ -198,20 +183,18 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
 
     tempNode=(*curNode)->child;
     IGetAbsolutePath(tempNode,temp);
-    outtextxy(192+DF,61+DF,temp);
-    //路径栏的显示
+    outtextxy(192+DF,61+DF,temp);   //路径栏的显示
 
     ISetEvent(&tempEvent,803+DF,51+DF,824+DF,78+DF,MOUSE_LEFT_PRESS,INOP,NULL,NULL,REACT_VIEW01);
-    IEventStackPush(top,tempEvent);
-    //刷新功能
+    IEventStackPush(top,tempEvent); //刷新功能
 
     if(IFindParent((*curNode)->child))
     {
         setcolor(DRM_BLACK);
         ISetEvent(&tempEvent,108+DF,57+DF,120+DF,76+DF,MOUSE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
-        IEventStackPush(top,tempEvent);
+        IEventStackPush(top,tempEvent); //单击返回上一级
         ISetEvent(&tempEvent,108+DF,57+DF,120+DF,76+DF,MOUSE_LEFT_PRESS,IEntreeActive,IFindParent((*curNode)->child),(IFileNode*)curNode,REACT_MORE);
-        IEventStackPush(top,tempEvent);
+        IEventStackPush(top,tempEvent); //单击返回上一级
     }
     else
         setcolor(LIGHTGRAY);
@@ -221,7 +204,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     if((*curNode)->pre&&(*curNode)->pre->child)
     {
         setcolor(DRM_BLACK);
-        ISetEvent(&tempEvent,25+DF,59+DF,40+DF,76+DF,MOUSE_LEFT_PRESS,IGoLeftActive,(IFileNode*)curNode,NULL,REACT_VIEW01);
+        ISetEvent(&tempEvent,25+DF,59+DF,40+DF,76+DF,MOUSE_LEFT_PRESS,IGoLeftActive,(IFileNode*)curNode,NULL,REACT_VIEW01); //单击返回上一目录功能
         IEventStackPush(top,tempEvent);
     }
     else
@@ -232,7 +215,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     if((*curNode)->next&&(*curNode)->next->child)
     {
         setcolor(DRM_BLACK);
-        ISetEvent(&tempEvent,62+DF,59+DF,92+DF,76+DF,MOUSE_LEFT_PRESS,IGoRightActive,(IFileNode*)curNode,NULL,REACT_VIEW01);
+        ISetEvent(&tempEvent,62+DF,59+DF,92+DF,76+DF,MOUSE_LEFT_PRESS,IGoRightActive,(IFileNode*)curNode,NULL,REACT_VIEW01);    //单击返回下一目录功能
         IEventStackPush(top,tempEvent);
     }
     else
@@ -256,7 +239,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     else
     {
         Iouttextxy(853+DF,61+DF,"在本文件夹中搜索",fpHZ);
-        ISetEvent(&tempEvent,853+DF,52+DF,1016+DF,77+DF,MOUSE_LEFT_PRESS,ISearchActive,(IFileNode*)(*curNode),NULL,REACT_VIEW2);
+        ISetEvent(&tempEvent,853+DF,52+DF,1016+DF,77+DF,MOUSE_LEFT_PRESS,ISearchActive,(IFileNode*)(*curNode),NULL,REACT_VIEW2);    //单击开始搜索
         IEventStackPush(top,tempEvent);
     }
     //搜索栏显示
@@ -271,7 +254,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     }
     //统计总文件数和被选中的文件数
 
-    IView1PageControl(curNode,page,numOfItem);
+    IView1PageControl(curNode,page,numOfItem);  //检查是否改变页码
     if(*page>=(numOfItem-1)/30+1)
         (*menuFlag)|=FLAG_ADD_LAST_PAGE;
     else
@@ -297,9 +280,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         IView10(curNode,nodeX,tempNode,fpHZ,top,menuFlag);
         ISetEvent(&tempEvent,1001+DF,747+DF,1020+DF,766+DF,MOUSE_LEFT_PRESS,ISetView11,(IFileNode*)menuFlag,NULL,REACT_VIEW1);
         IEventStackPush(top,tempEvent);
-    }
-    //主视图部分
-
+    }   //主视图部分
     IDetailOption(980+DF,751+DF);
     IPictureOption(1005+DF,751+DF);
     
@@ -314,9 +295,24 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     {
         setcolor(DRM_RED);
         outtextxy(320+DF,752+DF,"CTRL");
-    }
-    //状态栏
+    }   //状态栏
     
+    IView1DelOrCover(numOfSelected,curNode,nodeX,top,menuFlag,fpHZ);
+    //删除或覆盖确认
+    return numOfSelected;
+}
+
+/*
+    函数功能：删除或覆盖确认窗口
+    输入参数：numOFSelected——被选中的文件数,curNode——当前目录二级指针, nodeX——辅助节点指针，用于保存被复制/剪切的节点,top——事件栈,fpHZ——汉字库指针
+    输出参数：无
+    返回值：无
+*/
+void IView1DelOrCover(int numOfSelected,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,char *menuFlag,FILE* fpHZ)
+{
+    IEvent tempEvent;     //辅助事件
+    char temp[50];  //辅助字符串
+
     if((*menuFlag)&FLAG_TO_DEL)
     {
         (*menuFlag)&=FLAG_DEL_TO_DEL;
@@ -376,10 +372,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         IEventStackPush(top,tempEvent);
     }
     //删除确认
-
-    return numOfSelected;
 }
-
 /*
     函数功能：根据文件类型，画图标
     输入参数：tempNode——文件节点, y——纵向位置

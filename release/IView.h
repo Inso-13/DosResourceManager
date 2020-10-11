@@ -43,5 +43,6 @@ void IView2(char *page,FILE* fpHZ,IEventStackNode* top,IFileNodePointer** curNod
 void IView10(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IFileNode *tempNode,FILE* fpHZ,IEventStackNode* top,char *menuFlag);
 void IView11(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IFileNode *tempNode,FILE* fpHZ,IEventStackNode* top,char *menuFlag);
 void IView11DrawIcon(IFileNode *tempNode,int x,int y);
+void IView1DelOrCover(int numOfSelected,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,char *menuFlag,FILE* fpHZ);
 
 #endif

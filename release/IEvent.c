@@ -62,8 +62,7 @@ int IEventStackPop(IEventStackNode * top,int n)
     IEventStackNode *q=NULL;
     while(n--)      //出栈n次
     {
-        q=top;
-        if(!q->next)
+        if(!top->next)
             return 0;       //不足n返回0
         q = top->next;
         top->next = q->next;

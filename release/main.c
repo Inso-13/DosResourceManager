@@ -42,7 +42,7 @@ void main()
 #else
     strcpy(name,"\0");
     strcpy(password,"\0");
-    IPlainLogin();
+    IPlainLogin(fpHZ);
     ILogin(name,password,top0,id,fpHZ);
     while(1)
     {

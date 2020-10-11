@@ -15,10 +15,15 @@
     输出参数：无
     返回值：无
 */
-void IPlainLogin()
+void IPlainLogin(FILE* fpHZ)
 {
     int i;  //循环辅助变量
-    
+
+    if(fpHZ==NULL)
+    {
+        setcolor(DRM_BLACK);
+        outtextxy(100,100,"fpHZ is NULL in ILogin");
+    }
     setfillstyle(SOLID_FILL,DRM_DARKGRAY);
     bar(0+DF,0+DF,1024+DF,768+DF);
     setcolor(DRM_WHITE);
@@ -30,6 +35,21 @@ void IPlainLogin()
         arc(512-40+DF,340+DF,0,55,i+90);
         settextstyle(3,0,3);
     }
+
+    setcolor(DRM_WHITE);
+    Iouttextxy(370+DF,450+DF,"用户名:",fpHZ);
+    Iouttextxy(386+DF,500+DF,"密码:",fpHZ);
+
+    setfillstyle(SOLID_FILL,DRM_LIGHTGRAY);
+    bar(370+DF,550+DF,470+DF,550+27+DF);
+    bar(370+190+DF,550+DF,470+190+DF,550+27+DF);
+    //按钮
+    setcolor(DRM_WHITE);
+    Iouttextxy(370+2+DF,550+9+DF,"登录(管理员)",fpHZ);
+    Iouttextxy(370+10+190+DF,550+9+DF,"取消(游客)",fpHZ);
+    //按钮上的汉字
+    Iouttextxy(70+DF,750+DF,"仿Windows资源管理器",fpHZ);
+    Iouttextxy(800+DF,750+DF,"作者：黄子昊、郭一菲",fpHZ);
 }
 
 /*
@@ -48,22 +68,11 @@ void ILogin(char *name,char *password,IEventStackNode* top,int id,FILE* fpHZ)
         setcolor(DRM_BLACK);
         outtextxy(100,100,"fpHZ is NULL in ILogin");
     }
-    setcolor(DRM_WHITE);
-    Iouttextxy(370+DF,450+DF,"用户名:",fpHZ);
-    Iouttextxy(386+DF,500+DF,"密码:",fpHZ);
     setfillstyle(SOLID_FILL,DRM_WHITE);
     bar(440+DF,450-10+DF,660+DF,450-10+27+DF);
     bar(440+DF,500-10+DF,660+DF,500-10+27+DF);
     //输入框
 
-    setfillstyle(SOLID_FILL,DRM_LIGHTGRAY);
-    bar(370+DF,550+DF,470+DF,550+27+DF);
-    bar(370+190+DF,550+DF,470+190+DF,550+27+DF);
-    //按钮
-    setcolor(DRM_WHITE);
-    Iouttextxy(370+2+DF,550+9+DF,"登录(管理员)",fpHZ);
-    Iouttextxy(370+10+190+DF,550+9+DF,"取消(游客)",fpHZ);
-    //按钮上的汉字
 
     if(id==-1)
     {
@@ -73,10 +82,8 @@ void ILogin(char *name,char *password,IEventStackNode* top,int id,FILE* fpHZ)
         strcpy(password,"\0");
     }
     //登录失败
-
     setcolor(DRM_BLACK);
     outtextxy(440+2+DF,440+9+DF,name);
-    
     for(i=0;i<strlen(password);i++)
         outtextxy(440+2+8*i+DF,490+9+DF,"*");
 
