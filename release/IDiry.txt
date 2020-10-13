@@ -1,0 +1,9 @@
+IDiry模块
+
+该模块是文件操作的上层函数，可以被功能层直接调用。
+
+Icplr:判断需要复制/删除的子树，调用IDirBase中的Icpr，与上层做好连接。
+Irmlr:使用方法同上。
+Irename:封装rename函数，同时调用IGetString做好字符的合法性检查，实现文件的重命名操作。
+Inew:封装new函数，创建新文件，同时更新文件节点
+ISearch:使用DFS算法，深度优先搜索。

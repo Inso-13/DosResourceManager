@@ -73,7 +73,7 @@ int IEventStackPop(IEventStackNode * top,int n)
 }
 
 /*
-    函数功能：根据事件激活槽函数
+    函数功能：根据事件激活回调函数
     输入参数：top——事件栈顶, (x,y)——点击坐标, type点击类型
     输出参数：无
     返回值：返回change(需要更新的view)
@@ -86,7 +86,7 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type)
     {
         if(temp->event.type==-1||(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2&&(temp->event.type&type)))
         {   //如果完全符合点击条件
-            temp->event.pfun(temp->event.node0,temp->event.node1);      //激活槽函数
+            temp->event.pfun(temp->event.node0,temp->event.node1);      //激活回调函数
             if(temp->event.change<0)
             {
                 temp=temp->next;
@@ -98,7 +98,7 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type)
         else
             temp=temp->next;    //不符合点击条件，继续查找
     }
-    return 0;   //未激活槽函数，返回0
+    return 0;   //未激活回调函数，返回0
 }
 
 /*

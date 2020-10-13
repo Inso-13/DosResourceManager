@@ -12,7 +12,7 @@
 
 #define LM              //有限的内存
 // #define DB              //调试模式
-#define DF 0            //屏幕偏移量
+#define DF 128          //屏幕偏移量
 #define BUFFSIZE 1024   //复制文件时的缓存区大小
 #define MAXNODES 120    //每个文件夹中显示的最大文件数
 #define PATH_LEN 150    //绝对路径长度

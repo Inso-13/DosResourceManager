@@ -1,0 +1,12 @@
+IDirBase模块
+
+该模块主要是定义了底层的目录操作函数，共分为4层。
+
+第一层：Icopy、Irmf、Imkdir、Irmdir、ISearchPath
+    该层函数主要是封装system调用,除ISearchPath外,命名方法是I+终端命令。
+第二层：ICopyAll、IDelAll
+    分别调用Icopy/Imkdir,Irmf/Irmdir。递归调用，实现整个文件子树的操作。
+第三层：Icpr,Irmr
+    为子节点调用ICopyAll/IDelAll。r代表Linux命令中的 -r参数
+第四层：IEntree/IDetree
+    使文件树增加一层/递归删除。较为常用。

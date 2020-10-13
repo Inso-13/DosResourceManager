@@ -77,7 +77,7 @@ IFileNode *IGetFileNodeList(char * path)
     //"*.*"， 0xf7所有文件节点   ft存储查找结果
     while(1)
     {
-        while(!strcmp(ft.name,".")||!strcmp(ft.name,"..")||!strcmp(ft.name,"WINDOWS")||IStartWith(ft.name,"DOCUME")||IStartWith(ft.name,"$")||IStartWith(ft.name,"PROGRA")||IStartWith(ft.name,"360")||IStartWith(ft.name,"SYSTE")||IEndWith(ft.name,"SYS")||IEndWith(ft.name,"INI"))
+        while(!strcmp(ft.name,".")||!strcmp(ft.name,"..")||!strcmp(ft.name,"WINDOWS")||IStartWith(ft.name,"DOCUME")||IStartWith(ft.name,"$")||IStartWith(ft.name,"PROGRA")||IStartWith(ft.name,"360")||IStartWith(ft.name,"NTLDR")||IStartWith(ft.name,"SYSTE")||IEndWith(ft.name,"SYS")||IEndWith(ft.name,"INI")||IEndWith(ft.name,"COM")||IEndWith(ft.name,"BIN"))
         {
             ret=_dos_findnext(&ft);
             if(ret) break;

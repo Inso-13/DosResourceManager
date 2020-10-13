@@ -129,12 +129,5 @@ char *IGetString(int x,int y,int length,char *string,int flag)
                 outtextxy(x+2+8*j,y+9,"*");
         // «∑Òº”√‹œ‘ æ
     }
-    if(flag==1)
-    {
-        setcolor(DRM_DARKGRAY);
-        line(0+DF,84+DF,1024+DF,84+DF);
-        line(0+DF,85+DF,1024+DF,85+DF);
-        rectangle(832+DF,51+DF,1017+DF,78+DF);
-    }
     return org;
 }

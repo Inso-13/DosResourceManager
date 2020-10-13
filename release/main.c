@@ -209,6 +209,8 @@ void main()
                     mouseSave[i][j]=DRM_WHITE;
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             setcolor(DRM_DARKGRAY);
+            line(0+DF,84+DF,1024+DF,84+DF);
+            line(0+DF,85+DF,1024+DF,85+DF);
             rectangle(832+DF,51+DF,1017+DF,78+DF);
             line(851+DF,51+DF,851+DF,78+DF);
             setfillstyle(SOLID_FILL,DRM_WHITE);

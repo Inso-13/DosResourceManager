@@ -1,0 +1,11 @@
+IType模块
+
+IFileNode:文件树节点。flags文件节点的标志位，具体每一位的功能请参照IType.h注释或IDef.h。
+IFileNodePointer:自成链表，用于记录用户的浏览历史
+IEvent:点击事件。
+    x1,y1,x2,y2确定了点击事件的目标矩形（类似于按钮）
+    type:鼠标操作类型，具体请参照IMouse.c注释或IDef.h
+    pfun(IFileNode*,IFileNode*)回调函数。需要接受两个参数指针，本应当使用(void*)提高回调函数的兼容性。但由于IFileNode*的使用频率最高，因此使用IFileNode*而不是void*。
+    node0,node1:回调函数的两个参数。
+    change，回调函数执行后的返回（不是返回值），由IEventActive返回。具体请参照IDef.h
+IEventStackNode:点击事件栈节点，由于弹出的新窗口点击事件优先，因此使用栈的数据结构。

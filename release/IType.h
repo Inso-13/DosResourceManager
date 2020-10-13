@@ -43,9 +43,9 @@ typedef struct IEvent   //事件
     int x2;
     int y2;
     int type;               //点击类型
-    void (*pfun)(IFileNode *,IFileNode *);     //槽函数 (void*) (int*) 强转 
-    IFileNode * node0;      //槽函数的第一个参数
-    IFileNode * node1;      //槽函数的第二个参数
+    void (*pfun)(IFileNode *,IFileNode *);     //回调函数 (void*) (int*) 强转 
+    IFileNode * node0;      //回调函数的第一个参数
+    IFileNode * node1;      //回调函数的第二个参数
     char change;            //改变的位置
 }IEvent;
 
