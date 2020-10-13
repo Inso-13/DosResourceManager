@@ -3,7 +3,7 @@
  *   版本号：1.0
  *   作者：郭一菲
  *   生成日期：2020-9-4
- *   说明：Active类函数处于中间层，用于将后端（如Diry等）函数的接口统一化，供前端调用栈使用
+ *   说明：Active类函数处于中间层，用于将后端函数的接口统一化，供前端调用栈使用
  **************************************************
  */
 
@@ -11,7 +11,6 @@
 #define __IACTIVE_H
 
 //库文件
-#include<STDLIB.H>
 #include<BIOS.H>
 #include<DOS.H>
 #include<GRAPHICS.H>
@@ -30,9 +29,6 @@
 
 
 //函数原型
-void IAfterEntree(IFileNode *cur,IFileNode *X);
-void IEntreeActive(IFileNode *node,IFileNode *cur);
-void IDetreeActive(IFileNode *node,IFileNode *cur);
 void ISelect(IFileNode *node,IFileNode *null);
 void ICtrlSelect(IFileNode *node,IFileNode *null);
 void INOP(IFileNode *null1,IFileNode *null2);

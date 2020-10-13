@@ -30,7 +30,8 @@
 //µ÷ÓÃÄ£¿é
 #include"IInit.h"
 #include"IMouse.h"
-#include"IView.h"
+#include"IView02.h"
+#include"IView1.h"
 #include"ILogin.h"
 #include"IDisk.h"
 

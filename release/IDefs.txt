@@ -22,4 +22,4 @@ FLAG_FLAGS：在main函数中定义了DRM最重要的控制位menuFLag，FLAG_FLAGS显示化menuFLa
 FLAG_CHANGE：在对menuFLag进行位运算时使用，显示化位运算的意义。
 REACT_VIEW：回调函数的返回值，主要决定回调函数运行完时，画面中需要更新的位置。
 MOUSE_STATUS：鼠标的状态，包括无操作、指针移动、左键单击、右键单击、左键双击、左键释放。
-
+STRING_TYPE：字符串类型，被IGetString使用
