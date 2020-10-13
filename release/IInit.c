@@ -73,7 +73,7 @@ static void Set_Pal(const SVGA_COLOR * col)
     输出参数：无
     返回值：无
 */
-void Set_Pal_File(const char * path)
+void Set_Pal_File(const char *path)
 {
 	SVGA_COLOR     col[256];
 	FILE           *fpcol = NULL;

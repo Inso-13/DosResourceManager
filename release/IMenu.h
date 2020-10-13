@@ -33,8 +33,8 @@
 #include"IInput.h"
 
 //º¯ÊýÔ­ÐÍ
-void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNodePointer *curNode,IFileNodePointer *nodeX,char *menuFlag,FILE* fpHZ);
-void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer *curNode,IFileNodePointer *nodeX,char menuFlag,FILE* fpHZ);
+void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode *top,IFileNodePointer *curNode,IFileNodePointer *nodeX,char *menuFlag,FILE *fpHZ);
+void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer *curNode,IFileNodePointer *nodeX,char menuFlag,FILE *fpHZ);
 void ISetCopy(IFileNode *cur,IFileNode *nodeX);
 void ISetDelete(IFileNode *cur,IFileNode *null);
 void ISetPaste(IFileNode *cur,IFileNode *X);

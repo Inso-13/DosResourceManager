@@ -198,7 +198,7 @@ void ISortMenuActive(IFileNode *flag,IFileNode *null)
 */
 void ISortActive(IFileNode *cur,IFileNode *pfun)
 {
-    IFileNodePointer* curNode=(IFileNodePointer*)cur;   //当前节点
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;   //当前节点
     int (*fun)(IFileNode*,IFileNode*)=(int(*)(IFileNode*,IFileNode*))pfun;  //比较函数指针
     
     if(curNode->child->child)
@@ -213,10 +213,10 @@ void ISortActive(IFileNode *cur,IFileNode *pfun)
 */
 void IExchangeFileNode(IFileNode *node1,IFileNode *node2)
 {
-    if(node1->flags&4)  //如果node1是链表头
+    if(node1->flags&NODE_IS_HEAD)  //如果node1是链表头
     {
-        node1->flags&=27;
-        node2->flags|=4;
+        node1->flags&=NODE_DEL_HEAD;
+        node2->flags|=NODE_ADD_HEAD;
         node1->pre->child=node2;
         node2->pre=node1->pre;
         if(node2->next)

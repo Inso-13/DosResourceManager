@@ -32,11 +32,11 @@
 
 
 //º¯ÊýÔ­ÐÍ
-void Icplr(IFileNode * oldParent,IFileNode * newParent,char flag);
-void Irmlr(IFileNode * oldParent);
-void Irename(IFileNode * oldName,char * newName);
-int Inew(IFileNode * pathNode,char *fileName);
-void ISearch(char *path,char *name,FILE* fp);
-void IDelFilelist(IFileNode * root);
+void Icplr(IFileNode *oldParent,IFileNode *newParent,char flag);
+void Irmlr(IFileNode *oldParent);
+void Irename(IFileNode *oldName,char *newName);
+int Inew(IFileNode *pathNode,char *fileName);
+void ISearch(char *path,char *name,FILE *fp);
+void IDelFilelist(IFileNode *root);
 
 #endif

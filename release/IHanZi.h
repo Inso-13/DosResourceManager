@@ -21,7 +21,7 @@
 
 
 //º¯ÊýÔ­ÐÍ
-void IPutsHZ16(int x,int y,char *str,FILE * fp);
-void Iouttextxy(int x,int y,char *str,FILE * fp);
+void IPutsHZ16(int x,int y,char *str,FILE *fp);
+void Iouttextxy(int x,int y,char *str,FILE *fp);
 
 #endif

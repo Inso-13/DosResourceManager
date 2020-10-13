@@ -16,7 +16,7 @@
     返回值：无
     注：本函数源于往届学长，有修改
 */
-void IPutsHZ16(int x,int y,char *str,FILE * fp)
+void IPutsHZ16(int x,int y,char *str,FILE *fp)
 {
     unsigned ZCode,BCode;   //区码、位码
     int i,j,k,rec;
@@ -60,7 +60,7 @@ void IPutsHZ16(int x,int y,char *str,FILE * fp)
     输出参数：无
     返回值：无
 */
-void Iouttextxy(int x,int y,char *str,FILE * fp)
+void Iouttextxy(int x,int y,char *str,FILE *fp)
 {
     int inc=0;  //横轴增量
     int n,i=0;  //循环辅助变量

@@ -169,6 +169,6 @@ void IPictureOption(int x,int y)
     rectangle(x,y,x+11,y+11);
     setcolor(DRM_BLUE);
     line(x+1,y+1,x+10,y+1);
-    setfillstyle(SOLID_FILL,GREEN);
+    setfillstyle(SOLID_FILL,DRM_GREEN);
     bar(x+1,y+5,x+10,y+10);
 }

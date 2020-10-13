@@ -15,7 +15,7 @@
     输出参数：无
     返回值：无
 */
-void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNodePointer* curNode,IFileNodePointer* nodeX,char *menuFlag,FILE* fpHZ)
+void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode *top,IFileNodePointer *curNode,IFileNodePointer *nodeX,char *menuFlag,FILE *fpHZ)
 {
     IEvent tempEvent;
     int i;
@@ -81,7 +81,7 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode* top,IFileNod
     输出参数：无
     返回值：无
 */
-void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer *curNode,IFileNodePointer *nodeX,char menuFlag,FILE* fpHZ)
+void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer *curNode,IFileNodePointer *nodeX,char menuFlag,FILE *fpHZ)
 {
     int i;
     unsigned char str[2][8][11]={{"复制","剪切","删除","粘贴","重命名","新文件","新文件夹","排序.."},{"按日期升序","按日期降序","按大小升序","按大小降序","按名称升序","按名称降序","按类型升序","按类型降序"}};
@@ -145,8 +145,8 @@ void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer *curNode,IFileNode
 */
 void ISetCopy(IFileNode *cur,IFileNode *X)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
-    IFileNodePointer *nodeX=(IFileNodePointer *)X;
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
+    IFileNodePointer *nodeX=(IFileNodePointer*)X;
 
     if(nodeX->child)
     {
@@ -167,8 +167,8 @@ void ISetCopy(IFileNode *cur,IFileNode *X)
 */
 void ISetCut(IFileNode *cur,IFileNode *X)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
-    IFileNodePointer *nodeX=(IFileNodePointer *)X;
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
+    IFileNodePointer *nodeX=(IFileNodePointer*)X;
 
     if(nodeX->child)
     {
@@ -190,13 +190,12 @@ void ISetCut(IFileNode *cur,IFileNode *X)
 */
 void ISetPaste(IFileNode *cur,IFileNode *X)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
-    IFileNodePointer *nodeX=(IFileNodePointer *)X;
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
+    IFileNodePointer *nodeX=(IFileNodePointer*)X;
     IFileNode *tempNode=nodeX->child->child;
     char temp1[PATH_LEN],temp2[PATH_LEN];
 
     IGetAbsolutePath(curNode->child,temp1);
-    
     while(tempNode)
     {
         if(tempNode->flags&2 && IisFolder(tempNode))
@@ -238,8 +237,8 @@ void ISetPaste(IFileNode *cur,IFileNode *X)
 */
 void ISetPasteF(IFileNode *cur,IFileNode *X)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
-    IFileNodePointer *nodeX=(IFileNodePointer *)X;
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
+    IFileNodePointer *nodeX=(IFileNodePointer*)X;
     
     setfillstyle(SOLID_FILL,DRM_WHITE);
     bar(900+DF,745+DF,1020+DF,765+DF);
@@ -264,7 +263,7 @@ void ISetPasteF(IFileNode *cur,IFileNode *X)
 */
 void ISetPasteComfirm(IFileNode *flagx,IFileNode *null)
 {
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\TEMP.TXT","r");
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\TEMP.TXT","r");
     char *menuFlag=(char*)flagx;
 
     if(fgetc(fp)=='f')
@@ -289,10 +288,10 @@ void ISetPasteComfirm(IFileNode *flagx,IFileNode *null)
 */
 void ISetPasteCheck(IFileNode *cur,IFileNode *X)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
-    IFileNodePointer *nodeX=(IFileNodePointer *)X;
-    IFileNode * tempNode=nodeX->child->child;
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\TEMP.TXT","w+");
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
+    IFileNodePointer *nodeX=(IFileNodePointer*)X;
+    IFileNode *tempNode=nodeX->child->child;
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\TEMP.TXT","w+");
     char temp[PATH_LEN],ttemp[PATH_LEN];
 
     IGetAbsolutePath(curNode->child,temp);
@@ -327,8 +326,8 @@ void ISetPasteCheck(IFileNode *cur,IFileNode *X)
 */
 void ISetDelete(IFileNode *cur,IFileNode *X)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
-    IFileNodePointer *nodeX=(IFileNodePointer *)X;
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
+    IFileNodePointer *nodeX=(IFileNodePointer*)X;
     IFileNodePointer *tempNode=NULL,*lastNode=NULL;
     char path1[PATH_LEN],path2[PATH_LEN];
 
@@ -403,7 +402,7 @@ void ISetDeleteComfirm(IFileNode *flagx,IFileNode *null)
 */
 void ISetRename(IFileNode *cur,IFileNode *flag)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
     char *menuFlag=(char*)flag;
     IFileNode *tempNode=curNode->child->child;
     int i=0;
@@ -419,9 +418,9 @@ void ISetRename(IFileNode *cur,IFileNode *flag)
     
     strcpy(temp,tempNode->file.name);
     if((*menuFlag)&FLAG_IS_VIEW11)
-        IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,0);
+        IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,RENAME_STR);
     else
-        IGetString(254+DF,110+DF+20*i,150,temp,0);
+        IGetString(254+DF,110+DF+20*i,150,temp,RENAME_STR);
     //获取新文件名
 
     if(temp[0])
@@ -436,7 +435,7 @@ void ISetRename(IFileNode *cur,IFileNode *flag)
 */
 void ISetNewFile(IFileNode *cur,IFileNode *flag)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
     char *menuFlag=(char*)flag;
     IFileNode *tempNode=curNode->child->child;
     int i=0;
@@ -460,12 +459,12 @@ void ISetNewFile(IFileNode *cur,IFileNode *flag)
     if(*menuFlag&FLAG_IS_VIEW11)
     {
         if(i==30)
-            IGetString(786+DF,669+DF,150,temp,4);
+            IGetString(786+DF,669+DF,150,temp,NEWFILE_STR);
         else
-            IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,4);
+            IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,NEWFILE_STR);
     }
     else
-        IGetString(254+DF,110+20*i+DF,150,temp,4);
+        IGetString(254+DF,110+20*i+DF,150,temp,NEWFILE_STR);
     //获取新文件名
 
     if(temp[0])
@@ -489,7 +488,7 @@ void ISetNewFile(IFileNode *cur,IFileNode *flag)
 */
 void ISetNewFolder(IFileNode *cur,IFileNode *flag)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;
     char *menuFlag=(char*)flag;
     IFileNode *tempNode=curNode->child->child;
     int i=0;
@@ -513,12 +512,12 @@ void ISetNewFolder(IFileNode *cur,IFileNode *flag)
     if(*menuFlag&FLAG_IS_VIEW11)
     {
         if(i==30)
-            IGetString(786+DF,669+DF,150,temp,4);
+            IGetString(786+DF,669+DF,150,temp,NEWFILE_STR);
         else
-            IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,4);
+            IGetString(276+DF+(i%6)*102,116+85+DF+(i/6)*112,150,temp,NEWFILE_STR);
     }
     else
-        IGetString(254+DF,110+20*i+DF,150,temp,4);
+        IGetString(254+DF,110+20*i+DF,150,temp,NEWFILE_STR);
     //获取新文件名
 
     if(temp[0])

@@ -15,9 +15,9 @@
     输出参数：无
     返回值：返回全新的事件栈
 */
-IEventStackNode * IInitEventStack(void)
+IEventStackNode *IInitEventStack(void)
 {
-    IEventStackNode * top=(IEventStackNode *)malloc(sizeof(IEventStackNode));
+    IEventStackNode *top=(IEventStackNode*)malloc(sizeof(IEventStackNode));
     if(top==NULL)
     {
 #ifdef DB  //如果是在调试模式下
@@ -35,9 +35,9 @@ IEventStackNode * IInitEventStack(void)
     输出参数：无
     返回值：无
 */
-void IEventStackPush(IEventStackNode * top,IEvent newEvent)
+void IEventStackPush(IEventStackNode *top,IEvent newEvent)
 {
-    IEventStackNode * q=(IEventStackNode *)malloc(sizeof(IEventStackNode));
+    IEventStackNode *q=(IEventStackNode*)malloc(sizeof(IEventStackNode));
 
     if(q==NULL)
     {
@@ -57,7 +57,7 @@ void IEventStackPush(IEventStackNode * top,IEvent newEvent)
     输出参数：无
     返回值：正常返回1，事件栈高度不足n则返回0
 */
-int IEventStackPop(IEventStackNode * top,int n)
+int IEventStackPop(IEventStackNode *top,int n)
 {
     IEventStackNode *q=NULL;
     while(n--)      //出栈n次
@@ -78,9 +78,9 @@ int IEventStackPop(IEventStackNode * top,int n)
     输出参数：无
     返回值：返回change(需要更新的view)
 */
-char IEventStackActive(IEventStackNode * top,int x,int y,int type)
+char IEventStackActive(IEventStackNode *top,int x,int y,int type)
 {
-    IEventStackNode * temp=top->next;
+    IEventStackNode *temp=top->next;
     
     while(temp)
     {
@@ -107,7 +107,7 @@ char IEventStackActive(IEventStackNode * top,int x,int y,int type)
     输出参数：无
     返回值：无
 */
-void IDelStack(IEventStackNode * top)
+void IDelStack(IEventStackNode *top)
 {
     while(top->next)
         IEventStackPop(top,5);    //不断出栈
@@ -122,7 +122,7 @@ void IDelStack(IEventStackNode * top)
     输出参数：无
     返回值：无
 */
-void ISetEvent(IEvent* event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode * node0,IFileNode * node1,char change)
+void ISetEvent(IEvent *event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode*,IFileNode*),IFileNode *node0,IFileNode *node1,char change)
 {
     event->x1=x1;
     event->y1=y1;

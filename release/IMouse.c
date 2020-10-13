@@ -61,7 +61,7 @@ void IMouseMath(int (*mouseDraw)[16])
     输出参数：pixelSave——用于记录鼠标所覆盖的像素颜色
     返回值：无
 */
-void IMouseOn(int x,int y,int (*mouseDraw)[16],int(*pixelSave)[16])
+void IMouseOn(int x,int y,int (*mouseDraw)[16],int (*pixelSave)[16])
 {
     int i,j;
     int color;
@@ -109,7 +109,7 @@ void IMouseOff(int x,int y,int (*mouseDraw)[16],int (*pixelSave)[16])
     输出参数：无
     返回值：无
 */
-int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int(*pixelSave)[16])
+int IMouseStatus(int *pMouseX,int *pMouseY,int (*mouseDraw)[16],int (*pixelSave)[16])
 {
     int status=0,i,j,color,t=0;
     int x=*pMouseX;

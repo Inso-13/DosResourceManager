@@ -15,7 +15,7 @@
     输出参数：无
     返回值：无
 */
-void IPlainView(FILE* fpHZ)
+void IPlainView(FILE *fpHZ)
 {
     if(fpHZ==NULL)  //检查汉字库
     {
@@ -58,7 +58,7 @@ void IPlainView(FILE* fpHZ)
     输出参数：无
     返回值：纵坐标的偏移量
 */
-int IView0(IFileNode *root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,int beginX,int beginY,char *page,char flag,FILE* fpHZ)
+int IView0(IFileNode *root,IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,int beginX,int beginY,char *page,char flag,FILE *fpHZ)
 {
     int increaceY=0;    //y轴偏移量
     char thisPage=1;    //是否为当前页
@@ -166,7 +166,7 @@ int IView0(IFileNode *root,IFileNodePointer ** curNode,IFileNodePointer* nodeX,I
     输出参数：无
     返回值：纵坐标的偏移量
 */
-int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,char *page,char *menuFlag,FILE* fpHZ)
+int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,char *page,char *menuFlag,FILE *fpHZ)
 {
     int i,numOfItem=0,numOfSelected=0;
     IFileNode *tempNode=NULL;
@@ -179,8 +179,8 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
         setcolor(DRM_BLACK);
         outtextxy(100,100,"fpHZ is NULL in IView1");
     }
+    
     setcolor(DRM_BLACK);
-
     tempNode=(*curNode)->child;
     IGetAbsolutePath(tempNode,temp);
     outtextxy(192+DF,61+DF,temp);   //路径栏的显示
@@ -308,7 +308,7 @@ int IView1(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* 
     输出参数：无
     返回值：无
 */
-void IView1DelOrCover(int numOfSelected,IFileNodePointer ** curNode,IFileNodePointer* nodeX,IEventStackNode* top,char *menuFlag,FILE* fpHZ)
+void IView1DelOrCover(int numOfSelected,IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,char *menuFlag,FILE *fpHZ)
 {
     IEvent tempEvent;     //辅助事件
     char temp[50];  //辅助字符串
@@ -370,8 +370,7 @@ void IView1DelOrCover(int numOfSelected,IFileNodePointer ** curNode,IFileNodePoi
         (*menuFlag)&=FLAG_CLEAR_COVER;
         ISetEvent(&tempEvent,0,0,0,0,MOUSE_NULL,ISetPaste,(IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
         IEventStackPush(top,tempEvent);
-    }
-    //删除确认
+    }   //删除确认
 }
 /*
     函数功能：根据文件类型，画图标
@@ -455,7 +454,7 @@ void IView11DrawIcon(IFileNode *tempNode,int x,int y)
     输出参数：无
     返回值：无
 */
-void IView10(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IFileNode *tempNode,FILE* fpHZ,IEventStackNode* top,char *menuFlag)
+void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,FILE *fpHZ,IEventStackNode *top,char *menuFlag)
 {
     IEvent tempEvent;
     char temp[PATH_LEN];
@@ -542,7 +541,7 @@ void IView10(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IFileNode *temp
     输出参数：无
     返回值：无
 */
-void IView11(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IFileNode *tempNode,FILE* fpHZ,IEventStackNode* top,char *menuFlag)
+void IView11(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,FILE *fpHZ,IEventStackNode *top,char *menuFlag)
 {
     IEvent tempEvent;
     char temp[PATH_LEN];
@@ -603,7 +602,7 @@ void IView11(IFileNodePointer ** curNode,IFileNodePointer* nodeX,IFileNode *temp
     输出参数：无
     返回值：无
 */
-void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem)
+void IView1PageControl(IFileNodePointer **curNode,char *page,int numOfItem)
 {
     static IFileNode *lastCurNode;
     char temp[3];
@@ -638,10 +637,10 @@ void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem)
     输出参数：无
     返回值：无
 */
-void IView2(char *page,FILE* fpHZ,IEventStackNode* top,IFileNodePointer** curNode)
+void IView2(char *page,FILE *fpHZ,IEventStackNode *top,IFileNodePointer **curNode)
 {
 
-    FILE* searched=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","r");
+    FILE *searched=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","r");
     char tempStr[PATH_LEN];
     IEvent tempEvent;
     char name[15];

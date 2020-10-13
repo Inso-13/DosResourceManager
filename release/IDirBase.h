@@ -28,19 +28,16 @@
 
 
 //º¯ÊýÔ­ÐÍ
-int Icopy(IFileNode * inFile,IFileNode * outParent,char flag);
-int Irmf(IFileNode * fileNode);
-int Imkdir(IFileNode * pathNode,char *folderName);
-int Irmdir(IFileNode * node);
+int Icopy(IFileNode *inFile,IFileNode *outParent,char flag);
+int Irmf(IFileNode *fileNode);
+int Imkdir(IFileNode *pathNode,char *folderName);
+int Irmdir(IFileNode *node);
 int ISearchPath(char *name);
-
-void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild);
-void IDelAll(IFileNode * oldChildChild);
-
-void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag);
-void Irmr(IFileNode * oldChild);
-
-void IEntree(IFileNode * root,char flag);
-void IDetree(IFileNode * root);
+void ICopyAll(IFileNode *oldChildChild,IFileNode *newChild);
+void IDelAll(IFileNode *oldChildChild);
+void Icpr(IFileNode *oldChild,IFileNode *newParent,char flag);
+void Irmr(IFileNode *oldChild);
+void IEntree(IFileNode *root,char flag);
+void IDetree(IFileNode *root);
 
 #endif

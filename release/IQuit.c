@@ -7,7 +7,7 @@
  **************************************************
  */
 
-#include "IQuit.h"
+#include"IQuit.h"
 
 /*
     函数功能：退出程序
@@ -28,9 +28,9 @@ void IQuit()
     输出参数：无
     返回值：无
 */
-void IDelPointer(IFileNodePointer* pointer)
+void IDelPointer(IFileNodePointer *pointer)
 {
-    IFileNodePointer* tempNode=pointer;
+    IFileNodePointer *tempNode=pointer;
     while(tempNode->next)
     {
         tempNode=tempNode->next;

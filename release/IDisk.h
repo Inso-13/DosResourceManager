@@ -22,6 +22,6 @@
 
 
 //º¯ÊýÔ­ÐÍ
-IFileNode * IDiskInit(int id);
+IFileNode *IDiskInit(char id);
 
 #endif

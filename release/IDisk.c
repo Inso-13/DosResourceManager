@@ -15,10 +15,10 @@
     输出参数：无
     返回值：根文件节点
 */
-IFileNode * IDiskInit(int id)
+IFileNode *IDiskInit(char id)
 {
-    IFileNode *root=(IFileNode *)malloc(sizeof(IFileNode)); //根节点
-    IFileNode *rootC=(IFileNode *)malloc(sizeof(IFileNode)); //C盘节点
+    IFileNode *root=(IFileNode*)malloc(sizeof(IFileNode)); //根节点
+    IFileNode *rootC=(IFileNode*)malloc(sizeof(IFileNode)); //C盘节点
     IFileNode *tempNode=rootC,*lastNode=rootC;  //辅助文件节点 
     int i,disk; //循环变量
     char temp[3];  //辅助字符串
@@ -51,7 +51,7 @@ IFileNode * IDiskInit(int id)
                 strcpy(tempNode->file.type,"0d");
             temp[0]=disk+'A';
             strcpy(tempNode->file.name,temp);
-            tempNode=(IFileNode *)malloc(sizeof(IFileNode));    //申请新内存
+            tempNode=(IFileNode*)malloc(sizeof(IFileNode));    //申请新内存
             IFileNodeSetNull(tempNode); //节点初始化
             lastNode->next=tempNode;
             tempNode->pre=lastNode;

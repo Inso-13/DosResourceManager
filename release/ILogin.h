@@ -26,9 +26,9 @@
 #include"IInput.h"
 
 //º¯ÊýÔ­ÐÍ
-void IPlainLogin(FILE* fpHZ);
-void ILogin(char *name,char *password,IEventStackNode* top,int id,FILE* fpHZ);
-void ILoginConfirm(int* id,char *name,char *password);
+void IPlainLogin(FILE *fpHZ);
+void ILogin(char *name,char *password,IEventStackNode *top,char id,FILE *fpHZ);
+void ILoginConfirm(char *id,char *name,char *password);
 void IGetName(IFileNode *nam,IFileNode *null);
 void IGetPassword(IFileNode *pass,IFileNode *null);
 

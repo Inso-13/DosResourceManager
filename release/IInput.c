@@ -27,7 +27,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
     fflush(stdin);  //刷新键盘缓冲区
 
     setcolor(DRM_BLACK);
-    if(flag>=1&&flag<=3)
+    if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
     {
         rectangle(x-1,y,x+length+1,y+27);
         setfillstyle(SOLID_FILL,DRM_WHITE);
@@ -35,7 +35,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
     }
     else
     {
-        if(flag==4)
+        if(flag==NEWFILE_STR)
             strcpy(string,"");
         rectangle(x-1,y+6,x+length+1,y+25);
         setfillstyle(SOLID_FILL,DRM_WHITE);
@@ -46,7 +46,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
     i=n;
 
     setcolor(DRM_RED);
-    if(flag!=3)
+    if(flag!=PASSWORD_STR)
         outtextxy(x+2,y+9,string);
     else
         for(j=0;j<n;j++)
@@ -68,7 +68,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
         }
         //变量t用于计时，实现闪烁光标的效果
 
-        if(flag>=1&&flag<=3)
+        if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
             bar(x,y+1,x+length,y+26);
         else
             bar(x,y+7,x+length,y+24);
@@ -106,7 +106,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
                 continue;
             }
         }
-        else if(n<12&&((tempChar>='0'&&tempChar<='9')||(tempChar>='a'&&tempChar<='z')||(tempChar>='A'&&tempChar<='Z')||tempChar=='.'||tempChar=='_'||(flag==1&&(tempChar=='?'||tempChar=='*'))))
+        else if(n<12&&((tempChar>='0'&&tempChar<='9')||(tempChar>='a'&&tempChar<='z')||(tempChar>='A'&&tempChar<='Z')||tempChar=='.'||tempChar=='_'||(flag==SEARCH_STR&&(tempChar=='?'||tempChar=='*'))))
         {
             strcpy(temp,string+i);
             string[i++]=tempChar;
@@ -116,13 +116,13 @@ char *IGetString(int x,int y,int length,char *string,int flag)
         //合法字符检验
 
         setcolor(DRM_RED);
-        if(flag>=1&&flag<=3)
+        if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
             bar(x,y+1,x+length,y+26);
         else
             bar(x,y+7,x+length,y+24);   
         //两种输入框
 
-        if(flag!=3)
+        if(flag!=PASSWORD_STR)
             outtextxy(x+2,y+9,string);
         else
             for(j=0;j<n;j++)

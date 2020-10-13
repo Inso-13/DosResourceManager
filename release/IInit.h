@@ -32,6 +32,6 @@ typedef struct {
 //º¯ÊýÔ­ÐÍ
 void VGA_Init(void);
 int SVGA_Init(void);
-void Set_Pal_File(const char * path);
+void Set_Pal_File(const char *path);
 
 #endif

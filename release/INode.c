@@ -15,9 +15,9 @@
     输出参数：无
     返回值：成功则返回1, 失败则返回0
 */
-int IAddChild(IFileNode * parent,IFileNode * child)
+int IAddChild(IFileNode *parent,IFileNode *child)
 {
-    IFileNode * temp=NULL;
+    IFileNode *temp=NULL;
 
     if(!parent) return 0;
     //父节点为空，返回0
@@ -59,12 +59,12 @@ int IAddChild(IFileNode * parent,IFileNode * child)
     输出参数：无
     返回值：路径下的文件链表
 */
-IFileNode *IGetFileNodeList(char * path)
+IFileNode *IGetFileNodeList(char *path)
 {
-    IFileNode * childRoot=(IFileNode *)malloc(sizeof(IFileNode)), *tempNode=childRoot, *lastNode=childRoot;
+    IFileNode *childRoot=(IFileNode*)malloc(sizeof(IFileNode)),*tempNode=childRoot,*lastNode=childRoot;
     int ret,checkAgain=0,i,j=0;
     struct find_t ft;
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","r+");
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","r+");
     char tempStr1[PATH_LEN],tempStr2[PATH_LEN];
 
     if(childRoot==NULL)
@@ -115,7 +115,7 @@ IFileNode *IGetFileNodeList(char * path)
 
         strcpy(tempNode->file.name,ft.name);
         tempNode->file.size=(ft.size/512+1)/2;
-        if(ft.attrib&0x10)
+        if(ft.attrib&FA_DIREC)
         {
             strcpy(tempNode->file.type,"0");
         }
@@ -144,7 +144,7 @@ IFileNode *IGetFileNodeList(char * path)
         //如果该路径下节点数大于120, 则不再继续查找
 
         lastNode=tempNode;
-        tempNode=(IFileNode *)malloc(sizeof(IFileNode));
+        tempNode=(IFileNode*)malloc(sizeof(IFileNode));
 
         if(tempNode==NULL)
         {
@@ -164,9 +164,9 @@ IFileNode *IGetFileNodeList(char * path)
     输出参数：无
     返回值：成功则返回1, 失败则返回0
 */
-int IAddFileNode(IFileNode  *parent,char *name)
+int IAddFileNode(IFileNode *parent,char *name)
 {
-    IFileNode * child=(IFileNode *)malloc(sizeof(IFileNode));
+    IFileNode *child=(IFileNode*)malloc(sizeof(IFileNode));
     int ret,i;
     struct find_t ft;
     char temp[PATH_LEN];
@@ -188,7 +188,7 @@ int IAddFileNode(IFileNode  *parent,char *name)
     child->file.time=ft.wr_time;
     child->file.size=(ft.size/512+1)/2;
     
-    if(ft.attrib&0x10)
+    if(ft.attrib&FA_DIREC)
         strcpy(child->file.type,"0");
     
     else
@@ -217,7 +217,7 @@ int IAddFileNode(IFileNode  *parent,char *name)
 */
 int IDelFileNode(IFileNode *parent,char *name)
 {
-    IFileNode * child=parent->child;
+    IFileNode *child=parent->child;
     int ret,i;
     char temp[PATH_LEN];
 
@@ -323,7 +323,7 @@ int IPeek(IFileNode *node,char *path)
             if(ret) break;
         }
         if(ret) break;
-        if(ft.attrib&0x10)
+        if(ft.attrib&FA_DIREC)
             return 1;
 
         ret=_dos_findnext(&ft);
@@ -338,7 +338,7 @@ int IPeek(IFileNode *node,char *path)
     输出参数：无
     返回值：无
 */
-void Icd(char * path)
+void Icd(char *path)
 {
     char temp[PATH_LEN]="";
 

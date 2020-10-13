@@ -15,7 +15,7 @@
     输出参数：无
     返回值：复制成功返回1，失败则返回0
 */
-int Inew(IFileNode * pathNode,char *fileName)
+int Inew(IFileNode *pathNode,char *fileName)
 {
     char temp[PATH_LEN];  //辅助字符串
 
@@ -35,7 +35,7 @@ int Inew(IFileNode * pathNode,char *fileName)
     输出参数：无
     返回值：无
 */
-void Irename(IFileNode * oldName,char *newName)
+void Irename(IFileNode *oldName,char *newName)
 {
     char temp[PATH_LEN];  //辅助字符串
     struct find_t ft;  //查找文件结构体
@@ -57,7 +57,7 @@ void Irename(IFileNode * oldName,char *newName)
         if(i==strlen(oldName->file.name)-1) //如果没有后缀名
         {
             _dos_findfirst(newName,0xf7,&ft);
-            if(!(ft.attrib&0x10))   //如果不是文件夹
+            if(!(ft.attrib&FA_DIREC))   //如果不是文件夹
                 strcpy(oldName->file.type,"NOT");
         }
     }
@@ -70,7 +70,7 @@ void Irename(IFileNode * oldName,char *newName)
     输出参数：无
     返回值：无
 */
-void IDetree(IFileNode * root)
+void IDetree(IFileNode *root)
 {
     if(!root) return;
     //若root==NULL，直接返回
@@ -101,20 +101,17 @@ void IDetree(IFileNode * root)
     输出参数：无
     返回值：无
 */
-void IEntree(IFileNode * root,char flag)
+void IEntree(IFileNode *root,char flag)
 {
-    IFileNode * childRoot;
+    IFileNode *childRoot=NULL;
     char temp[PATH_LEN];
 
     if(!root) return;
     //若root==NULL，直接返回
-
     if(!IisFolder(root)) return;
     //若root不是文件夹，直接返回
-
     if(!strcmp(root->file.type,"0ds")) return;
     //若root是被保护的磁盘，直接返回
-
     if(root->file.type[0]=='1'||root->child)
     {
         if(flag)
@@ -126,19 +123,15 @@ void IEntree(IFileNode * root,char flag)
             return;
     }
     //若root已被打开，重新打开
-    
     root->file.type[0]='1';
     //打开文件夹
-    
     if(root->file.type[1]=='\\') return;
     //若目录为根目录，置1返回
-
     IGetAbsolutePath(root,temp);
     childRoot=IGetFileNodeList(temp);
     if(childRoot)
         IAddChild(root,childRoot);
     //将root目录下的文件加到文件树上
-
     while(childRoot)
     {
         if(IisFolder(childRoot))
@@ -158,9 +151,9 @@ void IEntree(IFileNode * root,char flag)
     输出参数：无
     返回值：无
 */
-void Icplr(IFileNode * oldParent,IFileNode * newParent,char flag)
+void Icplr(IFileNode *oldParent,IFileNode *newParent,char flag)
 {
-    IFileNode * tempNode=oldParent->child,*newF=NULL;
+    IFileNode *tempNode=oldParent->child,*newF=NULL;
     char temp[PATH_LEN];    //储存文件路径
 
     while(tempNode)
@@ -177,7 +170,6 @@ void Icplr(IFileNode * oldParent,IFileNode * newParent,char flag)
             }
         } 
         //如果子文件节点被选中，则复制之
-
         tempNode=tempNode->next;
     }
 }
@@ -188,9 +180,9 @@ void Icplr(IFileNode * oldParent,IFileNode * newParent,char flag)
     输出参数：无
     返回值：无
 */
-void Irmlr(IFileNode * oldParent)
+void Irmlr(IFileNode *oldParent)
 {
-    IFileNode * tempNode=oldParent->child;
+    IFileNode *tempNode=oldParent->child;
 
     while(tempNode)
     {
@@ -201,7 +193,6 @@ void Irmlr(IFileNode * oldParent)
                 Irmdir(tempNode);
         }
         //如果子文件节点被选中，则删除之
-
         tempNode=tempNode->next;
     }
 }
@@ -212,7 +203,7 @@ void Irmlr(IFileNode * oldParent)
     输出参数：fp——暂存文件
     返回值：无
 */
-void ISearch(char *path,char *pattern,FILE* fp)
+void ISearch(char *path,char *pattern,FILE *fp)
 {
     int ret,i;
     struct find_t ft;
@@ -240,7 +231,7 @@ void ISearch(char *path,char *pattern,FILE* fp)
         }
         //如果匹配，记录进fp文件
 
-        if(ft.attrib&0x10)
+        if(ft.attrib&FA_DIREC)
         {
             strcpy(temp,path);
             strcat(temp,"\\");

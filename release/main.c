@@ -1,9 +1,9 @@
 /*
  **************************************************
- *   版本号：1.0.0
+ *   版本号：1.2.1
  *   作者：黄子昊
- *   生成日期：2020-10-7
- *   说明：仿Windows资源管理器,仍在测试中
+ *   生成日期：2020-10-13
+ *   说明：仿Windows资源管理器
  **************************************************
  */
 
@@ -13,9 +13,9 @@ void main()
 {
     int mouseDraw[16][16],mouseSave[16][16],mouseX,mouseY,mouseStatus;  //鼠标相关变量
     int lastMenuX,lastMenuY,lastMenu=0,menu=0;  //菜单相关变量
-    int id,exit=0,i,j;  //其他整型变量
-    char activeFlag=0,numOfSelected=0,page0=1,page1=1,page2=1,menuFlag=0,searching=0;   //标志变量
-    char name[13],password[13],temp[PATH_LEN];    //辅助字符串
+    int i,j;  //其他整型变量
+    char id,exit=0,activeFlag=0,numOfSelected=0,page0=1,page1=1,page2=1,menuFlag=0,searching=0;   //标志变量
+    char name[13]={0},password[13]={0},temp[PATH_LEN];    //辅助字符串
     void *view1Image=NULL;  //图形缓冲区
     FILE *fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb"),*fpCLS=NULL;    //文件指针
     IFileNode *root=NULL;        //文件根节点
@@ -24,24 +24,14 @@ void main()
     IEventStackNode *top0=IInitEventStack(),*top1=IInitEventStack();    //事件栈顶
     //定义变量
 
-    fpCLS=fopen("C:\\DOSRES\\ETC\\DEL.TXT","w+");
-    fclose(fpCLS);
-    fpCLS=fopen("C:\\DOSRES\\ETC\\LOG.TXT","w+");
-    fclose(fpCLS);  //清空文件
-
+    fpCLS=fopen("C:\\DOSRES\\ETC\\DEL.TXT","w+");fclose(fpCLS);
+    fpCLS=fopen("C:\\DOSRES\\ETC\\LOG.TXT","w+");fclose(fpCLS);  //清空文件
     SVGA_Init();
     Set_Pal_File("C:\\DOSRES\\SRC\\win.act");
     view1Image=malloc(imagesize(0,0,95,160));   //图形界面初始化
-
 	IMouseMath(mouseDraw);
     IMouseSetLimit(1023+2*DF,767+2*DF);
     delay(2);   //鼠标初始化
-
-#ifdef DB  //如果是在调试模式下
-    id=1;
-#else
-    strcpy(name,"\0");
-    strcpy(password,"\0");
     IPlainLogin(fpHZ);
     ILogin(name,password,top0,id,fpHZ);
     while(1)
@@ -69,47 +59,29 @@ void main()
             id=0;
             break;
         }   //取消登录
-    }
-#endif
-    //登录界面
-
+    }   //登录界面
     root=IDiskInit(id);
-    curNode->child=root;
-    curNode->pre=NULL;
-    curNode->next=NULL;
-    curNode->wait=30000;
-    nodeX->child=NULL;
-    nodeX->pre=NULL;
-    nodeX->next=NULL;   //文件节点初始化
-
+    curNode->child=root;curNode->pre=NULL;curNode->next=NULL;curNode->wait=30000;
+    nodeX->child=NULL;nodeX->pre=NULL;nodeX->next=NULL;   //文件节点初始化
     IPlainView(fpHZ);
-    IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,1,fpHZ);
+    IView0(root,&curNode,nodeX,top0,4+DF,110+DF,&page0,VIEW0_PAGE,fpHZ);
     IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
     for(i=0;i<16;i++)
         for(j=0;j<16;j++)
             mouseSave[i][j]=getpixel(mouseX+j,mouseY+i);
-    
     //主循环开始
     while(!exit)
     {   
-#ifdef DB  //如果是在调试模式下
-        setcolor(DRM_BLACK);
-        sprintf(temp,"left memory:%u Byte",coreleft());
-        outtextxy(500+DF,753+DF,temp);
-#endif
-
         mouseStatus=IMouseStatus(&mouseX,&mouseY,mouseDraw,mouseSave);//鼠标状态查询
         activeFlag=IEventStackActive(top0,mouseX,mouseY,mouseStatus);//改变0号窗口
         if(!activeFlag)
             activeFlag=IEventStackActive(top1,mouseX,mouseY,mouseStatus);//改变1/2号窗口
         if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>1004+DF&&mouseX<1016+DF&&mouseY>8+DF&&mouseY<16+DF)
             exit=1; //点击退出按钮
-
         if((menuFlag&FLAG_IS_SEC_MENU)||((mouseStatus&MOUSE_RIGHT_PRESS)&&mouseX>240+DF&&mouseX<1024+DF&&mouseY>88+DF&&mouseY<744+DF))
             menu=1;
         else if(mouseStatus&MOUSE_LEFT_PRESS)
             menu=0; //是否尝试激活菜单
-
         if(bioskey(2)&4)
         {
             delay(100);
@@ -119,11 +91,9 @@ void main()
                     menuFlag&=FLAG_DEL_CTRLED;
                 else
                     menuFlag|=FLAG_ADD_CTRLED;
-
                 activeFlag|=REACT_VIEW1;
             }
         }   //是否按下Ctrl
-
         if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>992+DF&&mouseX<1001+DF&&mouseY>720+DF&&mouseY<731+DF)
         {
             if(!searching)
@@ -137,7 +107,7 @@ void main()
                 activeFlag|=REACT_VIEW2;
             }
         }
-        else if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>928+DF&&mouseX<586*1.6+DF&&mouseY>720+DF&&mouseY<731+DF)
+        else if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>928+DF&&mouseX<937+DF&&mouseY>720+DF&&mouseY<731+DF)
         {
             if(!searching)
             {
@@ -150,7 +120,6 @@ void main()
                 activeFlag|=REACT_VIEW2;
             }
         }   //窗口翻页
-
         if(!lastMenu&&menu==1){
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenuX=mouseX;
@@ -172,13 +141,11 @@ void main()
         }   //激活排序菜单
         else if(lastMenu&&!menu)
         {
-
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             putimage((lastMenuX>928+DF)?(928+DF):lastMenuX,(lastMenuY>607+DF)?(607+DF):lastMenuY,view1Image,COPY_PUT);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenu=0;
         }   //关闭菜单窗口
-
         if(activeFlag&REACT_VIEW0)
         {
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
@@ -222,7 +189,6 @@ void main()
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }   //激活2号窗口
     }
-
     fpCLS=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+");
     fclose(fpCLS);
     Icd("C:\\DOSRES\\SRC");

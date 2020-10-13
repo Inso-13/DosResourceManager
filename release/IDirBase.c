@@ -15,7 +15,7 @@
     输出参数：无
     返回值：复制成功返回1，失败则返回0
 */
-int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
+int Icopy(IFileNode *inFile,IFileNode *outParent,char flag)
 {
     char inPath[PATH_LEN];  //输入文件的路径
     char outPath[PATH_LEN]; //输出文件夹的路径
@@ -88,10 +88,10 @@ int Icopy(IFileNode * inFile,IFileNode * outParent,char flag)
     输出参数：无
     返回值：删除成功返回1，失败则返回0
 */
-int Irmf(IFileNode * fileNode)
+int Irmf(IFileNode *fileNode)
 {
     char tempStr[PATH_LEN];   //辅助字符串
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");    //打开删除辅助文件
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");    //打开删除辅助文件
 
     IGetAbsolutePath(fileNode,tempStr);
     strcat(tempStr,"\n");
@@ -112,7 +112,7 @@ int Irmf(IFileNode * fileNode)
     输出参数：无
     返回值：创建文件夹成功返回1，失败则返回0
 */
-int Imkdir(IFileNode * pathNode,char *folderName)    
+int Imkdir(IFileNode *pathNode,char *folderName)    
 {
     char temp[PATH_LEN];     //辅助字符串
     
@@ -133,11 +133,11 @@ int Imkdir(IFileNode * pathNode,char *folderName)
     输出参数：无
     返回值：删除文件夹成功返回1，失败则返回0
 */
-int Irmdir(IFileNode * node)
+int Irmdir(IFileNode *node)
 {
     int i=0;    //循环辅助变量
     char temp[PATH_LEN];      //辅助字符串
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");    //打开删除辅助文件
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","a+");    //打开删除辅助文件
 
     IGetAbsolutePath(node,temp);    
     strcat(temp,"\n");
@@ -162,7 +162,7 @@ int Irmdir(IFileNode * node)
     输出参数：无
     返回值：无
 */
-void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
+void ICopyAll(IFileNode *oldChildChild,IFileNode *newChild)
 {
     while(oldChildChild)
     {
@@ -192,7 +192,7 @@ void ICopyAll(IFileNode * oldChildChild,IFileNode * newChild)
     输出参数：无
     返回值：无
 */
-void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag)
+void Icpr(IFileNode *oldChild,IFileNode *newParent,char flag)
 {
     char temp[PATH_LEN];      //辅助字符串
     IFileNode *tempNode=NULL;   //辅助节点
@@ -227,7 +227,7 @@ void Icpr(IFileNode * oldChild,IFileNode * newParent,char flag)
     输出参数：无
     返回值：无
 */
-void IDelAll(IFileNode * oldChildChild)
+void IDelAll(IFileNode *oldChildChild)
 {
     IFileNode *nextNode=NULL;   //辅助文件节点
 
@@ -255,7 +255,7 @@ void IDelAll(IFileNode * oldChildChild)
     输出参数：无
     返回值：无
 */
-void Irmr(IFileNode * oldChild)
+void Irmr(IFileNode *oldChild)
 {
     if(IisFolder(oldChild)) //如果是文件夹
     {

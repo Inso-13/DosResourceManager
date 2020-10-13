@@ -44,7 +44,7 @@ void ISearchActive(IFileNode *cur,IFileNode *null);
 void ILastPage(IFileNode *pag,IFileNode *null);
 void INextPage(IFileNode *pag,IFileNode *null);
 void ISetXNull(IFileNode *node,IFileNode *X);
-void ISetView10(IFileNode * flag,IFileNode *null);
-void ISetView11(IFileNode * flag,IFileNode *null);
+void ISetView10(IFileNode *flag,IFileNode *null);
+void ISetView11(IFileNode *flag,IFileNode *null);
 
 #endif

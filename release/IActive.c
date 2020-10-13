@@ -19,7 +19,7 @@ void IAfterEntree(IFileNode *cur,IFileNode *X)
 {
 #ifdef LM   //在内存有限时使用
     IFileNodePointer **curNode=(IFileNodePointer **)cur;   //当前节点
-    IFileNodePointer *nodeX=(IFileNodePointer *)X;    //辅助文件节点
+    IFileNodePointer *nodeX=(IFileNodePointer*)X;    //辅助文件节点
     IFileNodePointer *tempNode=(*curNode)->pre,*lastNode=tempNode->pre;    //循环使用
     char path1[PATH_LEN],path2[PATH_LEN],path[PATH_LEN];   //暂存字符串
 
@@ -63,7 +63,7 @@ void IAfterEntree(IFileNode *cur,IFileNode *X)
 void IEntreeActive(IFileNode *node,IFileNode *cur)
 {
     IFileNodePointer **curNode=(IFileNodePointer **)cur;   //当前节点
-	IFileNodePointer *newCurNode=(IFileNodePointer *)malloc(sizeof(IFileNodePointer));     //新节点
+	IFileNodePointer *newCurNode=(IFileNodePointer*)malloc(sizeof(IFileNodePointer));     //新节点
     IFileNodePointer *tempNode=NULL,*nextNode=NULL;    //循环辅助节点
 
     tempNode=(*curNode)->next;  //tempNode指向循环的下一项
@@ -128,7 +128,7 @@ void IEntreeActive(IFileNode *node,IFileNode *cur)
 */
 void ISetXNull(IFileNode *node,IFileNode *X)
 {
-    IFileNodePointer *nodeX=(IFileNodePointer *)X;    //文件辅助节点
+    IFileNodePointer *nodeX=(IFileNodePointer*)X;    //文件辅助节点
     char path1[PATH_LEN],path2[PATH_LEN];     //辅助字符串
 
     if(node->file.type[1]=='\\')
@@ -283,13 +283,13 @@ void IGoRightActive(IFileNode *cur,IFileNode *null)
 */
 void ISearchActive(IFileNode *cur,IFileNode *null)
 {
-    IFileNodePointer *curNode=(IFileNodePointer *)cur;  //当前节点
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+"); //覆盖的方式打开用于记录的文件
+    IFileNodePointer *curNode=(IFileNodePointer*)cur;  //当前节点
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+"); //覆盖的方式打开用于记录的文件
     char temp[20],path[PATH_LEN];     //辅助字符串
 
     IGetAbsolutePath(curNode->child,path);  //获得需要查找的路径
     strcpy(temp,"\0");  //清空字符串
-    IGetString(851+DF,51+DF,166,temp,1);   //得到查找的pattern，可以使用？*
+    IGetString(851+DF,51+DF,166,temp,SEARCH_STR);   //得到查找的pattern，可以使用？*
 
     setfillstyle(SOLID_FILL,DRM_WHITE);
     bar(900+DF,745+DF,1020+DF,765+DF);
@@ -374,7 +374,7 @@ void INextPage(IFileNode *pag,IFileNode *null)
     输出参数：无
     返回值：无
 */
-void ISetView10(IFileNode * flag,IFileNode *null)
+void ISetView10(IFileNode *flag,IFileNode *null)
 {
     char *menuFlag=(char*)flag;    //菜单/视图控制
 
@@ -387,7 +387,7 @@ void ISetView10(IFileNode * flag,IFileNode *null)
     输出参数：无
     返回值：无
 */
-void ISetView11(IFileNode * flag,IFileNode *null)
+void ISetView11(IFileNode *flag,IFileNode *null)
 {
     char *menuFlag=(char*)flag; //菜单/视图控制
 

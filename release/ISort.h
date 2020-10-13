@@ -19,7 +19,7 @@
 
 
 //º¯ÊýÔ­ÐÍ
-void ISort(IFileNode *parent,int (*fun)(IFileNode*,IFileNode*));
+void ISort(IFileNode *parent,int(*fun)(IFileNode*,IFileNode*));
 int ISortDateUp(IFileNode *node1,IFileNode *node2);
 int ISortDateDown(IFileNode *node1,IFileNode *node2);
 int ISortSizeUp(IFileNode *node1,IFileNode *node2);

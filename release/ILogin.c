@@ -15,7 +15,7 @@
     输出参数：无
     返回值：无
 */
-void IPlainLogin(FILE* fpHZ)
+void IPlainLogin(FILE *fpHZ)
 {
     int i;  //循环辅助变量
 
@@ -58,7 +58,7 @@ void IPlainLogin(FILE* fpHZ)
     输出参数：无
     返回值：无
 */
-void ILogin(char *name,char *password,IEventStackNode* top,int id,FILE* fpHZ)
+void ILogin(char *name,char *password,IEventStackNode *top,char id,FILE *fpHZ)
 {
     int i;  //循环辅助变量
     IEvent tempEvent;
@@ -100,9 +100,9 @@ void ILogin(char *name,char *password,IEventStackNode* top,int id,FILE* fpHZ)
     输出参数：id——身份标志
     返回值：无
 */
-void ILoginConfirm(int* id,char *name,char *password)
+void ILoginConfirm(char *id,char *name,char *password)
 {
-    FILE* fp=fopen("C:\\DOSRES\\ETC\\ADMIN.TXT","rb");  //打开储存用户名、密码的文件
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\ADMIN.TXT","rb");  //打开储存用户名、密码的文件
     char nameC[13],passwordC[13],passwordP[13],temp[27];  //辅助字符串
     int i;  //循环辅助变量
 
@@ -144,7 +144,7 @@ void IGetName(IFileNode *nam,IFileNode *null)
 {
     char *name =(char*)nam;
 
-    IGetString(440+DF,440+DF,220,name,2);
+    IGetString(440+DF,440+DF,220,name,NAME_STR);
     //获取用户名
 }
 
@@ -158,6 +158,6 @@ void IGetPassword(IFileNode *pass,IFileNode *null)
 {
     char *password=(char*)pass;
 
-    IGetString(440+DF,490+DF,220,password,3);
+    IGetString(440+DF,490+DF,220,password,PASSWORD_STR);
     //获取密码
 }

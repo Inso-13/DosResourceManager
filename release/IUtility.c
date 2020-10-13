@@ -15,7 +15,7 @@
     输出参数：无
     返回值：无
 */
-void IFileNodeSetNull(IFileNode * node)
+void IFileNodeSetNull(IFileNode *node)
 {
     node->flags=0;
     node->child=NULL;
@@ -28,9 +28,9 @@ void IFileNodeSetNull(IFileNode * node)
     输出参数：无
     返回值：若找到，返回该节点；否则返回NULL
 */
-IFileNode * IFindNodeByPath(char * path,IFileNode * root)
+IFileNode *IFindNodeByPath(char *path,IFileNode *root)
 {
-    IFileNode * tempNode;
+    IFileNode *tempNode=NULL;
     char temp[PATH_LEN];
 
     if(!root)
@@ -57,9 +57,9 @@ IFileNode * IFindNodeByPath(char * path,IFileNode * root)
     输出参数：无
     返回值：若找到，返回该节点；否则返回NULL
 */
-IFileNode * IFindNodeByName(char * name,IFileNode * root)
+IFileNode *IFindNodeByName(char *name,IFileNode *root)
 {
-    IFileNode * temp;
+    IFileNode *temp=NULL;
 
     if(!root)
         return 0;
@@ -84,7 +84,7 @@ IFileNode * IFindNodeByName(char * name,IFileNode * root)
     输出参数：无
     返回值：是目录则返回1，不是目录则返回0
 */
-int IisFolder(IFileNode * node)
+int IisFolder(IFileNode *node)
 {
     return (node->file.type[0]=='0')||(node->file.type[0]=='1');
 }
@@ -95,7 +95,7 @@ int IisFolder(IFileNode * node)
     输出参数：temp——文件的绝对路径
     返回值：无
 */
-void IGetAbsolutePath(IFileNode * node,char *temp)
+void IGetAbsolutePath(IFileNode *node,char *temp)
 {
     if(node->file.name[1]==':'||!strcmp(node->file.name,ROOT_NAME))
         strcpy(temp,node->file.name);
@@ -113,9 +113,9 @@ void IGetAbsolutePath(IFileNode * node,char *temp)
     输出参数：无
     返回值：父节点
 */
-IFileNode * IFindParent(IFileNode * child)
+IFileNode *IFindParent(IFileNode *child)
 {
-    IFileNode * temp=child;
+    IFileNode *temp=child;
     
     if(temp->file.type[1]=='\\')
         return NULL;

@@ -21,6 +21,6 @@
 
 //函数原型
 void IQuit(void);   //异常退出函数
-void IDelPointer(IFileNodePointer* pointer);
+void IDelPointer(IFileNodePointer *pointer);
 
 #endif

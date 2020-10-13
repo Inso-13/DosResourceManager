@@ -25,7 +25,7 @@
 enum WAIT_CONTROL
 {
     WAIT_OFF    = 0,
-    WAIT_COUNT  = 10
+    WAIT_COUNT  = 20
 };
 
 enum NODE_FLAGS
@@ -49,23 +49,24 @@ enum NODE_CHANGE
 
 enum DRM_COLORS
 {
-    DRM_VIOLET      =   84,
-    DRM_PURPLE      =   50,
-    DRM_LIGHTGRAY   =   247,
-    DRM_DARKGRAY    =   248,
-    DRM_LIGHTGREEN  =   140,
+    DRM_BLACK       =   0,
+    DRM_GREEN       =   2,
+    DRM_TURQUOISE   =   6,
     DRM_DARKBLUE    =   10,
     DRM_BLUE        =   11,
-    DRM_WHITE       =   255,
-    DRM_ORANGE      =   202,
-    DRM_YELLOW      =   206,
-    DRM_CHOSENBLUE  =   139,
-    DRM_BLACK       =   0,
-    DRM_RED         =   180,
-    DRM_TURQUOISE   =   6,
     DRM_LIDHTBLUE   =   23,
     DRM_BRIGHTBLUE  =   31,
-    DRM_LIGHTYELLOW =   207
+    DRM_PURPLE      =   50,
+    DRM_VIOLET      =   84,
+    DRM_CHOSENBLUE  =   139,
+    DRM_LIGHTGREEN  =   140,
+    DRM_RED         =   180,
+    DRM_ORANGE      =   202,
+    DRM_YELLOW      =   206,
+    DRM_LIGHTYELLOW =   207,
+    DRM_LIGHTGRAY   =   247,
+    DRM_DARKGRAY    =   248,
+    DRM_WHITE       =   255
 };
 
 enum FLAG_FLAGS
@@ -118,4 +119,12 @@ enum MOUSE_STATUS
     MOUSE_LEFT_RELEASE      =  16
 };
 
+enum STRING_TYPE
+{
+    RENAME_STR    =   0,
+    SEARCH_STR    =   1,
+    NAME_STR      =   2,
+    PASSWORD_STR  =   3,
+    NEWFILE_STR   =   4
+};
 #endif
