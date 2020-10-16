@@ -135,15 +135,18 @@ int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *t
     
     sprintf(temp,"%d个项目",numOfItem);
     Iouttextxy(16+DF,752+3+DF,temp,fpHZ);
-    if(numOfSelected)
-    {
-        sprintf(temp,"选中%d个项目",numOfSelected);
-        Iouttextxy(160+DF,752+3+DF,temp,fpHZ);
-    }
+
+    Iouttextxy(160+DF,752+3+DF,"选中",fpHZ);
+    Iouttextxy(160+DF+16*2+8*3,752+3+DF,"个项目",fpHZ);
+    sprintf(temp,"%d",numOfSelected);
+    settextjustify(CENTER_TEXT,TOP_TEXT);
+    outtextxy(160+DF+16*2+12,752+3+DF,temp);
+
+    settextjustify(LEFT_TEXT,TOP_TEXT);
     if((*menuFlag)&FLAG_IS_CTRLED)
     {
         setcolor(DRM_RED);
-        outtextxy(320+DF,752+DF,"CTRL");
+        outtextxy(375+DF,754+DF,"CTRL");
     }   //状态栏
     
     IView1DelOrCover(numOfSelected,curNode,nodeX,top,menuFlag,fpHZ);
@@ -332,7 +335,7 @@ void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempN
         outtextxy(432+DF,y+6,temp);
         if(!IisFolder(tempNode))
         {
-            settextjustify(2,2);
+            settextjustify(RIGHT_TEXT,TOP_TEXT);
             if(tempNode->file.size<0)
                 sprintf(temp,">32 MB",tempNode->file.size);
             else if(tempNode->file.size==0)
@@ -340,14 +343,14 @@ void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempN
             else
                 sprintf(temp,"%d KB",tempNode->file.size);
             outtextxy(928+DF,y+6,temp);
-            settextjustify(0,2);
+            settextjustify(LEFT_TEXT,TOP_TEXT);
         }
         //文件详细信息
 
         if((*menuFlag)&FLAG_IS_CTRLED)
-            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_LEFT_PRESS,ICtrlSelect,tempNode,NULL,REACT_VIEW1);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_LEFT_PRESS,ICtrlSelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
         else
-            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_LEFT_PRESS,ISelect,tempNode,NULL,REACT_VIEW1);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_LEFT_PRESS,ISelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
         IEventStackPush(top,tempEvent);
         //根据是否Ctrl,设置选择类型
 
@@ -406,9 +409,9 @@ void IView11(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempN
         Iouttextxy(x+50-strlen(tempNode->file.name)*4,y+95,tempNode->file.name,fpHZ);
 
         if((*menuFlag)&FLAG_IS_CTRLED)
-            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_LEFT_PRESS,ICtrlSelect,tempNode,NULL,REACT_VIEW1);
+            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_LEFT_PRESS,ICtrlSelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
         else
-            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_LEFT_PRESS,ISelect,tempNode,NULL,REACT_VIEW1);
+            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_LEFT_PRESS,ISelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
         IEventStackPush(top,tempEvent);
         //根据是否Ctrl,设置选择类型
 

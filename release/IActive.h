@@ -26,6 +26,7 @@
 //调用模块
 #include"IDiry.h"
 #include"IInput.h"
+#include"IBar.h"
 
 
 //函数原型

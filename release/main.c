@@ -1,8 +1,8 @@
 /*
  **************************************************
- *   版本号：1.2.1
+ *   版本号：1.3.2
  *   作者：黄子昊
- *   生成日期：2020-10-13
+ *   生成日期：2020-10-16
  *   说明：仿Windows资源管理器
  **************************************************
  */
@@ -188,6 +188,15 @@ void main()
             IView2(&page2,fpHZ,top1,&curNode);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }   //激活2号窗口
+        if(activeFlag&REACT_MOUSE)
+        {
+            for(i=0;i<16;i++)
+                for(j=0;j<16;j++)
+                    if(mouseSave[i][j]==DRM_WHITE&&getpixel(mouseX+j,mouseY+i)!=DRM_MOUSEBLACK)
+                        mouseSave[i][j]=getpixel(mouseX+j,mouseY+i);
+            IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
+            IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
+        }
     }
     fpCLS=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+");
     fclose(fpCLS);

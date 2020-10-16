@@ -74,9 +74,9 @@ void IMouseOn(int x,int y,int (*mouseDraw)[16],int (*pixelSave)[16])
             //保存原来的颜色
 
             if(mouseDraw[i][j]==1)
-                putpixel(x+j,y+i,0);
+                putpixel(x+j,y+i,DRM_MOUSEBLACK);
             else if(mouseDraw[i][j]==2)
-                putpixel(x+j,y+i,0);
+                putpixel(x+j,y+i,DRM_MOUSEBLACK);
             //画鼠标
         }
     }
@@ -97,7 +97,7 @@ void IMouseOff(int x,int y,int (*mouseDraw)[16],int (*pixelSave)[16])
         {
             if(mouseDraw[i][j]==3||mouseDraw[i][j]==4)
                 continue;
-            putpixel(x+j,y+i,0);
+            putpixel(x+j,y+i,DRM_MOUSEBLACK);
             putpixel(x+j,y+i,pixelSave[i][j]);
             //原位置异或消去
         }

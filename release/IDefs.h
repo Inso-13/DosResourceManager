@@ -11,8 +11,8 @@
 #define __IDEFS_H
 
 #define LM              //有限的内存
-// #define DB              //调试模式
-#define DF 128          //屏幕偏移量
+#define DB              //调试模式
+#define DF 0          //屏幕偏移量
 #define BUFFSIZE 1024   //复制文件时的缓存区大小
 #define MAXNODES 120    //每个文件夹中显示的最大文件数
 #define PATH_LEN 150    //绝对路径长度
@@ -64,6 +64,7 @@ enum DRM_COLORS
     DRM_ORANGE      =   202,
     DRM_YELLOW      =   206,
     DRM_LIGHTYELLOW =   207,
+    DRM_MOUSEBLACK  =   236,
     DRM_LIGHTGRAY   =   247,
     DRM_DARKGRAY    =   248,
     DRM_WHITE       =   255
@@ -106,7 +107,8 @@ enum REACT_VIEW
     REACT_VIEW0  =  2,
     REACT_VIEW1  =  4,
     REACT_VIEW01 =  6,
-    REACT_VIEW2  =  8
+    REACT_VIEW2  =  8,
+    REACT_MOUSE  =  16
 };
 
 enum MOUSE_STATUS

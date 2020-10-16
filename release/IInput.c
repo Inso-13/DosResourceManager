@@ -26,12 +26,18 @@ char *IGetString(int x,int y,int length,char *string,int flag)
 
     fflush(stdin);  //刷新键盘缓冲区
 
+    if(flag==NAME_STR||flag==PASSWORD_STR)
+        setcolor(DRM_WHITE);
+    else
+        setcolor(DRM_RED);
+    outtextxy(500+DF,754+DF,"Enter or ESC");
+
     setcolor(DRM_BLACK);
     if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
     {
         rectangle(x-1,y,x+length+1,y+27);
         setfillstyle(SOLID_FILL,DRM_WHITE);
-        bar(x,y+1,x+length,y+26);
+        IBarInput(x,y+1,x+length,y+26,DRM_BLACK,DRM_WHITE);
     }
     else
     {
@@ -39,7 +45,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
             strcpy(string,"");
         rectangle(x-1,y+6,x+length+1,y+25);
         setfillstyle(SOLID_FILL,DRM_WHITE);
-        bar(x,y+7,x+length,y+24);   
+        IBarInput(x,y+7,x+length,y+24,DRM_BLACK,DRM_WHITE);   
     }
     //初始化输入框
     n=strlen(string);
@@ -69,9 +75,9 @@ char *IGetString(int x,int y,int length,char *string,int flag)
         //变量t用于计时，实现闪烁光标的效果
 
         if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
-            bar(x,y+1,x+length,y+26);
+            IBarInput(x,y+1,x+length,y+26,DRM_BLACK,DRM_WHITE);
         else
-            bar(x,y+7,x+length,y+24);
+            IBarInput(x,y+7,x+length,y+24,DRM_BLACK,DRM_WHITE);
         //两种不同的输入框
 
         tempChar=getch();
@@ -117,9 +123,9 @@ char *IGetString(int x,int y,int length,char *string,int flag)
 
         setcolor(DRM_RED);
         if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
-            bar(x,y+1,x+length,y+26);
+            IBarInput(x,y+1,x+length,y+26,DRM_BLACK,DRM_WHITE);
         else
-            bar(x,y+7,x+length,y+24);   
+            IBarInput(x,y+7,x+length,y+24,DRM_BLACK,DRM_WHITE);   
         //两种输入框
 
         if(flag!=PASSWORD_STR)
@@ -129,5 +135,10 @@ char *IGetString(int x,int y,int length,char *string,int flag)
                 outtextxy(x+2+8*j,y+9,"*");
         //是否加密显示
     }
+    if(flag==NAME_STR||flag==PASSWORD_STR)
+        setfillstyle(SOLID_FILL,DRM_DARKGRAY);
+    else
+        setfillstyle(SOLID_FILL,DRM_WHITE);
+    bar(500+DF,754+DF,600+DF,764+DF);
     return org;
 }

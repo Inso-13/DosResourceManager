@@ -36,17 +36,43 @@ void ISetXNull(IFileNode *node,IFileNode *X)
     输出参数：无
     返回值：无
 */
-void ISelect(IFileNode *node,IFileNode *null)
+void ISelect(IFileNode *node,IFileNode *flag)
 {
+    char *menuFlag=(char*)flag;
+    char *temp="1";
+    int i=0,j=0;
     IFileNode *tempNode=IFindParent(node)->child;   //选择节点的父节点
 
     while(tempNode)
     {
-        tempNode->flags&=NODE_DEL_SELECT;    
+        if(tempNode->flags&NODE_IS_SELECTED)
+        {
+            tempNode->flags&=NODE_DEL_SELECT;
+            if((*menuFlag)&FLAG_IS_VIEW11)
+                IBar(276+DF+i%30%6*102,116+DF+i%30/6*112,276+DF+99+i%30%6*102,116+DF+109+i%30/6*112,DRM_CHOSENBLUE,DRM_WHITE);
+            else
+                IBar(248+DF,116+20*i+DF,936+DF,135+20*i+DF,DRM_CHOSENBLUE,DRM_WHITE);
+        }
+        if(tempNode==node)
+        {
+            j=i;
+        }
         tempNode=tempNode->next;
+        i++;
     }   //如果当前路径下已经有被选中的节点，将其置为未被选中
 
     node->flags|=NODE_ADD_SELECT; //选中该节点
+    if((*menuFlag)&FLAG_IS_VIEW11)
+        IBar(276+DF+j%30%6*102,116+DF+j%30/6*112,276+DF+99+j%30%6*102,116+DF+109+j%30/6*112,DRM_WHITE,DRM_CHOSENBLUE);      
+    else
+        IBar(248+DF,116+20*j+DF,936+DF,135+20*j+DF,DRM_WHITE,DRM_CHOSENBLUE);
+    
+    setfillstyle(SOLID_FILL,DRM_WHITE);
+    bar(160+DF+16*2,752+3+DF,160+DF+16*2+8*3,752+3+DF+16);
+    setcolor(DRM_BLUE);
+    settextjustify(CENTER_TEXT,TOP_TEXT);
+    outtextxy(160+DF+16*2+12,752+3+DF,temp);
+    settextjustify(LEFT_TEXT,TOP_TEXT);
 }
 
 /*
@@ -55,13 +81,50 @@ void ISelect(IFileNode *node,IFileNode *null)
     输出参数：无
     返回值：无
 */
-void ICtrlSelect(IFileNode *node,IFileNode *null)
+void ICtrlSelect(IFileNode *node,IFileNode *flag)
 {
+    char temp[4];
+    char *menuFlag=(char*)flag;
+    IFileNode *tempNode=IFindParent(node)->child;   //选择节点的父节点
+    int i=0,j=0,numOfSelected=0;
+
+    while(tempNode)
+    {
+        if(tempNode->flags&NODE_IS_SELECTED)
+            numOfSelected++;
+        if(tempNode==node)
+            j=i;
+        tempNode=tempNode->next;
+        i++;
+    }
+
     if(!(node->flags&NODE_IS_SELECTED))
+    {
         node->flags|=NODE_ADD_SELECT;
+        numOfSelected++;
+        if((*menuFlag)&FLAG_IS_VIEW11)
+            IBar(276+DF+j%30%6*102,116+DF+j%30/6*112,276+DF+99+j%30%6*102,116+DF+109+j%30/6*112,DRM_WHITE,DRM_CHOSENBLUE);      
+        else
+            IBar(248+DF,116+20*j+DF,936+DF,135+20*j+DF,DRM_WHITE,DRM_CHOSENBLUE);
+    }
     else
+    {
         node->flags&=NODE_DEL_SELECT;
+        numOfSelected--;
+        if((*menuFlag)&FLAG_IS_VIEW11)
+            IBar(276+DF+j%30%6*102,116+DF+j%30/6*112,276+DF+99+j%30%6*102,116+DF+109+j%30/6*112,DRM_CHOSENBLUE,DRM_WHITE);
+        else
+            IBar(248+DF,116+20*j+DF,936+DF,135+20*j+DF,DRM_CHOSENBLUE,DRM_WHITE);
+    }
     //如果该节点已被选中，则解选中；否则选中该节点
+
+    setfillstyle(SOLID_FILL,DRM_WHITE);
+    bar(160+DF+16*2,752+3+DF,160+DF+16*2+8*3,752+3+DF+16);
+    setcolor(DRM_BLUE);
+    sprintf(temp,"%d",numOfSelected);
+    settextjustify(CENTER_TEXT,TOP_TEXT);
+    outtextxy(160+DF+16*2+12,752+3+DF,temp);
+    settextjustify(LEFT_TEXT,TOP_TEXT);
 }
 
 /*

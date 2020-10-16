@@ -21,6 +21,7 @@
 
 //调用模块
 #include"IType.h"
+#include"IBar.h"
 
 
 //函数原型
