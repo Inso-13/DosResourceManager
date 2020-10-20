@@ -27,6 +27,7 @@ void IEventStackPush(IEventStackNode *top,IEvent newEvent);
 int IEventStackPop(IEventStackNode *top,int n);
 char IEventStackActive(IEventStackNode *top,int x,int y,int type);
 void IDelStack(IEventStackNode *top);
-void ISetEvent(IEvent *event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode *,IFileNode *),IFileNode *node0,IFileNode *node1,char change);
+void ISetEvent(IEvent *event,int x1,int y1,int x2,int y2,int type,\
+void (*pfun)(IFileNode *,IFileNode *),IFileNode *node0,IFileNode *node1,char change);
 
 #endif

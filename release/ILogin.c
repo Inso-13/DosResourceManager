@@ -87,9 +87,11 @@ void ILogin(char *name,char *password,IEventStackNode *top,char id,FILE *fpHZ)
     for(i=0;i<strlen(password);i++)
         outtextxy(440+2+8*i+DF,490+9+DF,"*");
 
-    ISetEvent(&tempEvent,440+DF,450-10+DF,660+DF,450-10+28+DF,MOUSE_LEFT_PRESS,IGetName,(IFileNode*)name,NULL,REACT_LOGIN);
+    ISetEvent(&tempEvent,440+DF,450-10+DF,660+DF,450-10+28+DF,MOUSE_LEFT_PRESS,\
+    IGetName,(IFileNode*)name,NULL,REACT_LOGIN);
     IEventStackPush(top,tempEvent);
-    ISetEvent(&tempEvent,440+DF,500-10+DF,660+DF,500-10+28+DF,MOUSE_LEFT_PRESS,IGetPassword,(IFileNode*)password,NULL,REACT_LOGIN);
+    ISetEvent(&tempEvent,440+DF,500-10+DF,660+DF,500-10+28+DF,MOUSE_LEFT_PRESS,\
+    IGetPassword,(IFileNode*)password,NULL,REACT_LOGIN);
     IEventStackPush(top,tempEvent);
     //设置用户名、密码的激活函数
 }

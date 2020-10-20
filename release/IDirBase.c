@@ -173,7 +173,8 @@ void ICopyAll(IFileNode *oldChildChild,IFileNode *newChild)
             Imkdir(newChild,oldChildChild->file.name); //创建文件夹
             if(oldChildChild->child)    //如果有子节点
             {
-                ICopyAll(oldChildChild->child,IFindNodeByName(oldChildChild->file.name,newChild));  //复制整个链表
+                ICopyAll(oldChildChild->child,\
+                IFindNodeByName(oldChildChild->file.name,newChild));  //复制整个链表
                 IDetree(oldChildChild); //删除原链表
             }
         }

@@ -45,7 +45,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
             strcpy(string,"");
         rectangle(x-1,y+6,x+length+1,y+25);
         setfillstyle(SOLID_FILL,DRM_WHITE);
-        IBarInput(x,y+7,x+length,y+24,DRM_BLACK,DRM_WHITE);   
+        bar(x,y+7,x+length,y+24);   
     }
     //初始化输入框
     n=strlen(string);
@@ -77,7 +77,10 @@ char *IGetString(int x,int y,int length,char *string,int flag)
         if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
             IBarInput(x,y+1,x+length,y+26,DRM_BLACK,DRM_WHITE);
         else
-            IBarInput(x,y+7,x+length,y+24,DRM_BLACK,DRM_WHITE);
+        {
+            setfillstyle(SOLID_FILL,DRM_WHITE);
+            bar(x,y+7,x+length,y+24);
+        }
         //两种不同的输入框
 
         tempChar=getch();
@@ -112,7 +115,9 @@ char *IGetString(int x,int y,int length,char *string,int flag)
                 continue;
             }
         }
-        else if(n<12&&((tempChar>='0'&&tempChar<='9')||(tempChar>='a'&&tempChar<='z')||(tempChar>='A'&&tempChar<='Z')||tempChar=='.'||tempChar=='_'||(flag==SEARCH_STR&&(tempChar=='?'||tempChar=='*'))))
+        else if(n<12&&((tempChar>='0'&&tempChar<='9')||(tempChar>='a'&&tempChar<='z')||\
+        (tempChar>='A'&&tempChar<='Z')||tempChar=='.'||tempChar=='_'||\
+        (flag==SEARCH_STR&&(tempChar=='?'||tempChar=='*'))))
         {
             strcpy(temp,string+i);
             string[i++]=tempChar;
@@ -125,7 +130,10 @@ char *IGetString(int x,int y,int length,char *string,int flag)
         if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
             IBarInput(x,y+1,x+length,y+26,DRM_BLACK,DRM_WHITE);
         else
-            IBarInput(x,y+7,x+length,y+24,DRM_BLACK,DRM_WHITE);   
+        {
+            setfillstyle(SOLID_FILL,DRM_WHITE);
+            bar(x,y+7,x+length,y+24);   
+        }
         //两种输入框
 
         if(flag!=PASSWORD_STR)

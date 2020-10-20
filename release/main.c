@@ -14,7 +14,7 @@ void main()
     int mouseDraw[16][16],mouseSave[16][16],mouseX,mouseY,mouseStatus;  //鼠标相关变量
     int lastMenuX,lastMenuY,lastMenu=0,menu=0;  //菜单相关变量
     int i,j;  //其他整型变量
-    char id,exit=0,activeFlag=0,numOfSelected=0,page0=1,page1=1,page2=1,menuFlag=0,searching=0;   //标志变量
+    char id,exit=0,activeFlag=0,page0=1,page1=1,page2=1,menuFlag=0,searching=0;   //标志变量
     char name[13]={0},password[13]={0},temp[PATH_LEN];    //辅助字符串
     void *view1Image=NULL;  //图形缓冲区
     FILE *fpHZ=fopen("C:\\DOSRES\\SRC\\HZ16","rb"),*fpCLS=NULL;    //文件指针
@@ -46,7 +46,8 @@ void main()
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             id=0;
         }   //等待输入用户名密码
-        if(kbhit()&&getch()==13||(mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>370+DF&&mouseX<470+DF&&mouseY>550+DF&&mouseY<577+DF)
+        if(kbhit()&&getch()==13||(mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>370+DF&&\
+        mouseX<470+DF&&mouseY>550+DF&&mouseY<577+DF)
         {
             ILoginConfirm(&id,name,password);
             if(id==1)
@@ -54,7 +55,8 @@ void main()
             id=-1;
             IWarningBeep();   
         }   //检查登录
-        else if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>370+190+DF&&mouseX<470+190+DF&&mouseY>550+DF&&mouseY<550+27+DF)
+        else if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>370+190+DF&&mouseX<470+190+DF&&\
+        mouseY>550+DF&&mouseY<550+27+DF)
         {
             id=0;
             break;
@@ -76,9 +78,11 @@ void main()
         activeFlag=IEventStackActive(top0,mouseX,mouseY,mouseStatus);//改变0号窗口
         if(!activeFlag)
             activeFlag=IEventStackActive(top1,mouseX,mouseY,mouseStatus);//改变1/2号窗口
-        if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>1004+DF&&mouseX<1016+DF&&mouseY>8+DF&&mouseY<16+DF)
+        if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>1004+DF&&mouseX<1016+DF&&mouseY>8+DF&&\
+        mouseY<16+DF)
             exit=1; //点击退出按钮
-        if((menuFlag&FLAG_IS_SEC_MENU)||((mouseStatus&MOUSE_RIGHT_PRESS)&&mouseX>240+DF&&mouseX<1024+DF&&mouseY>88+DF&&mouseY<744+DF))
+        if((menuFlag&FLAG_IS_SEC_MENU)||((mouseStatus&MOUSE_RIGHT_PRESS)&&mouseX>240+DF&&\
+        mouseX<1024+DF&&mouseY>88+DF&&mouseY<744+DF))
             menu=1;
         else if(mouseStatus&MOUSE_LEFT_PRESS)
             menu=0; //是否尝试激活菜单
@@ -94,7 +98,8 @@ void main()
                 activeFlag|=REACT_VIEW1;
             }
         }   //是否按下Ctrl
-        if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>992+DF&&mouseX<1001+DF&&mouseY>720+DF&&mouseY<731+DF)
+        if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>992+DF&&mouseX<1001+DF&&mouseY>720+DF&&\
+        mouseY<731+DF)
         {
             if(!searching)
             {
@@ -107,7 +112,8 @@ void main()
                 activeFlag|=REACT_VIEW2;
             }
         }
-        else if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>928+DF&&mouseX<937+DF&&mouseY>720+DF&&mouseY<731+DF)
+        else if((mouseStatus&MOUSE_LEFT_PRESS)&&mouseX>928+DF&&mouseX<937+DF&&\
+        mouseY>720+DF&&mouseY<731+DF)
         {
             if(!searching)
             {
@@ -124,8 +130,11 @@ void main()
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenuX=mouseX;
             lastMenuY=mouseY;
-            getimage((mouseX>928+DF)?(928+DF):mouseX,(mouseY>607+DF)?(607+DF):mouseY,((mouseX>928+DF)?(928+DF):mouseX)+95,((mouseY>607+DF)?(607+DF):mouseY)+160,view1Image);
-            IMenu(mouseX,mouseY,numOfSelected,top1,curNode,nodeX,&menuFlag,fpHZ);
+            getimage((mouseX>928+DF)?(928+DF):mouseX,(mouseY>607+DF)?(607+DF):mouseY,\
+            ((mouseX>928+DF)?(928+DF):mouseX)+95,((mouseY>607+DF)?(607+DF):mouseY)+160,\
+            view1Image);
+            IEventStackPop(top1,1000);
+            IMenu(mouseX,mouseY,top1,curNode,nodeX,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             if(!(menuFlag&FLAG_IS_SEC_MENU))
                 lastMenu=1;
@@ -134,7 +143,8 @@ void main()
         else if(menuFlag&FLAG_IS_SEC_MENU)
         {
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
-            IMenu(lastMenuX,lastMenuY,numOfSelected,top1,curNode,nodeX,&menuFlag,fpHZ);
+            IEventStackPop(top1,1000);
+            IMenu(lastMenuX,lastMenuY,top1,curNode,nodeX,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenu=1;
             continue;
@@ -142,9 +152,11 @@ void main()
         else if(lastMenu&&!menu)
         {
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
-            putimage((lastMenuX>928+DF)?(928+DF):lastMenuX,(lastMenuY>607+DF)?(607+DF):lastMenuY,view1Image,COPY_PUT);
+            putimage((lastMenuX>928+DF)?(928+DF):lastMenuX,\
+            (lastMenuY>607+DF)?(607+DF):lastMenuY,view1Image,COPY_PUT);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
             lastMenu=0;
+            activeFlag=REACT_VIEW1;
         }   //关闭菜单窗口
         if(activeFlag&REACT_VIEW0)
         {
@@ -165,7 +177,7 @@ void main()
             bar(192+DF,52+DF,800+DF,76+DF);
             bar(0+DF,745+DF,1023+DF,766+DF);
             IEventStackPop(top1,1000);
-            numOfSelected=IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
+            IView1(&curNode,nodeX,top1,&page1,&menuFlag,fpHZ);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);
         }   //更新1号窗口
         if(activeFlag&REACT_VIEW2)
@@ -192,7 +204,8 @@ void main()
         {
             for(i=0;i<16;i++)
                 for(j=0;j<16;j++)
-                    if(mouseSave[i][j]==DRM_WHITE&&getpixel(mouseX+j,mouseY+i)!=DRM_MOUSEBLACK)
+                    if((mouseSave[i][j]==DRM_CHOSENBLUE||mouseSave[i][j]==DRM_WHITE)&&\
+                    getpixel(mouseX+j,mouseY+i)!=DRM_MOUSEBLACK)
                         mouseSave[i][j]=getpixel(mouseX+j,mouseY+i);
             IMouseOff(mouseX,mouseY,mouseDraw,mouseSave);
             IMouseOn(mouseX,mouseY,mouseDraw,mouseSave);

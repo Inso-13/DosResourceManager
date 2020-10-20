@@ -84,7 +84,8 @@ char IEventStackActive(IEventStackNode *top,int x,int y,int type)
     
     while(temp)
     {
-        if(temp->event.type==-1||(x>temp->event.x1&&x<temp->event.x2&&y>temp->event.y1&&y<temp->event.y2&&(temp->event.type&type)))
+        if(temp->event.type==-1||(x>temp->event.x1&&x<temp->event.x2&&\
+        y>temp->event.y1&&y<temp->event.y2&&(temp->event.type&type)))
         {   //如果完全符合点击条件
             temp->event.pfun(temp->event.node0,temp->event.node1);      //激活回调函数
             if(temp->event.change<0)
@@ -122,7 +123,8 @@ void IDelStack(IEventStackNode *top)
     输出参数：无
     返回值：无
 */
-void ISetEvent(IEvent *event,int x1,int y1,int x2,int y2,int type,void (*pfun)(IFileNode*,IFileNode*),IFileNode *node0,IFileNode *node1,char change)
+void ISetEvent(IEvent *event,int x1,int y1,int x2,int y2,int type,\
+void (*pfun)(IFileNode*,IFileNode*),IFileNode *node0,IFileNode *node1,char change)
 {
     event->x1=x1;
     event->y1=y1;

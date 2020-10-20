@@ -25,7 +25,7 @@
 
 //调用模块
 #include"IActive.h"
-#include"IDirActive.h"
+#include"IDirAct.h"
 
 //图形库
 #include"IIcon.h"
@@ -35,14 +35,8 @@
 
 //函数原型
 void IPlainView(FILE *fpHZ);
-int IView0(IFileNode *root,IFileNodePointer** curNode,IFileNodePointer *nodeX,IEventStackNode *top,int beginX,int beginY,char *page,char flag,FILE *fpHZ);
-int IView1(IFileNodePointer** curNode,IFileNodePointer *nodeX,IEventStackNode *top,char *page,char *menuFlag,FILE *fpHZ);
-void IView10DrawIcon(IFileNode *tempNode,int y);
-void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem);
+int IView0(IFileNode *root,IFileNodePointer** curNode,IFileNodePointer *nodeX,\
+IEventStackNode *top,int beginX,int beginY,char *page,char flag,FILE *fpHZ);
 void IView2(char *page,FILE *fpHZ,IEventStackNode *top,IFileNodePointer** curNode);
-void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,FILE *fpHZ,IEventStackNode *top,char *menuFlag);
-void IView11(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,FILE *fpHZ,IEventStackNode *top,char *menuFlag);
-void IView11DrawIcon(IFileNode *tempNode,int x,int y);
-void IView1DelOrCover(int numOfSelected,IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,char *menuFlag,FILE *fpHZ);
 
 #endif

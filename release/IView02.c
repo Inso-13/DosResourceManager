@@ -58,7 +58,8 @@ void IPlainView(FILE *fpHZ)
     输出参数：无
     返回值：纵坐标的偏移量
 */
-int IView0(IFileNode *root,IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,int beginX,int beginY,char *page,char flag,FILE *fpHZ)
+int IView0(IFileNode *root,IFileNodePointer **curNode,IFileNodePointer *nodeX,\
+IEventStackNode *top,int beginX,int beginY,char *page,char flag,FILE *fpHZ)
 {
     int increaceY=0;    //y轴偏移量
     char thisPage=1;    //是否为当前页
@@ -85,9 +86,13 @@ int IView0(IFileNode *root,IFileNodePointer **curNode,IFileNodePointer *nodeX,IE
                 Ifolder(beginX+11,beginY-(*page-1)*600+4);  //画图标
                 setcolor(DRM_BLACK);
                 Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fpHZ);
-                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,\
+                beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,\
+                (IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
                 IEventStackPush(top,tempEvent); //双击打开文件夹
-                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,root,(IFileNode*)curNode,REACT_MORE);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,\
+                beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,\
+                root,(IFileNode*)curNode,REACT_MORE);
                 IEventStackPush(top,tempEvent); //双击打开文件夹
             }
             else if(root->file.type[0]=='0')   //未打开
@@ -99,13 +104,21 @@ int IView0(IFileNode *root,IFileNodePointer **curNode,IFileNodePointer *nodeX,IE
                     Ifolder(beginX+11,beginY-(*page-1)*600+4);  //画图标
                 setcolor(DRM_BLACK);
                 Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fpHZ);
-                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
+                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,\
+                beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IAfterEntree,\
+                (IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
                 IEventStackPush(top,tempEvent); //单击打开文件夹
-                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IEntreeActive,root,(IFileNode*)curNode,REACT_MORE);
+                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,\
+                beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IEntreeActive,root,\
+                (IFileNode*)curNode,REACT_MORE);
                 IEventStackPush(top,tempEvent); //单击打开文件夹
-                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,\
+                beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,\
+                (IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
                 IEventStackPush(top,tempEvent); //双击打开文件夹
-                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,root,(IFileNode*)curNode,REACT_MORE);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,\
+                beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,\
+                root,(IFileNode*)curNode,REACT_MORE);
                 IEventStackPush(top,tempEvent); //双击打开文件夹
             }
             else        //打开的文件夹
@@ -118,26 +131,37 @@ int IView0(IFileNode *root,IFileNodePointer **curNode,IFileNodePointer *nodeX,IE
                     Ifolder(beginX+11,beginY-(*page-1)*600+4);  //画图标
                 setcolor(DRM_BLACK);
                 Iouttextxy(beginX+25+10,beginY-(*page-1)*600+7,root->file.name,fpHZ);
-                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IDetreeActive,root,(IFileNode*)curNode,REACT_VIEW01);
+                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,\
+                beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,IDetreeActive,root,\
+                (IFileNode*)curNode,REACT_VIEW01);
                 IEventStackPush(top,tempEvent); //单击关闭文件夹
-                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,ISetXNull,root,(IFileNode*)nodeX,REACT_MORE);
+                ISetEvent(&tempEvent,beginX,beginY-(*page-1)*600+6,beginX+16,\
+                beginY-(*page-1)*600+14,MOUSE_LEFT_PRESS,ISetXNull,root,\
+                (IFileNode*)nodeX,REACT_MORE);
                 IEventStackPush(top,tempEvent); //将nodeX置为null
-                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IDetreeActive,root,(IFileNode*)curNode,REACT_VIEW01);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,\
+                beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,IDetreeActive,\
+                root,(IFileNode*)curNode,REACT_VIEW01);
                 IEventStackPush(top,tempEvent);//单击关闭文件夹
-                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,ISetXNull,root,(IFileNode*)nodeX,REACT_MORE);
+                ISetEvent(&tempEvent,0+DF,beginY-(*page-1)*600,238+DF,\
+                beginY-(*page-1)*600+22,MOUSE_DOUBLE_LEFT_PRESS,ISetXNull,\
+                root,(IFileNode*)nodeX,REACT_MORE);
                 IEventStackPush(top,tempEvent); //将nodeX置为null
             }
         if(root->child&&root->file.type[0]=='1')
-            increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,beginY+increaceY,page,VIEW0_UNPAGE,fpHZ);
+            increaceY+=IView0(root->child,curNode,nodeX,top,beginX+8,\
+            beginY+increaceY,page,VIEW0_UNPAGE,fpHZ);
     }
     if(root->next)
-        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,page,VIEW0_UNPAGE,fpHZ);
+        increaceY+=IView0(root->next,curNode,nodeX,top,beginX,beginY+increaceY,\
+        page,VIEW0_UNPAGE,fpHZ);
 
     if(flag==VIEW0_PAGE)
     {
         if(*page>1)
         {
-            ISetEvent(&tempEvent,150+DF,720+DF,168+DF,738+DF,MOUSE_LEFT_PRESS,ILastPage,(IFileNode*)page,NULL,REACT_VIEW0);
+            ISetEvent(&tempEvent,150+DF,720+DF,168+DF,738+DF,MOUSE_LEFT_PRESS,\
+            ILastPage,(IFileNode*)page,NULL,REACT_VIEW0);
             IEventStackPush(top,tempEvent); //回到上一页
             setcolor(DRM_BLACK);
         }
@@ -146,7 +170,8 @@ int IView0(IFileNode *root,IFileNodePointer **curNode,IFileNodePointer *nodeX,IE
         IGoLeft(150+DF,720+DF);
         if(*page<=((increaceY-24)/600))
         {
-            ISetEvent(&tempEvent,210+DF,720+DF,228+DF,738+DF,MOUSE_LEFT_PRESS,INextPage,(IFileNode*)page,NULL,REACT_VIEW0);
+            ISetEvent(&tempEvent,210+DF,720+DF,228+DF,738+DF,MOUSE_LEFT_PRESS,\
+            INextPage,(IFileNode*)page,NULL,REACT_VIEW0);
             IEventStackPush(top,tempEvent); //回到下一页
             setcolor(DRM_BLACK);
         }
@@ -178,11 +203,13 @@ void IView2(char *page,FILE *fpHZ,IEventStackNode *top,IFileNodePointer **curNod
     setcolor(DRM_BLACK);
     IGoLeft(250+DF,720+DF);
     Iouttextxy(270+DF,721+DF,"返回",fpHZ);
-    ISetEvent(&tempEvent,250+DF,720+DF,265+DF,735+DF,MOUSE_LEFT_PRESS,INOP,NULL,NULL,REACT_VIEW1);
+    ISetEvent(&tempEvent,250+DF,720+DF,265+DF,735+DF,MOUSE_LEFT_PRESS,INOP,\
+    NULL,NULL,REACT_VIEW1);
     IEventStackPush(top,tempEvent);
 
     Iouttextxy(853+DF,61+DF,"在本文件夹中搜索",fpHZ);
-    ISetEvent(&tempEvent,853+DF,52+DF,1016+DF,77+DF,MOUSE_LEFT_PRESS,ISearchActive,(IFileNode*)(*curNode),NULL,REACT_VIEW2);
+    ISetEvent(&tempEvent,853+DF,52+DF,1016+DF,77+DF,MOUSE_LEFT_PRESS,\
+    ISearchActive,(IFileNode*)(*curNode),NULL,REACT_VIEW2);
     IEventStackPush(top,tempEvent);
     //重新搜索
 

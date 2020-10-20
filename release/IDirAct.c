@@ -7,7 +7,7 @@
  **************************************************
  */
 
-#include"IDirActive.h"
+#include"IDirAct.h"
 
 /*
     函数功能：激活IEntree函数，更改当前节点
@@ -165,7 +165,8 @@ void IAfterEntree(IFileNode *cur,IFileNode *X)
     {
         lastNode=tempNode->pre;
         IGetAbsolutePath(tempNode->child,path);     //得到待检查的链表节点
-        if(strcmp(path,ROOT_NAME)&&strcmp(path,path1)&&strcmp(path,path2)&&!IisChild(path1,path)&&!IisChild(path2,path))
+        if(strcmp(path,ROOT_NAME)&&strcmp(path,path1)&&strcmp(path,path2)\
+        &&!IisChild(path1,path)&&!IisChild(path2,path))
         {           //如果发生冲突
             IDetree(tempNode->child);   //释放节点
             if(tempNode->pre)

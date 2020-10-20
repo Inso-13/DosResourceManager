@@ -26,7 +26,7 @@
 //调用模块
 #include"IActive.h"
 #include"IMenu.h"
-#include"IDirActive.h"
+#include"IDirAct.h"
 
 //图形库
 #include"IIcon.h"
@@ -35,12 +35,16 @@
 
 
 //函数原型
-int IView1(IFileNodePointer** curNode,IFileNodePointer *nodeX,IEventStackNode *top,char *page,char *menuFlag,FILE *fpHZ);
+void IView1(IFileNodePointer** curNode,IFileNodePointer *nodeX,IEventStackNode *top,\
+char *page,char *menuFlag,FILE *fpHZ);
 void IView10DrawIcon(IFileNode *tempNode,int y);
 void IView1PageControl(IFileNodePointer** curNode,char *page,int numOfItem);
-void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,FILE *fpHZ,IEventStackNode *top,char *menuFlag);
-void IView11(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,FILE *fpHZ,IEventStackNode *top,char *menuFlag);
+void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,\
+FILE *fpHZ,IEventStackNode *top,char *menuFlag);
+void IView11(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,\
+FILE *fpHZ,IEventStackNode *top,char *menuFlag);
 void IView11DrawIcon(IFileNode *tempNode,int x,int y);
-void IView1DelOrCover(int numOfSelected,IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,char *menuFlag,FILE *fpHZ);
+void IView1DelOrCover(int numOfSelected,IFileNodePointer **curNode,\
+IFileNodePointer *nodeX,IEventStackNode *top,char *menuFlag,FILE *fpHZ);
 
 #endif

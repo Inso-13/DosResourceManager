@@ -15,7 +15,8 @@
     输出参数：无
     返回值：纵坐标的偏移量
 */
-int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,char *page,char *menuFlag,FILE *fpHZ)
+void IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,\
+char *page,char *menuFlag,FILE *fpHZ)
 {
     int i,numOfItem=0,numOfSelected=0;
     IFileNode *tempNode=NULL;
@@ -34,15 +35,18 @@ int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *t
     IGetAbsolutePath(tempNode,temp);
     outtextxy(192+DF,61+DF,temp);   //路径栏的显示
 
-    ISetEvent(&tempEvent,803+DF,51+DF,824+DF,78+DF,MOUSE_LEFT_PRESS,INOP,NULL,NULL,REACT_VIEW01);
+    ISetEvent(&tempEvent,803+DF,51+DF,824+DF,78+DF,MOUSE_LEFT_PRESS,INOP,NULL,\
+    NULL,REACT_VIEW01);
     IEventStackPush(top,tempEvent); //刷新功能
 
     if(IFindParent((*curNode)->child))
     {
         setcolor(DRM_BLACK);
-        ISetEvent(&tempEvent,108+DF,57+DF,120+DF,76+DF,MOUSE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
+        ISetEvent(&tempEvent,108+DF,57+DF,120+DF,76+DF,MOUSE_LEFT_PRESS,IAfterEntree,\
+        (IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
         IEventStackPush(top,tempEvent); //单击返回上一级
-        ISetEvent(&tempEvent,108+DF,57+DF,120+DF,76+DF,MOUSE_LEFT_PRESS,IEntreeActive,IFindParent((*curNode)->child),(IFileNode*)curNode,REACT_MORE);
+        ISetEvent(&tempEvent,108+DF,57+DF,120+DF,76+DF,MOUSE_LEFT_PRESS,IEntreeActive,\
+        IFindParent((*curNode)->child),(IFileNode*)curNode,REACT_MORE);
         IEventStackPush(top,tempEvent); //单击返回上一级
     }
     else
@@ -53,7 +57,8 @@ int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *t
     if((*curNode)->pre&&(*curNode)->pre->child)
     {
         setcolor(DRM_BLACK);
-        ISetEvent(&tempEvent,25+DF,59+DF,40+DF,76+DF,MOUSE_LEFT_PRESS,IGoLeftActive,(IFileNode*)curNode,NULL,REACT_VIEW01); //单击返回上一目录功能
+        ISetEvent(&tempEvent,25+DF,59+DF,40+DF,76+DF,MOUSE_LEFT_PRESS,IGoLeftActive,\
+        (IFileNode*)curNode,NULL,REACT_VIEW01); //单击返回上一目录功能
         IEventStackPush(top,tempEvent);
     }
     else
@@ -64,7 +69,8 @@ int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *t
     if((*curNode)->next&&(*curNode)->next->child)
     {
         setcolor(DRM_BLACK);
-        ISetEvent(&tempEvent,62+DF,59+DF,92+DF,76+DF,MOUSE_LEFT_PRESS,IGoRightActive,(IFileNode*)curNode,NULL,REACT_VIEW01);    //单击返回下一目录功能
+        ISetEvent(&tempEvent,62+DF,59+DF,92+DF,76+DF,MOUSE_LEFT_PRESS,IGoRightActive,\
+        (IFileNode*)curNode,NULL,REACT_VIEW01);    //单击返回下一目录功能
         IEventStackPush(top,tempEvent);
     }
     else
@@ -88,7 +94,8 @@ int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *t
     else
     {
         Iouttextxy(853+DF,61+DF,"在本文件夹中搜索",fpHZ);
-        ISetEvent(&tempEvent,853+DF,52+DF,1016+DF,77+DF,MOUSE_LEFT_PRESS,ISearchActive,(IFileNode*)(*curNode),NULL,REACT_VIEW2);    //单击开始搜索
+        ISetEvent(&tempEvent,853+DF,52+DF,1016+DF,77+DF,MOUSE_LEFT_PRESS,ISearchActive,\
+        (IFileNode*)(*curNode),NULL,REACT_VIEW2);    //单击开始搜索
         IEventStackPush(top,tempEvent);
     }
     //搜索栏显示
@@ -120,14 +127,16 @@ int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *t
     {
         bar(1001+DF,747+DF,1020+DF,766+DF);
         IView11(curNode,nodeX,tempNode,fpHZ,top,menuFlag);
-        ISetEvent(&tempEvent,976+DF,747+DF,995+DF,766+DF,MOUSE_LEFT_PRESS,ISetView10,(IFileNode*)menuFlag,NULL,REACT_VIEW1);
+        ISetEvent(&tempEvent,976+DF,747+DF,995+DF,766+DF,MOUSE_LEFT_PRESS,ISetView10,\
+        (IFileNode*)menuFlag,NULL,REACT_VIEW1);
         IEventStackPush(top,tempEvent);
     }
     else
     {
         bar(976+DF,747+DF,995+DF,766+DF);
         IView10(curNode,nodeX,tempNode,fpHZ,top,menuFlag);
-        ISetEvent(&tempEvent,1001+DF,747+DF,1020+DF,766+DF,MOUSE_LEFT_PRESS,ISetView11,(IFileNode*)menuFlag,NULL,REACT_VIEW1);
+        ISetEvent(&tempEvent,1001+DF,747+DF,1020+DF,766+DF,MOUSE_LEFT_PRESS,ISetView11,\
+        (IFileNode*)menuFlag,NULL,REACT_VIEW1);
         IEventStackPush(top,tempEvent);
     }   //主视图部分
     IDetailOption(980+DF,751+DF);
@@ -151,7 +160,6 @@ int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *t
     
     IView1DelOrCover(numOfSelected,curNode,nodeX,top,menuFlag,fpHZ);
     //删除或覆盖确认
-    return numOfSelected;
 }
 
 /*
@@ -160,7 +168,8 @@ int IView1(IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *t
     输出参数：无
     返回值：无
 */
-void IView1DelOrCover(int numOfSelected,IFileNodePointer **curNode,IFileNodePointer *nodeX,IEventStackNode *top,char *menuFlag,FILE *fpHZ)
+void IView1DelOrCover(int numOfSelected,IFileNodePointer **curNode,\
+IFileNodePointer *nodeX,IEventStackNode *top,char *menuFlag,FILE *fpHZ)
 {
     IEvent tempEvent;     //辅助事件
     char temp[50];  //辅助字符串
@@ -184,11 +193,14 @@ void IView1DelOrCover(int numOfSelected,IFileNodePointer **curNode,IFileNodePoin
         IPutsHZ16(600+DF,406+DF,"取消",fpHZ);
         IWarningBeep();
 
-        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,MOUSE_LEFT_PRESS,INOP,NULL,NULL,REACT_NULL);
+        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,MOUSE_LEFT_PRESS,INOP,NULL,\
+        NULL,REACT_NULL);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,MOUSE_LEFT_PRESS,ISetDelete,(IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
+        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,MOUSE_LEFT_PRESS,\
+        ISetDelete,(IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,MOUSE_LEFT_PRESS,INOP,NULL,NULL,REACT_VIEW1);
+        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,MOUSE_LEFT_PRESS,INOP,\
+        NULL,NULL,REACT_VIEW1);
         IEventStackPush(top,tempEvent);
     }
     else if((*menuFlag)&FLAG_TO_COVER)
@@ -210,17 +222,21 @@ void IView1DelOrCover(int numOfSelected,IFileNodePointer **curNode,IFileNodePoin
         IPutsHZ16(600+DF,406+DF,"取消",fpHZ);
         IWarningBeep();
 
-        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,MOUSE_LEFT_PRESS,INOP,NULL,NULL,REACT_NULL);
+        ISetEvent(&tempEvent,0+DF,0+DF,1024+DF,768+DF,MOUSE_LEFT_PRESS,INOP,\
+        NULL,NULL,REACT_NULL);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,MOUSE_LEFT_PRESS,ISetPasteF,(IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
+        ISetEvent(&tempEvent,521+DF,403+DF,571+DF,423+DF,MOUSE_LEFT_PRESS,\
+        ISetPasteF,(IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
         IEventStackPush(top,tempEvent);
-        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,MOUSE_LEFT_PRESS,ISetPaste,(IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
+        ISetEvent(&tempEvent,591+DF,403+DF,641+DF,423+DF,MOUSE_LEFT_PRESS,\
+        ISetPaste,(IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
         IEventStackPush(top,tempEvent);
     }
     else if((*menuFlag)&FLAG_TO_UNCOVER)
     {
         (*menuFlag)&=FLAG_CLEAR_COVER;
-        ISetEvent(&tempEvent,0,0,0,0,MOUSE_NULL,ISetPaste,(IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
+        ISetEvent(&tempEvent,0,0,0,0,MOUSE_NULL,ISetPaste,\
+        (IFileNode*)(*curNode),(IFileNode*)nodeX,REACT_VIEW01);
         IEventStackPush(top,tempEvent);
     }   //删除确认
 }
@@ -241,15 +257,18 @@ void IView10DrawIcon(IFileNode *tempNode,int y)
         Itxt(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
         Idoc(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
+    else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||\
+    !strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
         Ic(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
+    else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||\
+    !strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
         Ih(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
         Iobj(256+DF,y+2);
     else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
         Iexe(256+DF,y+2);
-    else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
+    else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")\
+    ||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
         Ipic(256+DF,y+2);
     else if(IisFolder(tempNode))
     {
@@ -279,15 +298,18 @@ void IView11DrawIcon(IFileNode *tempNode,int x,int y)
         ItxtL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"DOC")||!strcmp(tempNode->file.type,"doc"))
         IdocL(x+25,y+10);
-    else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
+    else if(!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"c")||\
+    !strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"cpp"))
         IcL(x+25,y+10);
-    else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||!strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
+    else if(!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"h")||\
+    !strcmp(tempNode->file.type,"HPP")||!strcmp(tempNode->file.type,"hpp"))
         IhL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"obj")||!strcmp(tempNode->file.type,"OBJ"))
         IobjL(x+25,y+10);
     else if(!strcmp(tempNode->file.type,"exe")||!strcmp(tempNode->file.type,"EXE"))
         IexeL(x+25,y+10);
-    else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||!strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
+    else if(!strcmp(tempNode->file.type,"jpg")||!strcmp(tempNode->file.type,"JPG")||\
+    !strcmp(tempNode->file.type,"bmp")||!strcmp(tempNode->file.type,"BMP"))
         IpicL(x+25,y+10);
     else if(IisFolder(tempNode))
     {
@@ -306,7 +328,8 @@ void IView11DrawIcon(IFileNode *tempNode,int x,int y)
     输出参数：无
     返回值：无
 */
-void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,FILE *fpHZ,IEventStackNode *top,char *menuFlag)
+void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,\
+FILE *fpHZ,IEventStackNode *top,char *menuFlag)
 {
     IEvent tempEvent;
     char temp[PATH_LEN];
@@ -331,7 +354,9 @@ void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempN
 
         setcolor(DRM_BLACK);
         Iouttextxy(256+20+DF,y+6,tempNode->file.name,fpHZ);
-        sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date/512+1980,(tempNode->file.date%512)/32,tempNode->file.date%32,tempNode->file.time/2048,(tempNode->file.time%2048)/32);
+        sprintf(temp,"%d/%d/%d %02d:%02d",tempNode->file.date/512+1980,\
+        (tempNode->file.date%512)/32,tempNode->file.date%32,\
+        tempNode->file.time/2048,(tempNode->file.time%2048)/32);
         outtextxy(432+DF,y+6,temp);
         if(!IisFolder(tempNode))
         {
@@ -348,34 +373,42 @@ void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempN
         //文件详细信息
 
         if((*menuFlag)&FLAG_IS_CTRLED)
-            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_LEFT_PRESS,ICtrlSelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_LEFT_PRESS,\
+            ICtrlSelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
         else
-            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_LEFT_PRESS,ISelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_LEFT_PRESS,\
+            ISelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
         IEventStackPush(top,tempEvent);
         //根据是否Ctrl,设置选择类型
 
         if(IisFolder(tempNode))
         {
-            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_DOUBLE_LEFT_PRESS,\
+            IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,tempNode,(IFileNode*)curNode,REACT_MORE);
+            ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_DOUBLE_LEFT_PRESS,\
+            IEntreeActive,tempNode,(IFileNode*)curNode,REACT_MORE);
             IEventStackPush(top,tempEvent);
             if(tempNode->file.type[1]=='d')
-                Iouttextxy(688+DF,y+6+3,"磁盘",fpHZ);
+                Iouttextxy(688+DF,y+8,"磁盘",fpHZ);
             else
-                Iouttextxy(688+DF,y+6+3,"文件夹",fpHZ);
+                Iouttextxy(688+DF,y+8,"文件夹",fpHZ);
         }
         else
         {
             outtextxy(688+DF,y+6,tempNode->file.type);
             if(!strcmp(tempNode->file.type,"EXE")||!strcmp(tempNode->file.type,"BAT"))
             {
-                ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_DOUBLE_LEFT_PRESS,IexeActive,tempNode,NULL,REACT_VIEW01);
+                ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_DOUBLE_LEFT_PRESS,\
+                IexeActive,tempNode,NULL,REACT_VIEW01);
                 IEventStackPush(top,tempEvent);
             }
-            if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"ASM"))
+            if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"C")||\
+            !strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"CPP")||\
+            !strcmp(tempNode->file.type,"ASM"))
             {
-                ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_DOUBLE_LEFT_PRESS,ItxtActive,tempNode,NULL,REACT_VIEW01);
+                ISetEvent(&tempEvent,248+DF,y,936+DF,y+19,MOUSE_DOUBLE_LEFT_PRESS,\
+                ItxtActive,tempNode,NULL,REACT_VIEW01);
                 IEventStackPush(top,tempEvent);
             }
         }
@@ -393,7 +426,8 @@ void IView10(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempN
     输出参数：无
     返回值：无
 */
-void IView11(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,FILE *fpHZ,IEventStackNode *top,char *menuFlag)
+void IView11(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempNode,\
+FILE *fpHZ,IEventStackNode *top,char *menuFlag)
 {
     IEvent tempEvent;
     char temp[PATH_LEN];
@@ -409,29 +443,37 @@ void IView11(IFileNodePointer **curNode,IFileNodePointer *nodeX,IFileNode *tempN
         Iouttextxy(x+50-strlen(tempNode->file.name)*4,y+95,tempNode->file.name,fpHZ);
 
         if((*menuFlag)&FLAG_IS_CTRLED)
-            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_LEFT_PRESS,ICtrlSelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
+            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_LEFT_PRESS,ICtrlSelect,\
+            tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
         else
-            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_LEFT_PRESS,ISelect,tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
+            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_LEFT_PRESS,ISelect,\
+            tempNode,(IFileNode*)menuFlag,REACT_MOUSE);
         IEventStackPush(top,tempEvent);
         //根据是否Ctrl,设置选择类型
 
         if(IisFolder(tempNode))
         {
-            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
+            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_DOUBLE_LEFT_PRESS,IAfterEntree,\
+            (IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW01);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,tempNode,(IFileNode*)curNode,REACT_MORE);
+            ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_DOUBLE_LEFT_PRESS,IEntreeActive,\
+            tempNode,(IFileNode*)curNode,REACT_MORE);
             IEventStackPush(top,tempEvent);
         }
         else
         {
             if(!strcmp(tempNode->file.type,"EXE")||!strcmp(tempNode->file.type,"BAT"))
             {
-                ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_DOUBLE_LEFT_PRESS,IexeActive,tempNode,NULL,REACT_VIEW01);
+                ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_DOUBLE_LEFT_PRESS,IexeActive,\
+                tempNode,NULL,REACT_VIEW01);
                 IEventStackPush(top,tempEvent);
             }
-            if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"C")||!strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"CPP")||!strcmp(tempNode->file.type,"ASM"))
+            if(!strcmp(tempNode->file.type,"TXT")||!strcmp(tempNode->file.type,"C")||\
+            !strcmp(tempNode->file.type,"H")||!strcmp(tempNode->file.type,"CPP")||\
+            !strcmp(tempNode->file.type,"ASM"))
             {
-                ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_DOUBLE_LEFT_PRESS,ItxtActive,tempNode,NULL,REACT_VIEW01);
+                ISetEvent(&tempEvent,x,y,x+99,y+79,MOUSE_DOUBLE_LEFT_PRESS,ItxtActive,\
+                tempNode,NULL,REACT_VIEW01);
                 IEventStackPush(top,tempEvent);
             }
         }

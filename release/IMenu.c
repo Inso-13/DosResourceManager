@@ -15,16 +15,25 @@
     输出参数：无
     返回值：无
 */
-void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode *top,IFileNodePointer *curNode,IFileNodePointer *nodeX,char *menuFlag,FILE *fpHZ)
+void IMenu(int mouseX,int mouseY,IEventStackNode *top,IFileNodePointer *curNode,\
+IFileNodePointer *nodeX,char *menuFlag,FILE *fpHZ)
 {
+    int i,numOfSelected=0;
     IEvent tempEvent;
-    int i;
-    int (*lambda[8])(IFileNode*,IFileNode*)={ISortDateUp,ISortDateDown,ISortSizeUp,ISortSizeDown,ISortNameUp,ISortNameDown,ISortTypeUp,ISortTypeDown};  
+    IFileNode *tempNode=curNode->child->child;
+    int (*lambda[8])(IFileNode*,IFileNode*)={ISortDateUp,ISortDateDown,\
+    ISortSizeUp,ISortSizeDown,ISortNameUp,ISortNameDown,ISortTypeUp,ISortTypeDown};  
     //排序函数指针数组
 
+    while(tempNode)
+    {
+        if(tempNode->flags&NODE_IS_SELECTED)
+            numOfSelected++;
+        tempNode=tempNode->next;
+    }
     if(mouseX>928+DF) mouseX=928+DF;
     if(mouseY>607+DF) mouseY=607+DF;
-    IDrawMenu(mouseX,mouseY,numOfSelected,curNode,nodeX,*menuFlag,fpHZ);
+    IDrawMenu(mouseX,mouseY,curNode,nodeX,*menuFlag,fpHZ);
     //画菜单
 
     if(!((*menuFlag)&FLAG_IS_SEC_MENU))
@@ -33,32 +42,45 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode *top,IFileNod
             return;
         if((*menuFlag)&FLAG_IS_LAST_PAGE)
         {
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*5,mouseX+80,mouseY+19+20*5,MOUSE_LEFT_PRESS,ISetNewFile,(IFileNode*)curNode,(IFileNode*)menuFlag,REACT_VIEW1);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*5,mouseX+80,mouseY+19+20*5,\
+            MOUSE_LEFT_PRESS,ISetNewFile,(IFileNode*)curNode,(IFileNode*)menuFlag,\
+            REACT_VIEW1);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*6,mouseX+80,mouseY+19+20*6,MOUSE_LEFT_PRESS,ISetNewFolder,(IFileNode*)curNode,(IFileNode*)menuFlag,REACT_VIEW01);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*6,mouseX+80,mouseY+19+20*6,\
+            MOUSE_LEFT_PRESS,ISetNewFolder,(IFileNode*)curNode,(IFileNode*)menuFlag,\
+            REACT_VIEW01);
             IEventStackPush(top,tempEvent);
         }
-        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*7,mouseX+80,mouseY+19+20*7,MOUSE_LEFT_PRESS,ISortMenuActive,(IFileNode*)menuFlag,NULL,REACT_VIEW1);
+        ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*7,mouseX+80,mouseY+19+20*7,\
+        MOUSE_LEFT_PRESS,ISortMenuActive,(IFileNode*)menuFlag,NULL,REACT_VIEW1);
         IEventStackPush(top,tempEvent);
         if(numOfSelected)
         {
             if(numOfSelected==1)
             {
-                ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*4,mouseX+80,mouseY+19+20*4,MOUSE_LEFT_PRESS,ISetRename,(IFileNode*)curNode,(IFileNode*)menuFlag,REACT_VIEW1);
+                ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*4,mouseX+80,mouseY+19+20*4,\
+                MOUSE_LEFT_PRESS,ISetRename,(IFileNode*)curNode,(IFileNode*)menuFlag,\
+                REACT_VIEW1);
                 IEventStackPush(top,tempEvent);
             }
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1,mouseX+80,mouseY+19,MOUSE_LEFT_PRESS,ISetCopy,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW1);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1,mouseX+80,mouseY+19,MOUSE_LEFT_PRESS,\
+            ISetCopy,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW1);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*1,mouseX+80,mouseY+19+20*1,MOUSE_LEFT_PRESS,ISetCut,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW1);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*1,mouseX+80,mouseY+19+20*1,\
+            MOUSE_LEFT_PRESS,ISetCut,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_VIEW1);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*2,mouseX+80,mouseY+19+20*2,MOUSE_LEFT_PRESS,ISetDeleteComfirm,(IFileNode*)menuFlag,NULL,REACT_VIEW1);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*2,mouseX+80,mouseY+19+20*2,\
+            MOUSE_LEFT_PRESS,ISetDeleteComfirm,(IFileNode*)menuFlag,NULL,REACT_VIEW1);
             IEventStackPush(top,tempEvent);
         }
         if(!numOfSelected||(curNode->child==nodeX->child))
         {
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,MOUSE_LEFT_PRESS,ISetPasteComfirm,(IFileNode*)menuFlag,NULL,REACT_VIEW01);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,\
+            MOUSE_LEFT_PRESS,ISetPasteComfirm,(IFileNode*)menuFlag,NULL,REACT_VIEW01);
             IEventStackPush(top,tempEvent);
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,MOUSE_LEFT_PRESS,ISetPasteCheck,(IFileNode*)curNode,(IFileNode*)nodeX,REACT_MORE);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*3,mouseX+80,mouseY+19+20*3,\
+            MOUSE_LEFT_PRESS,ISetPasteCheck,(IFileNode*)curNode,(IFileNode*)nodeX,\
+            REACT_MORE);
             IEventStackPush(top,tempEvent);
         }
     }
@@ -67,7 +89,9 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode *top,IFileNod
     {
         for(i=0;i<8;i++)
         {
-            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*i,mouseX+80,mouseY+19+20*i,MOUSE_LEFT_PRESS,ISortActive,(IFileNode*)curNode,(IFileNode*)lambda[i],REACT_VIEW1);
+            ISetEvent(&tempEvent,mouseX+1,mouseY+1+20*i,mouseX+80,mouseY+19+20*i,\
+            MOUSE_LEFT_PRESS,ISortActive,(IFileNode*)curNode,(IFileNode*)lambda[i],\
+            REACT_VIEW1);
             IEventStackPush(top,tempEvent);
         }
         (*menuFlag)&=FLAG_DEL_SEC_MENU;
@@ -81,10 +105,20 @@ void IMenu(int mouseX,int mouseY,int numOfSelected,IEventStackNode *top,IFileNod
     输出参数：无
     返回值：无
 */
-void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer *curNode,IFileNodePointer *nodeX,char menuFlag,FILE *fpHZ)
+void IDrawMenu(int x,int y,IFileNodePointer *curNode,IFileNodePointer *nodeX,char menuFlag,FILE *fpHZ)
 {
-    int i;
-    unsigned char str[2][8][11]={{"复制","剪切","删除","粘贴","重命名","新文件","新文件夹","排序.."},{"按日期升序","按日期降序","按大小升序","按大小降序","按名称升序","按名称降序","按类型升序","按类型降序"}};
+    int i,numOfSelected=0;
+    unsigned char str[2][8][11]={{"复制","剪切","删除","粘贴","重命名","新文件","新文件夹",\
+    "排序.."},{"按日期升序","按日期降序","按大小升序","按大小降序","按名称升序","按名称降序",\
+    "按类型升序","按类型降序"}};
+    IFileNode *tempNode=curNode->child->child;
+
+    while(tempNode)
+    {
+        if(tempNode->flags&NODE_IS_SELECTED)
+            numOfSelected++;
+        tempNode=tempNode->next;
+    }
     if(fpHZ==NULL)
     {
         setcolor(DRM_BLACK);
@@ -116,7 +150,8 @@ void IDrawMenu(int x,int y,int numOfSelected,IFileNodePointer *curNode,IFileNode
         for(i=0;i<3;i++)
             IPutsHZ16(x+3,y+20*i+3,str[0][i],fpHZ);    
 
-        if((!numOfSelected||curNode->child==nodeX->child)&&nodeX->child&&curNode->child->file.type[1]!='\\')
+        if((!numOfSelected||curNode->child==nodeX->child)&&nodeX->child&&\
+        curNode->child->file.type[1]!='\\')
             setcolor(DRM_DARKBLUE);
         else
             setcolor(DRM_LIGHTGRAY);
