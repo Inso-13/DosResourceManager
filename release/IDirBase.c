@@ -22,7 +22,9 @@ int Icopy(IFileNode *inFile,IFileNode *outParent,char flag)
     char temp[PATH_LEN]; //辅助字符串
     char i[2],name[18],ext[5]; //文件名，后缀名
     char tempStr[30+2*PATH_LEN];  //命令行辅助字符串
-    int j;  //循环辅助变量，记录后缀名的分界点
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","r+");
+    int j;
+    long len=0;  //循环辅助变量，记录后缀名的分界点
 
     IGetAbsolutePath(inFile,inPath);    //得到输入文件的路径
     IGetAbsolutePath(outParent,outPath);    //得到输出文件夹的路径
@@ -30,6 +32,20 @@ int Icopy(IFileNode *inFile,IFileNode *outParent,char flag)
     strcat(outPath,inFile->file.name);      //得到输出文件的路径
     strcpy(name,inFile->file.name);     //获取文件名
     
+    while(fgets(temp,PATH_LEN,fp))
+    {
+        if(temp[strlen(temp)-1]=='\n')
+            temp[strlen(temp)-1]='\0';
+        if(!strcmp(temp,outPath))
+        {
+            fseek(fp,len+1,SEEK_SET);
+            fputc('|',fp);
+            break;
+        }
+        len+=strlen(temp)+2;
+    }
+    fclose(fp);
+
     if(!flag)   //如果不需要强制覆盖
     {
         if(ISearchPath(outPath)||!strcmp(inPath,outPath)) //原位置拷贝，文件自动重命名
@@ -114,7 +130,9 @@ int Irmf(IFileNode *fileNode)
 */
 int Imkdir(IFileNode *pathNode,char *folderName)    
 {
-    char temp[PATH_LEN];     //辅助字符串
+    char temp[PATH_LEN],tempStr1[PATH_LEN];     //辅助字符串
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","r+");
+    long len=0;
     
     IGetAbsolutePath(pathNode,temp);
     strcat(temp,"\\");
@@ -123,7 +141,22 @@ int Imkdir(IFileNode *pathNode,char *folderName)
     if(mkdir(temp)==-1) //如果创建文件夹失败
         return 0;
     else
+    {
+        while(fgets(tempStr1,PATH_LEN,fp))
+        {
+            if(tempStr1[strlen(tempStr1)-1]=='\n')
+                tempStr1[strlen(tempStr1)-1]='\0';
+            if(!strcmp(tempStr1,temp))
+            {
+                fseek(fp,len+1,SEEK_SET);
+                fputc('|',fp);
+                break;
+            }
+            len+=strlen(tempStr1)+2;
+        }
+        fclose(fp);
         return IAddFileNode(pathNode,folderName);
+    }
     //更新文件节点
 }
 
@@ -174,7 +207,7 @@ void ICopyAll(IFileNode *oldChildChild,IFileNode *newChild)
             if(oldChildChild->child)    //如果有子节点
             {
                 ICopyAll(oldChildChild->child,\
-                IFindNodeByName(oldChildChild->file.name,newChild));  //复制整个链表
+                IFindNodeByName(oldChildChild->file.name,newChild->child));  //复制整个链表
                 IDetree(oldChildChild); //删除原链表
             }
         }

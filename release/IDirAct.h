@@ -24,5 +24,6 @@
 void IDetreeActive(IFileNode *node,IFileNode *cur);
 void IEntreeActive(IFileNode *node,IFileNode *cur);
 void IAfterEntree(IFileNode *cur,IFileNode *X);
+void IGotoFrom(IFileNode *path,IFileNode *cur);
 
 #endif

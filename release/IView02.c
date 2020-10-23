@@ -247,6 +247,8 @@ void IView2(char *page,FILE *fpHZ,IEventStackNode *top,IFileNodePointer **curNod
             tempStr[n-1]='\0';
             n-=1;
         }
+        ISetEvent(&tempEvent,248+DF,y,936+DF,y+18,MOUSE_LEFT_PRESS,IGotoFrom,(IFileNode*)j,(IFileNode*)curNode,REACT_VIEW01);
+        IEventStackPush(top,tempEvent);
         IGetNameByPath(tempStr,name);
 
         setcolor(DRM_BLACK);

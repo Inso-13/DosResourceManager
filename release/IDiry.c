@@ -17,14 +17,39 @@
 */
 int Inew(IFileNode *pathNode,char *fileName)
 {
-    char temp[PATH_LEN];  //辅助字符串
+    char temp[PATH_LEN],tempStr1[PATH_LEN];  //辅助字符串
+    FILE *fp=fopen("C:\\DOSRES\\ETC\\DEL.TXT","r+");
+    long len=0;
+    int i;
 
+    for(i=0;i<strlen(fileName);i++)
+    {
+        if(fileName[i]>='a'&&fileName[i]<='z')
+            fileName[i]+='A'-'a';
+    }
     IGetAbsolutePath(pathNode,temp);
     Icd(temp);  //进入当前目录
+    strcat(temp,"\\");
+    strcat(temp,fileName);
+    
     if(creatnew(fileName,0)==-1)
         return 0;
     //创建失败，返回0
 
+    while(fgets(tempStr1,PATH_LEN,fp))
+    {
+        if(tempStr1[strlen(tempStr1)-1]=='\n')
+            tempStr1[strlen(tempStr1)-1]='\0';
+        if(!strcmp(tempStr1,temp))
+        {
+            fseek(fp,len+1,SEEK_SET);
+            fputc('|',fp);
+            break;
+        }
+        len+=strlen(tempStr1)+2;
+    }
+    fclose(fp);
+    
     return IAddFileNode(pathNode,fileName);
     //创建成功，添加到文件树中，返回1 
 }
