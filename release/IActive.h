@@ -22,11 +22,13 @@
 #include"IType.h"
 #include"IEvent.h"
 #include"IDefs.h"
+#include"ISound.h"
 
 //调用模块
 #include"IDiry.h"
 #include"IInput.h"
 #include"IBar.h"
+#include"IGoto.h"
 
 
 //函数原型
@@ -43,5 +45,6 @@ void INextPage(IFileNode *pag,IFileNode *null);
 void ISetXNull(IFileNode *node,IFileNode *X);
 void ISetView10(IFileNode *flag,IFileNode *null);
 void ISetView11(IFileNode *flag,IFileNode *null);
+void IGotoActive(IFileNode *cur,IFileNode *null);
 
 #endif

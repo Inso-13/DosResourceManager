@@ -138,7 +138,11 @@ void ICtrlSelect(IFileNode *node,IFileNode *flag)
     输出参数：无
     返回值：无
 */
-void INOP(IFileNode *null1,IFileNode *null2){}
+void INOP(IFileNode *null1,IFileNode *null2)
+{
+    ICheckNull(null1);
+    ICheckNull(null2);
+}
 
 /*
     函数功能：返回上一目录
@@ -150,6 +154,7 @@ void IGoLeftActive(IFileNode *cur,IFileNode *null)
 {
     IFileNodePointer **curNode=(IFileNodePointer **)cur;
 
+    ICheckNull(null);
     *curNode=(*curNode)->pre;   //返回上一目录
 }
 
@@ -163,6 +168,7 @@ void IGoRightActive(IFileNode *cur,IFileNode *null)
 {
     IFileNodePointer **curNode=(IFileNodePointer **)cur;
 
+    ICheckNull(null);
     *curNode=(*curNode)->next;  //返回下一目录
 }
 
@@ -178,6 +184,7 @@ void ISearchActive(IFileNode *cur,IFileNode *null)
     FILE *fp=fopen("C:\\DOSRES\\ETC\\SEARCH.TXT","w+"); //覆盖的方式打开用于记录的文件
     char temp[20],path[PATH_LEN];     //辅助字符串
 
+    ICheckNull(null);
     IGetAbsolutePath(curNode->child,path);  //获得需要查找的路径
     strcpy(temp,"\0");  //清空字符串
     IGetString(851+DF,51+DF,166,temp,SEARCH_STR);   //得到查找的pattern，可以使用？*
@@ -205,6 +212,7 @@ void IexeActive(IFileNode *exe,IFileNode *null)
 {
     char temp[PATH_LEN+24];     //辅助字符串
 
+    ICheckNull(null);
     IGetAbsolutePath(exe,temp);
 
     setfillstyle(SOLID_FILL,DRM_BLACK);
@@ -225,6 +233,7 @@ void ItxtActive(IFileNode *txt,IFileNode *null)
 {
     char temp[PATH_LEN+48];   //辅助字符串
 
+    ICheckNull(null);
     strcpy(temp,"C:\\BORLANDC\\BIN\\BC.EXE ");  //调用BC编辑器
     IGetAbsolutePath(txt,temp+23);  
     
@@ -242,7 +251,8 @@ void ItxtActive(IFileNode *txt,IFileNode *null)
 void ILastPage(IFileNode *pag,IFileNode *null)
 {
     char *page=(char*)pag;  //页码控制
-
+    
+    ICheckNull(null);
     *page-=1;   //翻到上一页
 }
 
@@ -256,6 +266,7 @@ void INextPage(IFileNode *pag,IFileNode *null)
 {
     char *page=(char*)pag;  //页码控制
 
+    ICheckNull(null);
     *page+=1;   //翻到下一页
 }
 
@@ -269,6 +280,7 @@ void ISetView10(IFileNode *flag,IFileNode *null)
 {
     char *menuFlag=(char*)flag;    //菜单/视图控制
 
+    ICheckNull(null);
     (*menuFlag)&=FLAG_ADD_VIEW10;    //设置为显示view1的0号视图
 }
 
@@ -281,6 +293,34 @@ void ISetView10(IFileNode *flag,IFileNode *null)
 void ISetView11(IFileNode *flag,IFileNode *null)
 {
     char *menuFlag=(char*)flag; //菜单/视图控制
-
+    
+    ICheckNull(null);
     (*menuFlag)|=FLAG_ADD_VIEW11;    //设置为显示view1的1号视图
+}
+
+/*
+    函数功能：到达路径
+    输入参数：cur——当前节点, X——辅助文件节点
+    输出参数：无
+    返回值：无
+*/
+void IGotoActive(IFileNode *cur,IFileNode *null)
+{
+    IFileNodePointer **curNode=(IFileNodePointer**)cur;
+    char tempStr[PATH_LEN];
+    char flag;
+
+    ICheckNull(null);
+    IGetAbsolutePath((*curNode)->child,tempStr);
+    IGetString(152+DF,51+DF,649,tempStr,GOTO_STR);
+
+    flag=IGoto(tempStr,curNode);
+
+    if(!flag)
+    {
+        setcolor(DRM_RED);
+        outtextxy(400+DF,752+DF,"Failed");
+        IWarningBeep();
+        delay(1500);
+    }
 }

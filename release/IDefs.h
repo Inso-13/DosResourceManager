@@ -57,7 +57,7 @@ enum DRM_COLORS
     DRM_LIDHTBLUE   =   23,
     DRM_BRIGHTBLUE  =   31,
     DRM_PURPLE      =   50,
-    DRM_VIOLET      =   84,
+    DRM_BROWN       =   84,
     DRM_CHOSENBLUE  =   139,
     DRM_LIGHTGREEN  =   140,
     DRM_RED         =   180,
@@ -127,6 +127,7 @@ enum STRING_TYPE
     SEARCH_STR    =   1,
     NAME_STR      =   2,
     PASSWORD_STR  =   3,
-    NEWFILE_STR   =   4
+    NEWFILE_STR   =   4,
+    GOTO_STR      =   5
 };
 #endif

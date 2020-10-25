@@ -187,6 +187,7 @@ void ISortMenuActive(IFileNode *flag,IFileNode *null)
 {
     char *n=(char*)flag;   
     
+    ICheckNull(null);
     *n|=1;  //将打开标志置为1
 }
 

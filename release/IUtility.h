@@ -12,6 +12,7 @@
 
 //¿âÎÄ¼þ
 #include<STRING.H>
+#include<STDIO.H>
 
 //¸¨ÖúÄ£¿é
 #include"IType.h"
@@ -29,5 +30,6 @@ void IGetAbsolutePath(IFileNode *node,char *temp);
 void IFileNodeSetNull(IFileNode *node);
 char IStartWith(char *str,char *pattern);
 char IEndWith(char *str,char *pattern);
+void ICheckNull(void* ptr);
 
 #endif

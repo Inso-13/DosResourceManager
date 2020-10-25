@@ -202,3 +202,11 @@ char IEndWith(char *str,char *pattern)
             return 0;
     return 1;
 }
+
+void ICheckNull(void* ptr)
+{
+    if(ptr)
+        return;
+    else
+        return;
+}

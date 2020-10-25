@@ -77,7 +77,12 @@ char *page,char *menuFlag,FILE *fpHZ)
         setcolor(LIGHTGRAY);
     IGoRight(62+DF,60+DF);
     //返回下一目录功能
-        
+
+    IPointerRight(172+DF,62+DF);
+    ISetEvent(&tempEvent,152+DF,51+DF,802+DF,78+DF,MOUSE_LEFT_PRESS,IGotoActive,(IFileNode*)curNode,NULL,REACT_VIEW01);
+    IEventStackPush(top,tempEvent);
+    //地址栏
+    
     setcolor(DRM_BLACK);
     setfillstyle(SOLID_FILL,DRM_WHITE);
     bar(853+DF,52+DF,1016+DF,77+DF);
@@ -177,9 +182,9 @@ IFileNodePointer *nodeX,IEventStackNode *top,char *menuFlag,FILE *fpHZ)
     if((*menuFlag)&FLAG_TO_DEL)
     {
         (*menuFlag)&=FLAG_DEL_TO_DEL;
-        setcolor(DRM_VIOLET);
+        setcolor(DRM_BROWN);
         rectangle(412+DF,334+DF,662+DF,434+DF);
-        setfillstyle(SOLID_FILL,DRM_VIOLET);
+        setfillstyle(SOLID_FILL,DRM_BROWN);
         bar(412+DF,334+DF,662+DF,356+DF);
         setfillstyle(SOLID_FILL,DRM_WHITE);
         bar(413+DF,357+DF,661+DF,433+DF);
@@ -206,9 +211,9 @@ IFileNodePointer *nodeX,IEventStackNode *top,char *menuFlag,FILE *fpHZ)
     else if((*menuFlag)&FLAG_TO_COVER)
     {
         (*menuFlag)&=FLAG_CLEAR_COVER;
-        setcolor(DRM_VIOLET);
+        setcolor(DRM_BROWN);
         rectangle(412+DF,334+DF,662+DF,434+DF);
-        setfillstyle(SOLID_FILL,DRM_VIOLET);
+        setfillstyle(SOLID_FILL,DRM_BROWN);
         bar(412+DF,334+DF,662+DF,356+DF);
         setfillstyle(SOLID_FILL,DRM_WHITE);
         bar(413+DF,357+DF,661+DF,433+DF);

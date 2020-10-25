@@ -27,7 +27,7 @@ void IPlainView(FILE *fpHZ)
 
     setfillstyle(SOLID_FILL,DRM_WHITE);
     bar(0+DF,0+DF,1024+DF,768+DF);
-    setfillstyle(SOLID_FILL,DRM_VIOLET);
+    setfillstyle(SOLID_FILL,DRM_BROWN);
     bar(0+DF,0+DF,1024+DF,22+DF);
     setcolor(DRM_BLACK);
     Iouttextxy(10+DF,5+DF,"仿Windows资源管理器",fpHZ);  //头部栏
@@ -35,14 +35,12 @@ void IPlainView(FILE *fpHZ)
     setcolor(DRM_DARKGRAY);
     line(0+DF,44+DF,1024+DF,44+DF);
     line(0+DF,45+DF,1024+DF,45+DF);
-    IPointerDown(1000+DF,32+DF);
     rectangle(152+DF,51+DF,824+DF,78+DF);
     line(803+DF,52+DF,803+DF,76+DF);
     rectangle(832+DF,51+DF,1017+DF,78+DF);
     line(851+DF,51+DF,851+DF,78+DF);
     line(0+DF,84+DF,1024+DF,84+DF);
     line(0+DF,85+DF,1024+DF,85+DF);
-    IPointerRight(172+DF,62+DF);
     IRefresh(814+DF,64+DF);
     IMagnifier(841+DF,61+DF);
     IExit(1004+DF,8+DF);    

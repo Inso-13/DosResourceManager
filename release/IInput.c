@@ -26,14 +26,14 @@ char *IGetString(int x,int y,int length,char *string,int flag)
 
     fflush(stdin);  //刷新键盘缓冲区
 
-    if(flag==NAME_STR||flag==PASSWORD_STR)
+    if(flag==NAME_STR||flag==PASSWORD_STR||flag==GOTO_STR)
         setcolor(DRM_WHITE);
     else
         setcolor(DRM_RED);
     outtextxy(500+DF,754+DF,"Enter or ESC");
 
     setcolor(DRM_BLACK);
-    if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
+    if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR||flag==GOTO_STR)
     {
         rectangle(x-1,y,x+length+1,y+27);
         setfillstyle(SOLID_FILL,DRM_WHITE);
@@ -74,7 +74,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
         }
         //变量t用于计时，实现闪烁光标的效果
 
-        if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
+        if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR||flag==GOTO_STR)
             IBarInput(x,y+1,x+length,y+26,DRM_BLACK,DRM_WHITE);
         else
         {
@@ -115,9 +115,9 @@ char *IGetString(int x,int y,int length,char *string,int flag)
                 continue;
             }
         }
-        else if(n<12&&((tempChar>='0'&&tempChar<='9')||(tempChar>='a'&&tempChar<='z')||\
-        (tempChar>='A'&&tempChar<='Z')||tempChar=='.'||tempChar=='_'||\
-        (flag==SEARCH_STR&&(tempChar=='?'||tempChar=='*'))))
+        else if((n<12||n<80&&flag==GOTO_STR)&&((tempChar>='0'&&tempChar<='9')||\
+        (tempChar>='a'&&tempChar<='z')||(tempChar>='A'&&tempChar<='Z')||tempChar=='.'||\
+        tempChar=='_'||(flag==SEARCH_STR&&(tempChar=='?'||tempChar=='*'))||(flag==GOTO_STR&&(tempChar==':'||tempChar=='\\'))))
         {
             strcpy(temp,string+i);
             string[i++]=tempChar;
@@ -127,7 +127,7 @@ char *IGetString(int x,int y,int length,char *string,int flag)
         //合法字符检验
 
         setcolor(DRM_RED);
-        if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR)
+        if(flag==SEARCH_STR||flag==NAME_STR||flag==PASSWORD_STR||flag==GOTO_STR)
             IBarInput(x,y+1,x+length,y+26,DRM_BLACK,DRM_WHITE);
         else
         {

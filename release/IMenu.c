@@ -238,7 +238,7 @@ void ISetPaste(IFileNode *cur,IFileNode *X)
             IGetAbsolutePath(tempNode,temp2);
             if(IisChild(temp1,temp2)||!strcmp(temp1,temp2))
             {
-                setcolor(RED);
+                setcolor(DRM_RED);
                 outtextxy(400+DF,752+DF,"Failed");
                 IWarningBeep();
                 delay(1500);
@@ -300,7 +300,8 @@ void ISetPasteComfirm(IFileNode *flagx,IFileNode *null)
 {
     FILE *fp=fopen("C:\\DOSRES\\ETC\\TEMP.TXT","r");
     char *menuFlag=(char*)flagx;
-
+    
+    ICheckNull(null);
     if(fgetc(fp)=='f')
     {
         (*menuFlag)&=FLAG_DEL_UNCOVER;
@@ -425,6 +426,8 @@ void ISetDelete(IFileNode *cur,IFileNode *X)
 void ISetDeleteComfirm(IFileNode *flagx,IFileNode *null)
 {
     char *menuFlag=(char*)flagx;
+
+    ICheckNull(null);
     (*menuFlag)|=FLAG_ADD_DEL_COMFIRM;
     //激活确认删除窗口
 }
@@ -506,7 +509,7 @@ void ISetNewFile(IFileNode *cur,IFileNode *flag)
     {
         if(!Inew(curNode->child,temp))
         {
-            setcolor(RED);
+            setcolor(DRM_RED);
             outtextxy(400+DF,752+DF,"Failed");
             IWarningBeep();
             delay(1500);
@@ -558,7 +561,7 @@ void ISetNewFolder(IFileNode *cur,IFileNode *flag)
     if(temp[0])
         if(!Imkdir(curNode->child,temp))
         {
-            setcolor(RED);
+            setcolor(DRM_RED);
             outtextxy(400+DF,752+DF,"Failed");
             IWarningBeep();
             delay(1500);
