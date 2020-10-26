@@ -275,7 +275,7 @@ void IpicL(int x,int y)
 	bar(x-10,y+9,x+60,y+66);
 	setfillstyle(SOLID_FILL,DRM_LIGHTGREEN);
 	bar(x-10,y+35,x+60,y+49);
-    setfillstyle(SOLID_FILL,DRM_LIDHTBLUE);
+    setfillstyle(SOLID_FILL,DRM_LIGHTBLUE);
 	bar(x-10,y+49,x+60,y+66);
 	setcolor(DRM_ORANGE);
 	setfillstyle(SOLID_FILL,DRM_ORANGE);

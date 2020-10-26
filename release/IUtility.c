@@ -203,10 +203,10 @@ char IEndWith(char *str,char *pattern)
     return 1;
 }
 
-void ICheckNull(void* ptr)
+char ICheckNull(void* ptr)
 {
     if(ptr)
-        return;
+        return 1;
     else
-        return;
+        return 0;
 }

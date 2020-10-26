@@ -127,7 +127,7 @@ IFileNode *IGetFileNodeList(char *path)
         }
         else
         {
-            for(i=0;i<strlen(tempNode->file.name);i++)
+            for(i=strlen(tempNode->file.name)-1;i>=0;i--)
             {
                 if(tempNode->file.name[i]=='.')
                 {
@@ -137,7 +137,7 @@ IFileNode *IGetFileNodeList(char *path)
                     tempNode->file.type[3]='\0';
                     break;
                 }
-                if(i==strlen(tempNode->file.name)-1)
+                if(i==-1)
                     strcpy(tempNode->file.type,"NOT");
             }
         }

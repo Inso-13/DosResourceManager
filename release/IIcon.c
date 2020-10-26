@@ -208,7 +208,7 @@ void Imystery(int x,int y){Igeneral(x,y);}
 */
 void Ipic(int x,int y)
 {
-	setfillstyle(SOLID_FILL,DRM_LIDHTBLUE);
+	setfillstyle(SOLID_FILL,DRM_LIGHTBLUE);
 	bar(x,y,x+14,y+7);
     setfillstyle(SOLID_FILL,DRM_DARKBLUE);
 	bar(x,y+8,x+14,y+14);

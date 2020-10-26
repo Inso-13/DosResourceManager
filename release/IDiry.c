@@ -72,7 +72,7 @@ void Irename(IFileNode *oldName,char *newName)
     //重命名文件/文件夹
 
     strcpy(oldName->file.name,newName);
-    for(i=0;i<strlen(oldName->file.name);i++)
+    for(i=strlen(oldName->file.name)-1;i>=0;i--)
     {
         if(oldName->file.name[i]=='.')
         {
@@ -82,7 +82,7 @@ void Irename(IFileNode *oldName,char *newName)
             oldName->file.type[3]='\0';
             break;
         }
-        if(i==strlen(oldName->file.name)-1) //如果没有后缀名
+        if(i==-1) //如果没有后缀名
         {
             _dos_findfirst(newName,0xf7,&ft);
             if(!(ft.attrib&FA_DIREC))   //如果不是文件夹

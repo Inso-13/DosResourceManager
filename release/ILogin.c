@@ -146,6 +146,7 @@ void IGetName(IFileNode *nam,IFileNode *null)
 {
     char *name =(char*)nam;
 
+    ICheckNull(null);
     IGetString(440+DF,440+DF,220,name,NAME_STR);
     //获取用户名
 }
@@ -160,6 +161,7 @@ void IGetPassword(IFileNode *pass,IFileNode *null)
 {
     char *password=(char*)pass;
 
+    ICheckNull(null);
     IGetString(440+DF,490+DF,220,password,PASSWORD_STR);
     //获取密码
 }

@@ -20,10 +20,12 @@
 #include"IHanZi.h"
 #include"IType.h"
 #include"IEvent.h"
+#include"IUtility.h"
 
 //调用模块
 #include"ISecret.h"
 #include"IInput.h"
+
 
 //函数原型
 void IPlainLogin(FILE *fpHZ);
