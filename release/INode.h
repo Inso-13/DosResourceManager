@@ -25,7 +25,6 @@
 #include"IType.h"
 #include"IDefs.h"
 
-
 //º¯ÊýÔ­ÐÍ
 int IAddChild(IFileNode *parent,IFileNode *child);
 int IAddFileNode(IFileNode  *parent,char *name);

@@ -76,7 +76,10 @@ void Irename(IFileNode *oldName,char *newName)
     {
         if(oldName->file.name[i]=='.')
         {
-            strcpy(oldName->file.type,oldName->file.name+i+1);
+            oldName->file.type[0]=oldName->file.name[i+1];
+            oldName->file.type[1]=oldName->file.name[i+2];
+            oldName->file.type[2]=oldName->file.name[i+3];
+            oldName->file.type[3]='\0';
             break;
         }
         if(i==strlen(oldName->file.name)-1) //如果没有后缀名
