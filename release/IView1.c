@@ -33,7 +33,7 @@ char *page,char *menuFlag,FILE *fpHZ)
     setcolor(DRM_BLACK);
     tempNode=(*curNode)->child;
     IGetAbsolutePath(tempNode,temp);
-    outtextxy(192+DF,61+DF,temp);   //路径栏的显示
+    Iouttextxy(192+DF,61+DF,temp,fpHZ);   //路径栏的显示
 
     ISetEvent(&tempEvent,803+DF,51+DF,824+DF,78+DF,MOUSE_LEFT_PRESS,INOP,NULL,\
     NULL,REACT_VIEW01);

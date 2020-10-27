@@ -82,7 +82,7 @@ void Irename(IFileNode *oldName,char *newName)
             oldName->file.type[3]='\0';
             break;
         }
-        if(i==-1) //如果没有后缀名
+        if(i==0) //如果没有后缀名
         {
             _dos_findfirst(newName,0xf7,&ft);
             if(!(ft.attrib&FA_DIREC))   //如果不是文件夹

@@ -52,7 +52,7 @@ void ISelect(IFileNode *node,IFileNode *flag)
                 IBar(276+DF+i%30%6*102,116+DF+i%30/6*112,276+DF+99+i%30%6*102,\
                 116+DF+109+i%30/6*112,DRM_CHOSENBLUE,DRM_WHITE);
             else
-                IBar(248+DF,116+20*i+DF,936+DF,135+20*i+DF,DRM_CHOSENBLUE,\
+                IBar(248+DF,116+i%30*20+DF,936+DF,135+i%30*20+DF,DRM_CHOSENBLUE,\
                 DRM_WHITE);
         }
         if(tempNode==node)
@@ -68,7 +68,7 @@ void ISelect(IFileNode *node,IFileNode *flag)
         IBar(276+DF+j%30%6*102,116+DF+j%30/6*112,276+DF+99+j%30%6*102,\
         116+DF+109+j%30/6*112,DRM_WHITE,DRM_CHOSENBLUE);      
     else
-        IBar(248+DF,116+20*j+DF,936+DF,135+20*j+DF,DRM_WHITE,DRM_CHOSENBLUE);
+        IBar(248+DF,116+j%30*20+DF,936+DF,135+j%30*20+DF,DRM_WHITE,DRM_CHOSENBLUE);
     
     setfillstyle(SOLID_FILL,DRM_WHITE);
     bar(160+DF+16*2,752+3+DF,160+DF+16*2+8*3,767+DF);
@@ -109,7 +109,7 @@ void ICtrlSelect(IFileNode *node,IFileNode *flag)
             IBar(276+DF+j%30%6*102,116+DF+j%30/6*112,276+DF+99+j%30%6*102,\
             116+DF+109+j%30/6*112,DRM_WHITE,DRM_CHOSENBLUE);      
         else
-            IBar(248+DF,116+20*j+DF,936+DF,135+20*j+DF,DRM_WHITE,DRM_CHOSENBLUE);
+            IBar(248+DF,116+j%30*20+DF,936+DF,135+j%30*20+DF,DRM_WHITE,DRM_CHOSENBLUE);
     }
     else
     {
@@ -119,7 +119,7 @@ void ICtrlSelect(IFileNode *node,IFileNode *flag)
             IBar(276+DF+j%30%6*102,116+DF+j%30/6*112,276+DF+99+j%30%6*102,\
             116+DF+109+j%30/6*112,DRM_CHOSENBLUE,DRM_WHITE);
         else
-            IBar(248+DF,116+20*j+DF,936+DF,135+20*j+DF,DRM_CHOSENBLUE,DRM_WHITE);
+            IBar(248+DF,116+j%30*20+DF,936+DF,135+j%30*20+DF,DRM_CHOSENBLUE,DRM_WHITE);
     }
     //如果该节点已被选中，则解选中；否则选中该节点
 

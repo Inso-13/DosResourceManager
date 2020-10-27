@@ -20,7 +20,7 @@ void IBar(int x1,int y1,int x2,int y2,int oldColor,int newColor)
     
     for(j=y1;j<=y2;j++)
     {
-        for(i=x1;i<=x2;i++)
+        for(i=x1;i<=x2;i++) //对于每行每列的每一个点
         {
             if(getpixel(i,j)==oldColor||getpixel(i,j)==DRM_MOUSEBLACK)
             {

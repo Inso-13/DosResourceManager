@@ -137,7 +137,7 @@ IFileNode *IGetFileNodeList(char *path)
                     tempNode->file.type[3]='\0';
                     break;
                 }
-                if(i==-1)
+                if(i==0)
                     strcpy(tempNode->file.type,"NOT");
             }
         }
